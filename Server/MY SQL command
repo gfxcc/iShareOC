@@ -1,0 +1,41 @@
+protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` ./iShare.proto
+protoc -I ./ --cpp_out=. ./iShare.proto
+
+protoc --objc_out=. --objcgrpc_out=. ./*.proto
+
+
+// create bills talbe
+//
+// with name new_table
+CREATE TABLE `iShare_data`.`new_table` (
+`bill_uuid` VARCHAR(36) NULL,
+`creater` INT NULL,
+`amount` DOUBLE NULL,
+`type` VARCHAR(45) NULL,
+`account` VARCHAR(45) NULL,
+`date` DATETIME NULL,
+`note` VARCHAR(140) NULL,
+`member_count` INT NULL,
+`member_0` INT NULL,
+`member_1` INT NULL,
+`member_2` INT NULL,
+`member_3` INT NULL,
+`member_4` INT NULL,
+`member_5` INT NULL,
+`member_6` INT NULL,
+`member_7` INT NULL,
+`member_8` INT NULL,
+`member_9` INT NULL);
+
+
+SET SQL_SAFE_UPDATES=0;
+UPDATE iShare_data.User set synchronism = 1 where username = 'gfxcc'
+
+// create friends table
+//
+//
+CREATE TABLE `iShare_data`.`new_table` (
+`user_id` INT NOT NULL,
+`username` VARCHAR(45) NULL,
+`create_time` TIMESTAMP(12) NULL,
+PRIMARY KEY (`user_id`));

@@ -1,0 +1,5 @@
+#include "gRPC_pod.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/gRPC_pod" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/OpenSSL" "${PODS_ROOT}/Headers/Public/OpenSSL/openssl" "${PODS_ROOT}/Headers/Public/Protobuf" "${PODS_ROOT}/Headers/Public/Protobuf/google/protobuf" "${PODS_ROOT}/Headers/Public/gRPC" "${PODS_ROOT}/Headers/Public/gRPC/GRPCClient" "${PODS_ROOT}/Headers/Public/gRPC/ProtoRPC" "${PODS_ROOT}/Headers/Public/gRPC/RxLibrary" "${PODS_ROOT}/Headers/Public/gRPC/RxLibrary/transformations" "${PODS_ROOT}/Headers/Public/gRPC/grpc" "${PODS_ROOT}/Headers/Public/gRPC/grpc/support" "${PODS_ROOT}/Headers/Public/gRPC/src/core/support" "${PODS_ROOT}/Headers/Public/gRPC_pod"
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

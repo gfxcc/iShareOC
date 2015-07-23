@@ -1,0 +1,43 @@
+{
+  "name": "gRPC_pod",
+  "version": "0.0.1",
+  "license": "...",
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8"
+  },
+  "prepare_command": "protoc --objc_out=. --objcgrpc_out=. ./*.proto",
+  "subspecs": [
+    {
+      "name": "Messages",
+      "source_files": [
+        "*.pbobjc.{h,m}",
+        "**/*.pbobjc.{h,m}"
+      ],
+      "header_mappings_dir": ".",
+      "requires_arc": false,
+      "dependencies": {
+        "Protobuf": [
+          "~> 3.0.0-alpha-3"
+        ]
+      }
+    },
+    {
+      "name": "Services",
+      "source_files": [
+        "*.pbrpc.{h,m}",
+        "**/*.pbrpc.{h,m}"
+      ],
+      "header_mappings_dir": ".",
+      "requires_arc": true,
+      "dependencies": {
+        "gRPC": [
+          "~> 0.5"
+        ],
+        "gRPC_pod/Messages": [
+
+        ]
+      }
+    }
+  ]
+}

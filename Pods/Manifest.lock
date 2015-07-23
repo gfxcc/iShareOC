@@ -1,0 +1,41 @@
+PODS:
+  - gRPC (0.6.0):
+    - gRPC/C-Core (= 0.6.0)
+    - gRPC/GRPCClient (= 0.6.0)
+    - gRPC/ProtoRPC (= 0.6.0)
+    - gRPC/RxLibrary (= 0.6.0)
+  - gRPC/C-Core (0.6.0):
+    - OpenSSL (~> 1.0.200)
+  - gRPC/GRPCClient (0.6.0):
+    - gRPC/C-Core
+    - gRPC/RxLibrary
+  - gRPC/ProtoRPC (0.6.0):
+    - gRPC/GRPCClient
+    - gRPC/RxLibrary
+    - Protobuf (~> 3.0.0-alpha-3)
+  - gRPC/RxLibrary (0.6.0)
+  - gRPC_pod (0.0.1):
+    - gRPC_pod/Messages (= 0.0.1)
+    - gRPC_pod/Services (= 0.0.1)
+  - gRPC_pod/Messages (0.0.1):
+    - Protobuf (~> 3.0.0-alpha-3)
+  - gRPC_pod/Services (0.0.1):
+    - gRPC (~> 0.5)
+    - gRPC_pod/Messages
+  - OpenSSL (1.0.204)
+  - Protobuf (3.0.0-alpha-3)
+
+DEPENDENCIES:
+  - gRPC_pod (from `./Server`)
+
+EXTERNAL SOURCES:
+  gRPC_pod:
+    :path: ./Server
+
+SPEC CHECKSUMS:
+  gRPC: 2b65b35bdb80b2dac889399afb6706ab10d85d51
+  gRPC_pod: 4832ce1411a8e5523cfeb88bc335e72014e342f9
+  OpenSSL: 576b352e6e6e60793ca133c6785736e3cbc31a09
+  Protobuf: c823c03c19e1c6f3ff6688551e31f3fa76fd46cb
+
+COCOAPODS: 0.38.0

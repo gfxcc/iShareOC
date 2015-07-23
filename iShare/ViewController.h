@@ -1,0 +1,45 @@
+//
+//  ViewController.h
+//  iShare
+//
+//  Created by caoyong on 5/9/15.
+//  Copyright (c) 2015 caoyong. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "LeftMenuViewController.h"
+#import "SlideNavigationController.h"
+#import <gRPC/RxLibrary/GRXWriter.h>
+#import <gRPC/RxLibrary/GRXWriteable.h>
+#import <gRPC/RxLibrary/GRXWriter+Immediate.h>
+#import "RKTabView.h"
+
+
+
+@interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *addNewButtion;
+@property (weak, nonatomic) IBOutlet UIButton *grpc_test;
+@property (weak, nonatomic) IBOutlet RKTabView *standardView;
+@property (weak, nonatomic) IBOutlet UIView *statusView;
+
+- (void)buttonHighlight;
+
+@property(strong, nonatomic) NSMutableArray *bill_latest;
+@property(strong, nonatomic) NSMutableArray *bills;
+@property(strong, nonatomic) LeftMenuViewController *leftMenu;
+
+@property(strong, nonatomic) RKTabItem *billList;
+@property(strong, nonatomic) RKTabItem *analyze;
+@property(strong, nonatomic) RKTabItem *mapView;
+@property(strong, nonatomic) NSString *result;
+
+//@property(strong, nonatomic) id<GRXWriter> requestsWriter;
+
+- (void)openLeftMenu;
+- (void)hideMainUI;
+- (void)changeShadow;
+- (void)obtail_bills;
+@end
+
