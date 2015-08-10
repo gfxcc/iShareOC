@@ -1,7 +1,8 @@
 #import "IShare.pbobjc.h"
 #import <gRPC/ProtoRPC/ProtoService.h>
 
-#define ServerHost @"http://192.168.0.103:50051"
+#define ServerHost @"http://192.168.1.3:50051"
+
 
 @protocol GRXWriteable;
 @protocol GRXWriter;
@@ -90,6 +91,62 @@
 - (void)receive_ImgWithRequest:(Repeated_string *)request handler:(void(^)(BOOL done, Image *response, NSError *error))handler;
 
 - (ProtoRPC *)RPCToReceive_ImgWithRequest:(Repeated_string *)request handler:(void(^)(BOOL done, Image *response, NSError *error))handler;
+
+
+#pragma mark Reset_Status(Inf) returns (Inf)
+
+- (void)reset_StatusWithRequest:(Inf *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToReset_StatusWithRequest:(Inf *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+
+#pragma mark Send_request(Request) returns (Inf)
+
+- (void)send_requestWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToSend_requestWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+
+#pragma mark Obtain_request(Inf) returns (stream Request)
+
+- (void)obtain_requestWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToObtain_requestWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+
+#pragma mark Obtain_requestLog(Inf) returns (stream Request)
+
+- (void)obtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToObtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+
+#pragma mark Request_response(Response) returns (Inf)
+
+- (void)request_responseWithRequest:(Response *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRequest_responseWithRequest:(Response *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+
+#pragma mark MakePayment(stream BillPayment) returns (Inf)
+
+- (void)makePaymentWithRequestsWriter:(id<GRXWriter>)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToMakePaymentWithRequestsWriter:(id<GRXWriter>)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+
+#pragma mark IgnoreRequestLog(IgnoreMessage) returns (Inf)
+
+- (void)ignoreRequestLogWithRequest:(IgnoreMessage *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToIgnoreRequestLogWithRequest:(IgnoreMessage *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+
+#pragma mark Create_requestLog(Request) returns (Inf)
+
+- (void)create_requestLogWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToCreate_requestLogWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler;
 
 
 @end

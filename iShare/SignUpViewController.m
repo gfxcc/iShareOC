@@ -105,7 +105,7 @@
                 [_LeftMenuView obtain_friends];
                 
                 ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
-                [mainUI obtail_bills];
+                [mainUI obtain_bills];
                 
                 [self dismissViewControllerAnimated:true completion:^{
                     NSLog(@"Present Modal View");

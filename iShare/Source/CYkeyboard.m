@@ -15,26 +15,38 @@
 - (id)initWithTitle:(NSString *)title {
 
     
-    if (self = [super initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, InterfaceHigh)]) {
+    if (self = [super initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height + 40, [UIScreen mainScreen].bounds.size.width, InterfaceHigh)]) {
         
         self.backgroundColor = RGB(255, 255, 255);
         
         
         
-        UIButton *fadeout = [UIButton buttonWithType:UIButtonTypeSystem];
-        [fadeout setFrame:CGRectMake(self.frame.size.width - 60, self.bounds.origin.y, 60, 40)];
-        fadeout.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [fadeout setTitle:@"    back" forState:UIControlStateNormal];
-        [fadeout setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal ];
-        [fadeout addTarget:self action:@selector(clickFadeOut) forControlEvents:UIControlEventTouchUpInside];
-        fadeout.backgroundColor = RGB(98, 98, 98);
+        _fadeout = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_fadeout setFrame:CGRectMake(self.bounds.size.width - 60, self.bounds.origin.y - 40 + 4, 60, 40)];
+        _fadeout.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_fadeout setTitle:@"    back" forState:UIControlStateNormal];
+        [_fadeout setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
+        [_fadeout addTarget:self action:@selector(clickFadeOut) forControlEvents:UIControlEventTouchUpInside];
+        _fadeout.backgroundColor = RGB(98, 98, 98);
         //fade corner
-        fadeout.layer.cornerRadius = 5;
-        fadeout.clipsToBounds = YES;
+        _fadeout.layer.cornerRadius = 5;
+        _fadeout.clipsToBounds = YES;
+        [self addSubview:_fadeout];
+        
+        // edit button
+        _edit = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_edit setFrame:CGRectMake(0, self.bounds.origin.y - 40 + 4, 60, 40)];
+        _edit.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_edit setTitle:@"    Edit" forState:UIControlStateNormal];
+        [_edit setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
+        [_edit addTarget:self action:@selector(editPage) forControlEvents:UIControlEventTouchUpInside];
+        _edit.backgroundColor = RGB(98, 98, 98);
+        //fade corner
+        _edit.layer.cornerRadius = 5;
+        _edit.clipsToBounds = YES;
         
         
-        
-        [self addSubview:fadeout];
+        [self addSubview:_edit];
         
         CALayer *TopBorder = [CALayer layer];
         UIColor *borderColor = RGB(73, 71, 72);
@@ -61,7 +73,32 @@
     _memberArray = [NSMutableArray arrayWithArray:members];
     
     _mydata = NULL;
+    
+    // load member icon
+    _memberIcons = [[NSMutableArray alloc] init];
+    for (int i = 0; i != _memberArray.count; i++) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+        
+        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _memberArray[i]];
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+        UIImage *icon = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"];
+        [_memberIcons addObject:icon];
+    }
+    
     return self;
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (CGRectContainsPoint(self.bounds, point) ||
+        CGRectContainsPoint(_fadeout.frame, point) ||
+        CGRectContainsPoint(_edit.frame, point))
+    {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)textFieldDidChange {
@@ -119,6 +156,7 @@
     [_datepicker removeFromSuperview];
     [_typePicker removeFromSuperview];
     [_memberPicker removeFromSuperview];
+    [_paidByPicker removeFromSuperview];
     
     _typePicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0,
                                                                  0,
@@ -130,11 +168,21 @@
     [self sendSubviewToBack:_typePicker];
     
 }
-- (void)accountMode {
+- (void)paidByMode {
     [_textfield removeFromSuperview];
     [_datepicker removeFromSuperview];
     [_typePicker removeFromSuperview];
     [_memberPicker removeFromSuperview];
+    [_paidByPicker removeFromSuperview];
+    
+    _paidByPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0,
+                                                                 0,
+                                                                 [UIScreen mainScreen].bounds.size.width,
+                                                                 InterfaceHigh)];
+    _paidByPicker.dataSource = self;
+    _paidByPicker.delegate = self;
+    [self addSubview:_paidByPicker];
+    [self sendSubviewToBack:_paidByPicker];
 
 }
 - (void)dataMode {
@@ -142,6 +190,7 @@
     [_datepicker removeFromSuperview];
     [_typePicker removeFromSuperview];
     [_memberPicker removeFromSuperview];
+    [_paidByPicker removeFromSuperview];
     
     _datepicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0,
                                                                  0,
@@ -160,6 +209,7 @@
     [_datepicker removeFromSuperview];
     [_typePicker removeFromSuperview];
     [_memberPicker removeFromSuperview];
+    [_paidByPicker removeFromSuperview];
     
     _memberPicker = [[UITableView alloc] initWithFrame:CGRectMake(0,
                                                                  0,
@@ -171,10 +221,10 @@
     [self sendSubviewToBack:_memberPicker];
 }
 
-- (void)setLables:(UILabel *)amount type:(UILabel *)type account:(UILabel *)account data:(UILabel *)data member:(UILabel *)member {
+- (void)setLables:(UILabel *)amount type:(UILabel *)type data:(UILabel *)data member:(UILabel *)member paidBy:(UILabel *)paidBy {
     amount_ = amount;
     type_ = type;
-    account_ = account;
+    paidBy_ = paidBy;
     data_ = data;
     member_ = member;
 }
@@ -183,7 +233,7 @@
     [self fadeMeOut];
     amount_.backgroundColor = RGB(255, 255, 255);
     type_.backgroundColor = RGB(255, 255, 255);
-    account_.backgroundColor = RGB(255, 255, 255);
+    paidBy_.backgroundColor = RGB(255, 255, 255);
     data_.backgroundColor = RGB(255, 255, 255);
     member_.backgroundColor = RGB(255, 255, 255);
 }
@@ -230,7 +280,7 @@
     CGPoint fadeOutToPoint;
     
     
-    fadeOutToPoint = CGPointMake(self.center.x,[UIScreen mainScreen].bounds.size.height + (self.frame.size.height/2));
+    fadeOutToPoint = CGPointMake(self.center.x,[UIScreen mainScreen].bounds.size.height + (self.frame.size.height/2) + 40);
     [UIView animateWithDuration:kTSMessageAnimationDuration animations:^
      {
          self.center = fadeOutToPoint;
@@ -242,6 +292,10 @@
      }];
 }
 
+- (void)editPage {
+    
+}
+
 #pragma mark -
 #pragma mark UIPiker delegate
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -251,7 +305,15 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return _typeArray.count;
+    if ([pickerView isEqual:_typePicker]) {
+        return _typeArray.count;
+    }
+    
+    if ([pickerView isEqual:_paidByPicker]) {
+        return _memberArray.count;
+    }
+    
+    return 0;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
@@ -264,20 +326,47 @@
 //}
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
-    UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
+    if ([pickerView isEqual:_typePicker]) {
+        UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
+        
+        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(-40, 5, 40, 40)];
+        image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", _typeArray[row]]];
+        [typeView addSubview:image];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 150, 40)];
+        label.text = _typeArray[row];
+        [typeView addSubview:label];
+        return typeView;
+    }
     
-    UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(-40, 5, 40, 40)];
-    image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", _typeArray[row]]];
-    [typeView addSubview:image];
+    if ([pickerView isEqual:_paidByPicker]) {
+        
+        UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
+        
+        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(-40, 5, 40, 40)];
+        
+        //image.image = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"];
+        image.image = _memberIcons[row];
+        [typeView addSubview:image];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 150, 40)];
+        label.text = _memberArray[row];
+        [typeView addSubview:label];
+        return typeView;
+    }
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 150, 40)];
-    label.text = _typeArray[row];
-    [typeView addSubview:label];
-    return typeView;
+    return nil;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    type_.text = [_typeArray objectAtIndex:row];
+    if ([pickerView isEqual:_typePicker]) {
+        type_.text = [_typeArray objectAtIndex:row];
+    }
+    
+    if ([pickerView isEqual:_paidByPicker]) {
+        paidBy_.text = [_memberArray objectAtIndex:row];
+    }
+    
 }
 
 #pragma mark -

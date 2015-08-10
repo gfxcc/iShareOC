@@ -26,7 +26,7 @@
 -(void) setFrame:(CGRect) frame {
 
     frame.origin.x = 60.0;
-    frame.size.width = CellWidth - 60.0;
+    frame.size.width = [UIScreen mainScreen].bounds.size.width - 60.0;
     frame.size.height = 50.0;
 
     [super setFrame:frame];
@@ -37,7 +37,7 @@
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
-- (void)initWithType:(NSString *)type amount:(NSString *)amount day:(NSString *)day dayHiden:(BOOL)dayHiden{
+- (void)initWithType:(NSString *)type amount:(NSString *)amount memberCount:(NSString *)memberCount day:(NSString *)day dayHiden:(BOOL)dayHiden{
     // modify ui
     self.backgroundColor = RGB(245, 245, 245);
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -49,11 +49,17 @@
     VlineImage.image = [UIImage imageNamed:@"vertical line.png"];
     [self addSubview:VlineImage];
     [self sendSubviewToBack:VlineImage];
+    
     UIImageView *left = [[UIImageView alloc] initWithFrame:CGRectMake(-60, 0, 60, 50)];
     [left setImage:[self imageWithColor:RGB(245, 245, 245)]];
-    
     [self addSubview:left];
     [self sendSubviewToBack:left];
+    
+    //UIImageView *right = [[UIImageView alloc] initWithFrame:CGRectMake(0, 1, 10, 48)];
+    //[right setImage:[self imageWithColor:RGB(132, 183, 255)]];
+    
+    //[self addSubview:right];
+    //[self sendSubviewToBack:right];
     
     _monthLine = [[UIImageView alloc] initWithFrame:CGRectMake(-60, 49, 60, 1)];
     _monthLine.image = [UIImage imageNamed:@"line.png"];
@@ -65,6 +71,7 @@
     _type.text = type;
     _amount.text = amount;
     _day.text = day;
+    _memberCount.text = memberCount;
     
     _day.hidden = dayHiden;
     

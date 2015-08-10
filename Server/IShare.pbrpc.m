@@ -165,4 +165,100 @@ static NSString *const kServiceName = @"Greeter";
              responseClass:[Image class]
         responsesWriteable:[GRXWriteable writeableWithStreamHandler:handler]];
 }
+#pragma mark Reset_Status(Inf) returns (Inf)
+
+- (void)reset_StatusWithRequest:(Inf *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToReset_StatusWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToReset_StatusWithRequest:(Inf *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"Reset_Status"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark Send_request(Request) returns (Inf)
+
+- (void)send_requestWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToSend_requestWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToSend_requestWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"Send_request"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark Obtain_request(Inf) returns (stream Request)
+
+- (void)obtain_requestWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  [[self RPCToObtain_requestWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToObtain_requestWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  return [self RPCToMethod:@"Obtain_request"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Request class]
+        responsesWriteable:[GRXWriteable writeableWithStreamHandler:handler]];
+}
+#pragma mark Obtain_requestLog(Inf) returns (stream Request)
+
+- (void)obtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  [[self RPCToObtain_requestLogWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToObtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  return [self RPCToMethod:@"Obtain_requestLog"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Request class]
+        responsesWriteable:[GRXWriteable writeableWithStreamHandler:handler]];
+}
+#pragma mark Request_response(Response) returns (Inf)
+
+- (void)request_responseWithRequest:(Response *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToRequest_responseWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToRequest_responseWithRequest:(Response *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"Request_response"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark MakePayment(stream BillPayment) returns (Inf)
+
+- (void)makePaymentWithRequestsWriter:(id<GRXWriter>)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToMakePaymentWithRequestsWriter:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToMakePaymentWithRequestsWriter:(id<GRXWriter>)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"MakePayment"
+            requestsWriter:request
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark IgnoreRequestLog(IgnoreMessage) returns (Inf)
+
+- (void)ignoreRequestLogWithRequest:(IgnoreMessage *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToIgnoreRequestLogWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToIgnoreRequestLogWithRequest:(IgnoreMessage *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"IgnoreRequestLog"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark Create_requestLog(Request) returns (Inf)
+
+- (void)create_requestLogWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  [[self RPCToCreate_requestLogWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToCreate_requestLogWithRequest:(Request *)request handler:(void(^)(Inf *response, NSError *error))handler{
+  return [self RPCToMethod:@"Create_requestLog"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Inf class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

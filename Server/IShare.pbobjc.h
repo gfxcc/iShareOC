@@ -107,13 +107,14 @@ typedef GPB_ENUM(Share_inf_FieldNumber) {
   Share_inf_FieldNumber_Creater = 1,
   Share_inf_FieldNumber_Amount = 2,
   Share_inf_FieldNumber_Type = 3,
-  Share_inf_FieldNumber_Account = 4,
+  Share_inf_FieldNumber_PaidBy = 4,
   Share_inf_FieldNumber_Data_p = 5,
   Share_inf_FieldNumber_Note = 6,
   Share_inf_FieldNumber_Image = 7,
   Share_inf_FieldNumber_MembersArray = 8,
   Share_inf_FieldNumber_MembersCount = 9,
   Share_inf_FieldNumber_BillId = 10,
+  Share_inf_FieldNumber_PaidStatus = 11,
 };
 
 @interface Share_inf : GPBMessage
@@ -124,7 +125,7 @@ typedef GPB_ENUM(Share_inf_FieldNumber) {
 
 @property(nonatomic, readwrite, copy) NSString *type;
 
-@property(nonatomic, readwrite, copy) NSString *account;
+@property(nonatomic, readwrite, copy) NSString *paidBy;
 
 @property(nonatomic, readwrite, copy) NSString *data_p;
 
@@ -138,6 +139,8 @@ typedef GPB_ENUM(Share_inf_FieldNumber) {
 @property(nonatomic, readwrite) int32_t membersCount;
 
 @property(nonatomic, readwrite, copy) NSString *billId;
+
+@property(nonatomic, readwrite, copy) NSString *paidStatus;
 
 @end
 
@@ -165,6 +168,7 @@ typedef GPB_ENUM(Syn_data_FieldNumber) {
   Syn_data_FieldNumber_Friend_p = 1,
   Syn_data_FieldNumber_Bill = 2,
   Syn_data_FieldNumber_Delete_p = 3,
+  Syn_data_FieldNumber_Request = 4,
 };
 
 @interface Syn_data : GPBMessage
@@ -174,6 +178,8 @@ typedef GPB_ENUM(Syn_data_FieldNumber) {
 @property(nonatomic, readwrite, copy) NSString *bill;
 
 @property(nonatomic, readwrite, copy) NSString *delete_p;
+
+@property(nonatomic, readwrite, copy) NSString *request;
 
 @end
 
@@ -215,6 +221,99 @@ typedef GPB_ENUM(Image_FieldNumber) {
 @property(nonatomic, readwrite, copy) NSString *name;
 
 @property(nonatomic, readwrite, copy) NSData *data_p;
+
+@end
+
+#pragma mark - Request
+
+typedef GPB_ENUM(Request_FieldNumber) {
+  Request_FieldNumber_RequestId = 1,
+  Request_FieldNumber_Sender = 2,
+  Request_FieldNumber_Receiver = 3,
+  Request_FieldNumber_Type = 4,
+  Request_FieldNumber_Content = 5,
+  Request_FieldNumber_Response = 6,
+  Request_FieldNumber_RequestDate = 7,
+  Request_FieldNumber_ResponseDate = 8,
+  Request_FieldNumber_IgnoreFrom = 9,
+  Request_FieldNumber_IgnoreTo = 10,
+};
+
+@interface Request : GPBMessage
+
+@property(nonatomic, readwrite, copy) NSString *requestId;
+
+@property(nonatomic, readwrite, copy) NSString *sender;
+
+@property(nonatomic, readwrite, copy) NSString *receiver;
+
+@property(nonatomic, readwrite, copy) NSString *type;
+
+@property(nonatomic, readwrite, copy) NSString *content;
+
+@property(nonatomic, readwrite, copy) NSString *response;
+
+@property(nonatomic, readwrite, copy) NSString *requestDate;
+
+@property(nonatomic, readwrite, copy) NSString *responseDate;
+
+@property(nonatomic, readwrite, copy) NSString *ignoreFrom;
+
+@property(nonatomic, readwrite, copy) NSString *ignoreTo;
+
+@end
+
+#pragma mark - Response
+
+typedef GPB_ENUM(Response_FieldNumber) {
+  Response_FieldNumber_RequestId = 1,
+  Response_FieldNumber_Sender = 2,
+  Response_FieldNumber_Receiver = 3,
+  Response_FieldNumber_Response = 4,
+  Response_FieldNumber_ResponseDate = 5,
+};
+
+@interface Response : GPBMessage
+
+@property(nonatomic, readwrite, copy) NSString *requestId;
+
+@property(nonatomic, readwrite, copy) NSString *sender;
+
+@property(nonatomic, readwrite, copy) NSString *receiver;
+
+@property(nonatomic, readwrite, copy) NSString *response;
+
+@property(nonatomic, readwrite, copy) NSString *responseDate;
+
+@end
+
+#pragma mark - IgnoreMessage
+
+typedef GPB_ENUM(IgnoreMessage_FieldNumber) {
+  IgnoreMessage_FieldNumber_RequestLogId = 1,
+  IgnoreMessage_FieldNumber_User = 2,
+};
+
+@interface IgnoreMessage : GPBMessage
+
+@property(nonatomic, readwrite, copy) NSString *requestLogId;
+
+@property(nonatomic, readwrite, copy) NSString *user;
+
+@end
+
+#pragma mark - BillPayment
+
+typedef GPB_ENUM(BillPayment_FieldNumber) {
+  BillPayment_FieldNumber_BillId = 1,
+  BillPayment_FieldNumber_PaidStatus = 2,
+};
+
+@interface BillPayment : GPBMessage
+
+@property(nonatomic, readwrite, copy) NSString *billId;
+
+@property(nonatomic, readwrite, copy) NSString *paidStatus;
 
 @end
 

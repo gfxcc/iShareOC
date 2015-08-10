@@ -19,16 +19,19 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *type;
 
-@property (weak, nonatomic) IBOutlet UILabel *account;
+@property (weak, nonatomic) IBOutlet UILabel *paidBy;
 
 @property (weak, nonatomic) IBOutlet UILabel *data;
 
 @property (weak, nonatomic) IBOutlet UILabel *member;
 
 @property (weak, nonatomic) IBOutlet UITextView *comment;
+@property (weak, nonatomic) IBOutlet UILabel *creater;
 
-@property (weak, nonatomic) NSString *idText;
+
+//@property (weak, nonatomic) NSString *idText;
 @property (strong, nonatomic) NSDate *mydate;
+
 
 - (void)unlight;
 @end

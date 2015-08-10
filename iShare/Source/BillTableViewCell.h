@@ -14,11 +14,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *type;
 @property (weak, nonatomic) IBOutlet UILabel *amount;
 @property (weak, nonatomic) IBOutlet UILabel *day;
+@property (weak, nonatomic) IBOutlet UILabel *memberCount;
 @property (strong, nonatomic) UIImageView *monthLine;
 
 
 - (void)initWithLabel:(NSString *)label;
-- (void)initWithType:(NSString *)type amount:(NSString *)amount day:(NSString *)day dayHiden:(BOOL)dayHiden;
+- (void)initWithType:(NSString *)type amount:(NSString *)amount memberCount:(NSString *)memberCount day:(NSString *)day dayHiden:(BOOL)dayHiden;
 - (void)SetDayHiden:(BOOL)dayHiden;
 - (void)SetMonthLineHiden:(BOOL)hiden;
 @end

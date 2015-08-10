@@ -295,10 +295,12 @@
             } else {
                 _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
             }
+            // reload
             [_tableView reloadData];
+            ViewController *mainView = (ViewController *)_mainUIView;
+            [mainView.tableView reloadData];
         }
     }];
-    
     
 }
 
@@ -312,9 +314,10 @@
         [_friendsArray removeAllObjects];
         [_tableView reloadData];
         ViewController *mainUI = (ViewController *)_mainUIView;
-        [mainUI.bills removeAllObjects];
+        [mainUI.bill_latest removeAllObjects];
         [mainUI.tableView reloadData];
-        
+        mainUI.helloWorld.text = @"Sign In OR Log In";
+        [self clean];
         
         [_log_button setTitle:@"Log In" forState:UIControlStateNormal];
         [_add_sign_button setTitle:@"Sign Up" forState:UIControlStateNormal];
@@ -348,6 +351,24 @@
         [self signUpView];
         
     }
+}
+
+- (void)clean {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
+                          documentsDirectory];
+    [@"" writeToFile:fileName
+             atomically:NO
+               encoding:NSUTF8StringEncoding
+                  error:nil];
+    fileName = [NSString stringWithFormat:@"%@/billRecord",
+                documentsDirectory];
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+
 }
 
 #pragma mark - imagePickerController Delegate & Datasrouce -

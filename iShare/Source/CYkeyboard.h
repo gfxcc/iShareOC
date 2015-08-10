@@ -26,17 +26,18 @@ typedef NS_ENUM(NSInteger, CYkeyboardKind) {
     
     UILabel *type_;
     
-    UILabel *account_;
-    
     UILabel *data_;
     
     UILabel *member_;
     
+    UILabel *paidBy_;
 }
 
+@property (strong, nonatomic) UIButton *fadeout;
+@property (strong, nonatomic) UIButton *edit;
 @property (strong, nonatomic) UITextField *textfield;
 @property (strong, nonatomic) UIPickerView *typePicker;
-@property (strong, nonatomic) UIPickerView *accountPicker;
+@property (strong, nonatomic) UIPickerView *paidByPicker;
 @property (strong, nonatomic) UIDatePicker *datepicker;
 @property (strong, nonatomic) UITableView *memberPicker;
 @property (strong, nonatomic) NSDate *mydata;
@@ -44,18 +45,21 @@ typedef NS_ENUM(NSInteger, CYkeyboardKind) {
 @property (strong, nonatomic) NSMutableArray *memberArray;
 
 @property (strong, nonatomic) NSMutableArray *selectedItems;
+@property (strong, nonatomic) NSMutableArray *memberIcons;
 
 - (id)initWithTitle:(NSString *)title;
 
-- (void)setLables:(UILabel *)amount type:(UILabel *)type account:(UILabel *)account data:(UILabel *)data member:(UILabel *)member;
+- (void)setLables:(UILabel *)amount type:(UILabel *)type data:(UILabel *)data member:(UILabel *)member paidBy:(UILabel *)paidBy;
 
 - (void)show;
 
 - (void)fadeMeOut;
+- (void)clickFadeOut;
 
 - (void)amountMode;
 - (void)typeMode;
-- (void)accountMode;
+- (void)paidByMode;
 - (void)dataMode;
 - (void)memberMode;
+- (void)editPage;
 @end

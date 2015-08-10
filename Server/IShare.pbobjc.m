@@ -334,13 +334,14 @@ typedef struct User_detail_Storage {
 @dynamic creater;
 @dynamic amount;
 @dynamic type;
-@dynamic account;
+@dynamic paidBy;
 @dynamic data_p;
 @dynamic note;
 @dynamic image;
 @dynamic membersArray;
 @dynamic membersCount;
 @dynamic billId;
+@dynamic paidStatus;
 
 typedef struct Share_inf_Storage {
   uint32_t _has_storage_[1];
@@ -348,12 +349,13 @@ typedef struct Share_inf_Storage {
   NSString *creater;
   NSString *amount;
   NSString *type;
-  NSString *account;
+  NSString *paidBy;
   NSString *data_p;
   NSString *note;
   NSString *image;
   NSMutableArray *membersArray;
   NSString *billId;
+  NSString *paidStatus;
 } Share_inf_Storage;
 
 // This method is threadsafe because it is initially called
@@ -396,12 +398,12 @@ typedef struct Share_inf_Storage {
         .fieldOptions = NULL,
       },
       {
-        .name = "account",
-        .number = Share_inf_FieldNumber_Account,
+        .name = "paidBy",
+        .number = Share_inf_FieldNumber_PaidBy,
         .hasIndex = 3,
-        .flags = GPBFieldOptional,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .type = GPBTypeString,
-        .offset = offsetof(Share_inf_Storage, account),
+        .offset = offsetof(Share_inf_Storage, paidBy),
         .defaultValue.valueString = nil,
         .typeSpecific.className = NULL,
         .fieldOptions = NULL,
@@ -472,7 +474,23 @@ typedef struct Share_inf_Storage {
         .typeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
+      {
+        .name = "paidStatus",
+        .number = Share_inf_FieldNumber_PaidStatus,
+        .hasIndex = 10,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .type = GPBTypeString,
+        .offset = offsetof(Share_inf_Storage, paidStatus),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
     };
+#if GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    const char *extraTextFormatInfo = NULL;
+#else
+    static const char *extraTextFormatInfo = "\002\004\006\000\013\n\000";
+#endif  // GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     descriptor = [GPBDescriptor allocDescriptorForClass:[Share_inf class]
                                               rootClass:[IShareRoot class]
                                                    file:IShareRoot_FileDescriptor()
@@ -485,7 +503,8 @@ typedef struct Share_inf_Storage {
                                                  ranges:NULL
                                              rangeCount:0
                                             storageSize:sizeof(Share_inf_Storage)
-                                             wireFormat:NO];
+                                             wireFormat:NO
+                                    extraTextFormatInfo:extraTextFormatInfo];
   }
   return descriptor;
 }
@@ -573,12 +592,14 @@ typedef struct Bill_request_Storage {
 @dynamic friend_p;
 @dynamic bill;
 @dynamic delete_p;
+@dynamic request;
 
 typedef struct Syn_data_Storage {
   uint32_t _has_storage_[1];
   NSString *friend_p;
   NSString *bill;
   NSString *delete_p;
+  NSString *request;
 } Syn_data_Storage;
 
 // This method is threadsafe because it is initially called
@@ -616,6 +637,17 @@ typedef struct Syn_data_Storage {
         .flags = GPBFieldOptional,
         .type = GPBTypeString,
         .offset = offsetof(Syn_data_Storage, delete_p),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "request",
+        .number = Syn_data_FieldNumber_Request,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Syn_data_Storage, request),
         .defaultValue.valueString = nil,
         .typeSpecific.className = NULL,
         .fieldOptions = NULL,
@@ -791,6 +823,405 @@ typedef struct Image_Storage {
                                              rangeCount:0
                                             storageSize:sizeof(Image_Storage)
                                              wireFormat:NO];
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Request
+
+@implementation Request
+
+@dynamic requestId;
+@dynamic sender;
+@dynamic receiver;
+@dynamic type;
+@dynamic content;
+@dynamic response;
+@dynamic requestDate;
+@dynamic responseDate;
+@dynamic ignoreFrom;
+@dynamic ignoreTo;
+
+typedef struct Request_Storage {
+  uint32_t _has_storage_[1];
+  NSString *requestId;
+  NSString *sender;
+  NSString *receiver;
+  NSString *type;
+  NSString *content;
+  NSString *response;
+  NSString *requestDate;
+  NSString *responseDate;
+  NSString *ignoreFrom;
+  NSString *ignoreTo;
+} Request_Storage;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "requestId",
+        .number = Request_FieldNumber_RequestId,
+        .hasIndex = 0,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, requestId),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "sender",
+        .number = Request_FieldNumber_Sender,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, sender),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "receiver",
+        .number = Request_FieldNumber_Receiver,
+        .hasIndex = 2,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, receiver),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "type",
+        .number = Request_FieldNumber_Type,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, type),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "content",
+        .number = Request_FieldNumber_Content,
+        .hasIndex = 4,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, content),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "response",
+        .number = Request_FieldNumber_Response,
+        .hasIndex = 5,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, response),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "requestDate",
+        .number = Request_FieldNumber_RequestDate,
+        .hasIndex = 6,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, requestDate),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "responseDate",
+        .number = Request_FieldNumber_ResponseDate,
+        .hasIndex = 7,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, responseDate),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "ignoreFrom",
+        .number = Request_FieldNumber_IgnoreFrom,
+        .hasIndex = 8,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, ignoreFrom),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "ignoreTo",
+        .number = Request_FieldNumber_IgnoreTo,
+        .hasIndex = 9,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Request_Storage, ignoreTo),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    descriptor = [GPBDescriptor allocDescriptorForClass:[Request class]
+                                              rootClass:[IShareRoot class]
+                                                   file:IShareRoot_FileDescriptor()
+                                                 fields:fields
+                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                                 oneofs:NULL
+                                             oneofCount:0
+                                                  enums:NULL
+                                              enumCount:0
+                                                 ranges:NULL
+                                             rangeCount:0
+                                            storageSize:sizeof(Request_Storage)
+                                             wireFormat:NO];
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Response
+
+@implementation Response
+
+@dynamic requestId;
+@dynamic sender;
+@dynamic receiver;
+@dynamic response;
+@dynamic responseDate;
+
+typedef struct Response_Storage {
+  uint32_t _has_storage_[1];
+  NSString *requestId;
+  NSString *sender;
+  NSString *receiver;
+  NSString *response;
+  NSString *responseDate;
+} Response_Storage;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "requestId",
+        .number = Response_FieldNumber_RequestId,
+        .hasIndex = 0,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Response_Storage, requestId),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "sender",
+        .number = Response_FieldNumber_Sender,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Response_Storage, sender),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "receiver",
+        .number = Response_FieldNumber_Receiver,
+        .hasIndex = 2,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Response_Storage, receiver),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "response",
+        .number = Response_FieldNumber_Response,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Response_Storage, response),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "responseDate",
+        .number = Response_FieldNumber_ResponseDate,
+        .hasIndex = 4,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(Response_Storage, responseDate),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    descriptor = [GPBDescriptor allocDescriptorForClass:[Response class]
+                                              rootClass:[IShareRoot class]
+                                                   file:IShareRoot_FileDescriptor()
+                                                 fields:fields
+                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                                 oneofs:NULL
+                                             oneofCount:0
+                                                  enums:NULL
+                                              enumCount:0
+                                                 ranges:NULL
+                                             rangeCount:0
+                                            storageSize:sizeof(Response_Storage)
+                                             wireFormat:NO];
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - IgnoreMessage
+
+@implementation IgnoreMessage
+
+@dynamic requestLogId;
+@dynamic user;
+
+typedef struct IgnoreMessage_Storage {
+  uint32_t _has_storage_[1];
+  NSString *requestLogId;
+  NSString *user;
+} IgnoreMessage_Storage;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "requestLogId",
+        .number = IgnoreMessage_FieldNumber_RequestLogId,
+        .hasIndex = 0,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .type = GPBTypeString,
+        .offset = offsetof(IgnoreMessage_Storage, requestLogId),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "user",
+        .number = IgnoreMessage_FieldNumber_User,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(IgnoreMessage_Storage, user),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+#if GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    const char *extraTextFormatInfo = NULL;
+#else
+    static const char *extraTextFormatInfo = "\001\001\n\242\000";
+#endif  // GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    descriptor = [GPBDescriptor allocDescriptorForClass:[IgnoreMessage class]
+                                              rootClass:[IShareRoot class]
+                                                   file:IShareRoot_FileDescriptor()
+                                                 fields:fields
+                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                                 oneofs:NULL
+                                             oneofCount:0
+                                                  enums:NULL
+                                              enumCount:0
+                                                 ranges:NULL
+                                             rangeCount:0
+                                            storageSize:sizeof(IgnoreMessage_Storage)
+                                             wireFormat:NO
+                                    extraTextFormatInfo:extraTextFormatInfo];
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - BillPayment
+
+@implementation BillPayment
+
+@dynamic billId;
+@dynamic paidStatus;
+
+typedef struct BillPayment_Storage {
+  uint32_t _has_storage_[1];
+  NSString *billId;
+  NSString *paidStatus;
+} BillPayment_Storage;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "billId",
+        .number = BillPayment_FieldNumber_BillId,
+        .hasIndex = 0,
+        .flags = GPBFieldOptional,
+        .type = GPBTypeString,
+        .offset = offsetof(BillPayment_Storage, billId),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "paidStatus",
+        .number = BillPayment_FieldNumber_PaidStatus,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .type = GPBTypeString,
+        .offset = offsetof(BillPayment_Storage, paidStatus),
+        .defaultValue.valueString = nil,
+        .typeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+#if GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    const char *extraTextFormatInfo = NULL;
+#else
+    static const char *extraTextFormatInfo = "\001\002\n\000";
+#endif  // GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    descriptor = [GPBDescriptor allocDescriptorForClass:[BillPayment class]
+                                              rootClass:[IShareRoot class]
+                                                   file:IShareRoot_FileDescriptor()
+                                                 fields:fields
+                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                                 oneofs:NULL
+                                             oneofCount:0
+                                                  enums:NULL
+                                              enumCount:0
+                                                 ranges:NULL
+                                             rangeCount:0
+                                            storageSize:sizeof(BillPayment_Storage)
+                                             wireFormat:NO
+                                    extraTextFormatInfo:extraTextFormatInfo];
   }
   return descriptor;
 }

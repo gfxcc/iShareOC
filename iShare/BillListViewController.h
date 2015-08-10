@@ -14,6 +14,7 @@
 
 
 @property (strong, nonatomic) NSMutableArray *billsWithMonth;
+@property (strong, nonatomic) NSString *idText;
 
 - (UIImage *)imageWithColor:(UIColor *)color;
 

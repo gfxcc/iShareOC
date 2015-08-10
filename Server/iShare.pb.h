@@ -47,6 +47,10 @@ class Syn_data;
 class HelloRequest;
 class HelloReply;
 class Image;
+class Request;
+class Response;
+class IgnoreMessage;
+class BillPayment;
 
 // ===================================================================
 
@@ -624,16 +628,16 @@ class Share_inf : public ::google::protobuf::Message {
   ::std::string* release_type();
   void set_allocated_type(::std::string* type);
 
-  // optional string account = 4;
-  void clear_account();
-  static const int kAccountFieldNumber = 4;
-  const ::std::string& account() const;
-  void set_account(const ::std::string& value);
-  void set_account(const char* value);
-  void set_account(const char* value, size_t size);
-  ::std::string* mutable_account();
-  ::std::string* release_account();
-  void set_allocated_account(::std::string* account);
+  // optional string paidBy = 4;
+  void clear_paidby();
+  static const int kPaidByFieldNumber = 4;
+  const ::std::string& paidby() const;
+  void set_paidby(const ::std::string& value);
+  void set_paidby(const char* value);
+  void set_paidby(const char* value, size_t size);
+  ::std::string* mutable_paidby();
+  ::std::string* release_paidby();
+  void set_allocated_paidby(::std::string* paidby);
 
   // optional string data = 5;
   void clear_data();
@@ -701,6 +705,17 @@ class Share_inf : public ::google::protobuf::Message {
   ::std::string* release_bill_id();
   void set_allocated_bill_id(::std::string* bill_id);
 
+  // optional string paidStatus = 11;
+  void clear_paidstatus();
+  static const int kPaidStatusFieldNumber = 11;
+  const ::std::string& paidstatus() const;
+  void set_paidstatus(const ::std::string& value);
+  void set_paidstatus(const char* value);
+  void set_paidstatus(const char* value, size_t size);
+  ::std::string* mutable_paidstatus();
+  ::std::string* release_paidstatus();
+  void set_allocated_paidstatus(::std::string* paidstatus);
+
   // @@protoc_insertion_point(class_scope:helloworld.Share_inf)
  private:
 
@@ -709,12 +724,13 @@ class Share_inf : public ::google::protobuf::Message {
   ::google::protobuf::internal::ArenaStringPtr creater_;
   ::google::protobuf::internal::ArenaStringPtr amount_;
   ::google::protobuf::internal::ArenaStringPtr type_;
-  ::google::protobuf::internal::ArenaStringPtr account_;
+  ::google::protobuf::internal::ArenaStringPtr paidby_;
   ::google::protobuf::internal::ArenaStringPtr data_;
   ::google::protobuf::internal::ArenaStringPtr note_;
   ::google::protobuf::internal::ArenaStringPtr image_;
   ::google::protobuf::RepeatedPtrField< ::std::string> members_;
   ::google::protobuf::internal::ArenaStringPtr bill_id_;
+  ::google::protobuf::internal::ArenaStringPtr paidstatus_;
   ::google::protobuf::int32 members_count_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_iShare_2eproto();
@@ -922,6 +938,17 @@ class Syn_data : public ::google::protobuf::Message {
   ::std::string* release_delete_();
   void set_allocated_delete_(::std::string* delete_);
 
+  // optional string request = 4;
+  void clear_request();
+  static const int kRequestFieldNumber = 4;
+  const ::std::string& request() const;
+  void set_request(const ::std::string& value);
+  void set_request(const char* value);
+  void set_request(const char* value, size_t size);
+  ::std::string* mutable_request();
+  ::std::string* release_request();
+  void set_allocated_request(::std::string* request);
+
   // @@protoc_insertion_point(class_scope:helloworld.Syn_data)
  private:
 
@@ -930,6 +957,7 @@ class Syn_data : public ::google::protobuf::Message {
   ::google::protobuf::internal::ArenaStringPtr friend__;
   ::google::protobuf::internal::ArenaStringPtr bill_;
   ::google::protobuf::internal::ArenaStringPtr delete__;
+  ::google::protobuf::internal::ArenaStringPtr request_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_iShare_2eproto();
   friend void protobuf_AssignDesc_iShare_2eproto();
@@ -1198,6 +1226,518 @@ class Image : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Image* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Request : public ::google::protobuf::Message {
+ public:
+  Request();
+  virtual ~Request();
+
+  Request(const Request& from);
+
+  inline Request& operator=(const Request& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Request& default_instance();
+
+  void Swap(Request* other);
+
+  // implements Message ----------------------------------------------
+
+  inline Request* New() const { return New(NULL); }
+
+  Request* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Request& from);
+  void MergeFrom(const Request& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Request* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string request_id = 1;
+  void clear_request_id();
+  static const int kRequestIdFieldNumber = 1;
+  const ::std::string& request_id() const;
+  void set_request_id(const ::std::string& value);
+  void set_request_id(const char* value);
+  void set_request_id(const char* value, size_t size);
+  ::std::string* mutable_request_id();
+  ::std::string* release_request_id();
+  void set_allocated_request_id(::std::string* request_id);
+
+  // optional string sender = 2;
+  void clear_sender();
+  static const int kSenderFieldNumber = 2;
+  const ::std::string& sender() const;
+  void set_sender(const ::std::string& value);
+  void set_sender(const char* value);
+  void set_sender(const char* value, size_t size);
+  ::std::string* mutable_sender();
+  ::std::string* release_sender();
+  void set_allocated_sender(::std::string* sender);
+
+  // optional string receiver = 3;
+  void clear_receiver();
+  static const int kReceiverFieldNumber = 3;
+  const ::std::string& receiver() const;
+  void set_receiver(const ::std::string& value);
+  void set_receiver(const char* value);
+  void set_receiver(const char* value, size_t size);
+  ::std::string* mutable_receiver();
+  ::std::string* release_receiver();
+  void set_allocated_receiver(::std::string* receiver);
+
+  // optional string type = 4;
+  void clear_type();
+  static const int kTypeFieldNumber = 4;
+  const ::std::string& type() const;
+  void set_type(const ::std::string& value);
+  void set_type(const char* value);
+  void set_type(const char* value, size_t size);
+  ::std::string* mutable_type();
+  ::std::string* release_type();
+  void set_allocated_type(::std::string* type);
+
+  // optional string content = 5;
+  void clear_content();
+  static const int kContentFieldNumber = 5;
+  const ::std::string& content() const;
+  void set_content(const ::std::string& value);
+  void set_content(const char* value);
+  void set_content(const char* value, size_t size);
+  ::std::string* mutable_content();
+  ::std::string* release_content();
+  void set_allocated_content(::std::string* content);
+
+  // optional string response = 6;
+  void clear_response();
+  static const int kResponseFieldNumber = 6;
+  const ::std::string& response() const;
+  void set_response(const ::std::string& value);
+  void set_response(const char* value);
+  void set_response(const char* value, size_t size);
+  ::std::string* mutable_response();
+  ::std::string* release_response();
+  void set_allocated_response(::std::string* response);
+
+  // optional string request_date = 7;
+  void clear_request_date();
+  static const int kRequestDateFieldNumber = 7;
+  const ::std::string& request_date() const;
+  void set_request_date(const ::std::string& value);
+  void set_request_date(const char* value);
+  void set_request_date(const char* value, size_t size);
+  ::std::string* mutable_request_date();
+  ::std::string* release_request_date();
+  void set_allocated_request_date(::std::string* request_date);
+
+  // optional string response_date = 8;
+  void clear_response_date();
+  static const int kResponseDateFieldNumber = 8;
+  const ::std::string& response_date() const;
+  void set_response_date(const ::std::string& value);
+  void set_response_date(const char* value);
+  void set_response_date(const char* value, size_t size);
+  ::std::string* mutable_response_date();
+  ::std::string* release_response_date();
+  void set_allocated_response_date(::std::string* response_date);
+
+  // optional string ignore_from = 9;
+  void clear_ignore_from();
+  static const int kIgnoreFromFieldNumber = 9;
+  const ::std::string& ignore_from() const;
+  void set_ignore_from(const ::std::string& value);
+  void set_ignore_from(const char* value);
+  void set_ignore_from(const char* value, size_t size);
+  ::std::string* mutable_ignore_from();
+  ::std::string* release_ignore_from();
+  void set_allocated_ignore_from(::std::string* ignore_from);
+
+  // optional string ignore_to = 10;
+  void clear_ignore_to();
+  static const int kIgnoreToFieldNumber = 10;
+  const ::std::string& ignore_to() const;
+  void set_ignore_to(const ::std::string& value);
+  void set_ignore_to(const char* value);
+  void set_ignore_to(const char* value, size_t size);
+  ::std::string* mutable_ignore_to();
+  ::std::string* release_ignore_to();
+  void set_allocated_ignore_to(::std::string* ignore_to);
+
+  // @@protoc_insertion_point(class_scope:helloworld.Request)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr request_id_;
+  ::google::protobuf::internal::ArenaStringPtr sender_;
+  ::google::protobuf::internal::ArenaStringPtr receiver_;
+  ::google::protobuf::internal::ArenaStringPtr type_;
+  ::google::protobuf::internal::ArenaStringPtr content_;
+  ::google::protobuf::internal::ArenaStringPtr response_;
+  ::google::protobuf::internal::ArenaStringPtr request_date_;
+  ::google::protobuf::internal::ArenaStringPtr response_date_;
+  ::google::protobuf::internal::ArenaStringPtr ignore_from_;
+  ::google::protobuf::internal::ArenaStringPtr ignore_to_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_iShare_2eproto();
+  friend void protobuf_AssignDesc_iShare_2eproto();
+  friend void protobuf_ShutdownFile_iShare_2eproto();
+
+  void InitAsDefaultInstance();
+  static Request* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Response : public ::google::protobuf::Message {
+ public:
+  Response();
+  virtual ~Response();
+
+  Response(const Response& from);
+
+  inline Response& operator=(const Response& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Response& default_instance();
+
+  void Swap(Response* other);
+
+  // implements Message ----------------------------------------------
+
+  inline Response* New() const { return New(NULL); }
+
+  Response* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Response& from);
+  void MergeFrom(const Response& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Response* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string request_id = 1;
+  void clear_request_id();
+  static const int kRequestIdFieldNumber = 1;
+  const ::std::string& request_id() const;
+  void set_request_id(const ::std::string& value);
+  void set_request_id(const char* value);
+  void set_request_id(const char* value, size_t size);
+  ::std::string* mutable_request_id();
+  ::std::string* release_request_id();
+  void set_allocated_request_id(::std::string* request_id);
+
+  // optional string sender = 2;
+  void clear_sender();
+  static const int kSenderFieldNumber = 2;
+  const ::std::string& sender() const;
+  void set_sender(const ::std::string& value);
+  void set_sender(const char* value);
+  void set_sender(const char* value, size_t size);
+  ::std::string* mutable_sender();
+  ::std::string* release_sender();
+  void set_allocated_sender(::std::string* sender);
+
+  // optional string receiver = 3;
+  void clear_receiver();
+  static const int kReceiverFieldNumber = 3;
+  const ::std::string& receiver() const;
+  void set_receiver(const ::std::string& value);
+  void set_receiver(const char* value);
+  void set_receiver(const char* value, size_t size);
+  ::std::string* mutable_receiver();
+  ::std::string* release_receiver();
+  void set_allocated_receiver(::std::string* receiver);
+
+  // optional string response = 4;
+  void clear_response();
+  static const int kResponseFieldNumber = 4;
+  const ::std::string& response() const;
+  void set_response(const ::std::string& value);
+  void set_response(const char* value);
+  void set_response(const char* value, size_t size);
+  ::std::string* mutable_response();
+  ::std::string* release_response();
+  void set_allocated_response(::std::string* response);
+
+  // optional string response_date = 5;
+  void clear_response_date();
+  static const int kResponseDateFieldNumber = 5;
+  const ::std::string& response_date() const;
+  void set_response_date(const ::std::string& value);
+  void set_response_date(const char* value);
+  void set_response_date(const char* value, size_t size);
+  ::std::string* mutable_response_date();
+  ::std::string* release_response_date();
+  void set_allocated_response_date(::std::string* response_date);
+
+  // @@protoc_insertion_point(class_scope:helloworld.Response)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr request_id_;
+  ::google::protobuf::internal::ArenaStringPtr sender_;
+  ::google::protobuf::internal::ArenaStringPtr receiver_;
+  ::google::protobuf::internal::ArenaStringPtr response_;
+  ::google::protobuf::internal::ArenaStringPtr response_date_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_iShare_2eproto();
+  friend void protobuf_AssignDesc_iShare_2eproto();
+  friend void protobuf_ShutdownFile_iShare_2eproto();
+
+  void InitAsDefaultInstance();
+  static Response* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class IgnoreMessage : public ::google::protobuf::Message {
+ public:
+  IgnoreMessage();
+  virtual ~IgnoreMessage();
+
+  IgnoreMessage(const IgnoreMessage& from);
+
+  inline IgnoreMessage& operator=(const IgnoreMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const IgnoreMessage& default_instance();
+
+  void Swap(IgnoreMessage* other);
+
+  // implements Message ----------------------------------------------
+
+  inline IgnoreMessage* New() const { return New(NULL); }
+
+  IgnoreMessage* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const IgnoreMessage& from);
+  void MergeFrom(const IgnoreMessage& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(IgnoreMessage* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string requestLog_id = 1;
+  void clear_requestlog_id();
+  static const int kRequestLogIdFieldNumber = 1;
+  const ::std::string& requestlog_id() const;
+  void set_requestlog_id(const ::std::string& value);
+  void set_requestlog_id(const char* value);
+  void set_requestlog_id(const char* value, size_t size);
+  ::std::string* mutable_requestlog_id();
+  ::std::string* release_requestlog_id();
+  void set_allocated_requestlog_id(::std::string* requestlog_id);
+
+  // optional string user = 2;
+  void clear_user();
+  static const int kUserFieldNumber = 2;
+  const ::std::string& user() const;
+  void set_user(const ::std::string& value);
+  void set_user(const char* value);
+  void set_user(const char* value, size_t size);
+  ::std::string* mutable_user();
+  ::std::string* release_user();
+  void set_allocated_user(::std::string* user);
+
+  // @@protoc_insertion_point(class_scope:helloworld.IgnoreMessage)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr requestlog_id_;
+  ::google::protobuf::internal::ArenaStringPtr user_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_iShare_2eproto();
+  friend void protobuf_AssignDesc_iShare_2eproto();
+  friend void protobuf_ShutdownFile_iShare_2eproto();
+
+  void InitAsDefaultInstance();
+  static IgnoreMessage* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BillPayment : public ::google::protobuf::Message {
+ public:
+  BillPayment();
+  virtual ~BillPayment();
+
+  BillPayment(const BillPayment& from);
+
+  inline BillPayment& operator=(const BillPayment& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BillPayment& default_instance();
+
+  void Swap(BillPayment* other);
+
+  // implements Message ----------------------------------------------
+
+  inline BillPayment* New() const { return New(NULL); }
+
+  BillPayment* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BillPayment& from);
+  void MergeFrom(const BillPayment& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(BillPayment* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string bill_id = 1;
+  void clear_bill_id();
+  static const int kBillIdFieldNumber = 1;
+  const ::std::string& bill_id() const;
+  void set_bill_id(const ::std::string& value);
+  void set_bill_id(const char* value);
+  void set_bill_id(const char* value, size_t size);
+  ::std::string* mutable_bill_id();
+  ::std::string* release_bill_id();
+  void set_allocated_bill_id(::std::string* bill_id);
+
+  // optional string paidStatus = 2;
+  void clear_paidstatus();
+  static const int kPaidStatusFieldNumber = 2;
+  const ::std::string& paidstatus() const;
+  void set_paidstatus(const ::std::string& value);
+  void set_paidstatus(const char* value);
+  void set_paidstatus(const char* value, size_t size);
+  ::std::string* mutable_paidstatus();
+  ::std::string* release_paidstatus();
+  void set_allocated_paidstatus(::std::string* paidstatus);
+
+  // @@protoc_insertion_point(class_scope:helloworld.BillPayment)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr bill_id_;
+  ::google::protobuf::internal::ArenaStringPtr paidstatus_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_iShare_2eproto();
+  friend void protobuf_AssignDesc_iShare_2eproto();
+  friend void protobuf_ShutdownFile_iShare_2eproto();
+
+  void InitAsDefaultInstance();
+  static BillPayment* default_instance_;
 };
 // ===================================================================
 
@@ -1808,47 +2348,47 @@ inline void Share_inf::set_allocated_type(::std::string* type) {
   // @@protoc_insertion_point(field_set_allocated:helloworld.Share_inf.type)
 }
 
-// optional string account = 4;
-inline void Share_inf::clear_account() {
-  account_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional string paidBy = 4;
+inline void Share_inf::clear_paidby() {
+  paidby_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Share_inf::account() const {
-  // @@protoc_insertion_point(field_get:helloworld.Share_inf.account)
-  return account_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& Share_inf::paidby() const {
+  // @@protoc_insertion_point(field_get:helloworld.Share_inf.paidBy)
+  return paidby_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Share_inf::set_account(const ::std::string& value) {
+inline void Share_inf::set_paidby(const ::std::string& value) {
   
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:helloworld.Share_inf.account)
+  paidby_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Share_inf.paidBy)
 }
-inline void Share_inf::set_account(const char* value) {
+inline void Share_inf::set_paidby(const char* value) {
   
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:helloworld.Share_inf.account)
+  paidby_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Share_inf.paidBy)
 }
-inline void Share_inf::set_account(const char* value, size_t size) {
+inline void Share_inf::set_paidby(const char* value, size_t size) {
   
-  account_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  paidby_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:helloworld.Share_inf.account)
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Share_inf.paidBy)
 }
-inline ::std::string* Share_inf::mutable_account() {
+inline ::std::string* Share_inf::mutable_paidby() {
   
-  // @@protoc_insertion_point(field_mutable:helloworld.Share_inf.account)
-  return account_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:helloworld.Share_inf.paidBy)
+  return paidby_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Share_inf::release_account() {
+inline ::std::string* Share_inf::release_paidby() {
   
-  return account_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return paidby_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Share_inf::set_allocated_account(::std::string* account) {
-  if (account != NULL) {
+inline void Share_inf::set_allocated_paidby(::std::string* paidby) {
+  if (paidby != NULL) {
     
   } else {
     
   }
-  account_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), account);
-  // @@protoc_insertion_point(field_set_allocated:helloworld.Share_inf.account)
+  paidby_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), paidby);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Share_inf.paidBy)
 }
 
 // optional string data = 5;
@@ -2089,6 +2629,49 @@ inline void Share_inf::set_allocated_bill_id(::std::string* bill_id) {
   }
   bill_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bill_id);
   // @@protoc_insertion_point(field_set_allocated:helloworld.Share_inf.bill_id)
+}
+
+// optional string paidStatus = 11;
+inline void Share_inf::clear_paidstatus() {
+  paidstatus_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Share_inf::paidstatus() const {
+  // @@protoc_insertion_point(field_get:helloworld.Share_inf.paidStatus)
+  return paidstatus_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Share_inf::set_paidstatus(const ::std::string& value) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Share_inf.paidStatus)
+}
+inline void Share_inf::set_paidstatus(const char* value) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Share_inf.paidStatus)
+}
+inline void Share_inf::set_paidstatus(const char* value, size_t size) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Share_inf.paidStatus)
+}
+inline ::std::string* Share_inf::mutable_paidstatus() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Share_inf.paidStatus)
+  return paidstatus_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Share_inf::release_paidstatus() {
+  
+  return paidstatus_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Share_inf::set_allocated_paidstatus(::std::string* paidstatus) {
+  if (paidstatus != NULL) {
+    
+  } else {
+    
+  }
+  paidstatus_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), paidstatus);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Share_inf.paidStatus)
 }
 
 // -------------------------------------------------------------------
@@ -2357,6 +2940,49 @@ inline void Syn_data::set_allocated_delete_(::std::string* delete_) {
   // @@protoc_insertion_point(field_set_allocated:helloworld.Syn_data.delete)
 }
 
+// optional string request = 4;
+inline void Syn_data::clear_request() {
+  request_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Syn_data::request() const {
+  // @@protoc_insertion_point(field_get:helloworld.Syn_data.request)
+  return request_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Syn_data::set_request(const ::std::string& value) {
+  
+  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Syn_data.request)
+}
+inline void Syn_data::set_request(const char* value) {
+  
+  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Syn_data.request)
+}
+inline void Syn_data::set_request(const char* value, size_t size) {
+  
+  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Syn_data.request)
+}
+inline ::std::string* Syn_data::mutable_request() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Syn_data.request)
+  return request_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Syn_data::release_request() {
+  
+  return request_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Syn_data::set_allocated_request(::std::string* request) {
+  if (request != NULL) {
+    
+  } else {
+    
+  }
+  request_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Syn_data.request)
+}
+
 // -------------------------------------------------------------------
 
 // HelloRequest
@@ -2541,7 +3167,848 @@ inline void Image::set_allocated_data(::std::string* data) {
   // @@protoc_insertion_point(field_set_allocated:helloworld.Image.data)
 }
 
+// -------------------------------------------------------------------
+
+// Request
+
+// optional string request_id = 1;
+inline void Request::clear_request_id() {
+  request_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::request_id() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.request_id)
+  return request_id_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_request_id(const ::std::string& value) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.request_id)
+}
+inline void Request::set_request_id(const char* value) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.request_id)
+}
+inline void Request::set_request_id(const char* value, size_t size) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.request_id)
+}
+inline ::std::string* Request::mutable_request_id() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.request_id)
+  return request_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_request_id() {
+  
+  return request_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_request_id(::std::string* request_id) {
+  if (request_id != NULL) {
+    
+  } else {
+    
+  }
+  request_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request_id);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.request_id)
+}
+
+// optional string sender = 2;
+inline void Request::clear_sender() {
+  sender_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::sender() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.sender)
+  return sender_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_sender(const ::std::string& value) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.sender)
+}
+inline void Request::set_sender(const char* value) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.sender)
+}
+inline void Request::set_sender(const char* value, size_t size) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.sender)
+}
+inline ::std::string* Request::mutable_sender() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.sender)
+  return sender_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_sender() {
+  
+  return sender_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_sender(::std::string* sender) {
+  if (sender != NULL) {
+    
+  } else {
+    
+  }
+  sender_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sender);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.sender)
+}
+
+// optional string receiver = 3;
+inline void Request::clear_receiver() {
+  receiver_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::receiver() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.receiver)
+  return receiver_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_receiver(const ::std::string& value) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.receiver)
+}
+inline void Request::set_receiver(const char* value) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.receiver)
+}
+inline void Request::set_receiver(const char* value, size_t size) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.receiver)
+}
+inline ::std::string* Request::mutable_receiver() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.receiver)
+  return receiver_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_receiver() {
+  
+  return receiver_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_receiver(::std::string* receiver) {
+  if (receiver != NULL) {
+    
+  } else {
+    
+  }
+  receiver_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), receiver);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.receiver)
+}
+
+// optional string type = 4;
+inline void Request::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::type() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.type)
+  return type_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.type)
+}
+inline void Request::set_type(const char* value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.type)
+}
+inline void Request::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.type)
+}
+inline ::std::string* Request::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_type() {
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.type)
+}
+
+// optional string content = 5;
+inline void Request::clear_content() {
+  content_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::content() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.content)
+  return content_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_content(const ::std::string& value) {
+  
+  content_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.content)
+}
+inline void Request::set_content(const char* value) {
+  
+  content_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.content)
+}
+inline void Request::set_content(const char* value, size_t size) {
+  
+  content_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.content)
+}
+inline ::std::string* Request::mutable_content() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.content)
+  return content_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_content() {
+  
+  return content_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_content(::std::string* content) {
+  if (content != NULL) {
+    
+  } else {
+    
+  }
+  content_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), content);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.content)
+}
+
+// optional string response = 6;
+inline void Request::clear_response() {
+  response_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::response() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.response)
+  return response_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_response(const ::std::string& value) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.response)
+}
+inline void Request::set_response(const char* value) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.response)
+}
+inline void Request::set_response(const char* value, size_t size) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.response)
+}
+inline ::std::string* Request::mutable_response() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.response)
+  return response_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_response() {
+  
+  return response_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_response(::std::string* response) {
+  if (response != NULL) {
+    
+  } else {
+    
+  }
+  response_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), response);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.response)
+}
+
+// optional string request_date = 7;
+inline void Request::clear_request_date() {
+  request_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::request_date() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.request_date)
+  return request_date_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_request_date(const ::std::string& value) {
+  
+  request_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.request_date)
+}
+inline void Request::set_request_date(const char* value) {
+  
+  request_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.request_date)
+}
+inline void Request::set_request_date(const char* value, size_t size) {
+  
+  request_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.request_date)
+}
+inline ::std::string* Request::mutable_request_date() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.request_date)
+  return request_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_request_date() {
+  
+  return request_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_request_date(::std::string* request_date) {
+  if (request_date != NULL) {
+    
+  } else {
+    
+  }
+  request_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request_date);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.request_date)
+}
+
+// optional string response_date = 8;
+inline void Request::clear_response_date() {
+  response_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::response_date() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.response_date)
+  return response_date_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_response_date(const ::std::string& value) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.response_date)
+}
+inline void Request::set_response_date(const char* value) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.response_date)
+}
+inline void Request::set_response_date(const char* value, size_t size) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.response_date)
+}
+inline ::std::string* Request::mutable_response_date() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.response_date)
+  return response_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_response_date() {
+  
+  return response_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_response_date(::std::string* response_date) {
+  if (response_date != NULL) {
+    
+  } else {
+    
+  }
+  response_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), response_date);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.response_date)
+}
+
+// optional string ignore_from = 9;
+inline void Request::clear_ignore_from() {
+  ignore_from_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::ignore_from() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.ignore_from)
+  return ignore_from_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_ignore_from(const ::std::string& value) {
+  
+  ignore_from_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.ignore_from)
+}
+inline void Request::set_ignore_from(const char* value) {
+  
+  ignore_from_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.ignore_from)
+}
+inline void Request::set_ignore_from(const char* value, size_t size) {
+  
+  ignore_from_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.ignore_from)
+}
+inline ::std::string* Request::mutable_ignore_from() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.ignore_from)
+  return ignore_from_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_ignore_from() {
+  
+  return ignore_from_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_ignore_from(::std::string* ignore_from) {
+  if (ignore_from != NULL) {
+    
+  } else {
+    
+  }
+  ignore_from_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ignore_from);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.ignore_from)
+}
+
+// optional string ignore_to = 10;
+inline void Request::clear_ignore_to() {
+  ignore_to_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::ignore_to() const {
+  // @@protoc_insertion_point(field_get:helloworld.Request.ignore_to)
+  return ignore_to_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_ignore_to(const ::std::string& value) {
+  
+  ignore_to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Request.ignore_to)
+}
+inline void Request::set_ignore_to(const char* value) {
+  
+  ignore_to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Request.ignore_to)
+}
+inline void Request::set_ignore_to(const char* value, size_t size) {
+  
+  ignore_to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Request.ignore_to)
+}
+inline ::std::string* Request::mutable_ignore_to() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Request.ignore_to)
+  return ignore_to_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_ignore_to() {
+  
+  return ignore_to_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_ignore_to(::std::string* ignore_to) {
+  if (ignore_to != NULL) {
+    
+  } else {
+    
+  }
+  ignore_to_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ignore_to);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Request.ignore_to)
+}
+
+// -------------------------------------------------------------------
+
+// Response
+
+// optional string request_id = 1;
+inline void Response::clear_request_id() {
+  request_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Response::request_id() const {
+  // @@protoc_insertion_point(field_get:helloworld.Response.request_id)
+  return request_id_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_request_id(const ::std::string& value) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Response.request_id)
+}
+inline void Response::set_request_id(const char* value) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Response.request_id)
+}
+inline void Response::set_request_id(const char* value, size_t size) {
+  
+  request_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Response.request_id)
+}
+inline ::std::string* Response::mutable_request_id() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Response.request_id)
+  return request_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Response::release_request_id() {
+  
+  return request_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_allocated_request_id(::std::string* request_id) {
+  if (request_id != NULL) {
+    
+  } else {
+    
+  }
+  request_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request_id);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Response.request_id)
+}
+
+// optional string sender = 2;
+inline void Response::clear_sender() {
+  sender_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Response::sender() const {
+  // @@protoc_insertion_point(field_get:helloworld.Response.sender)
+  return sender_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_sender(const ::std::string& value) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Response.sender)
+}
+inline void Response::set_sender(const char* value) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Response.sender)
+}
+inline void Response::set_sender(const char* value, size_t size) {
+  
+  sender_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Response.sender)
+}
+inline ::std::string* Response::mutable_sender() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Response.sender)
+  return sender_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Response::release_sender() {
+  
+  return sender_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_allocated_sender(::std::string* sender) {
+  if (sender != NULL) {
+    
+  } else {
+    
+  }
+  sender_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sender);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Response.sender)
+}
+
+// optional string receiver = 3;
+inline void Response::clear_receiver() {
+  receiver_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Response::receiver() const {
+  // @@protoc_insertion_point(field_get:helloworld.Response.receiver)
+  return receiver_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_receiver(const ::std::string& value) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Response.receiver)
+}
+inline void Response::set_receiver(const char* value) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Response.receiver)
+}
+inline void Response::set_receiver(const char* value, size_t size) {
+  
+  receiver_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Response.receiver)
+}
+inline ::std::string* Response::mutable_receiver() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Response.receiver)
+  return receiver_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Response::release_receiver() {
+  
+  return receiver_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_allocated_receiver(::std::string* receiver) {
+  if (receiver != NULL) {
+    
+  } else {
+    
+  }
+  receiver_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), receiver);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Response.receiver)
+}
+
+// optional string response = 4;
+inline void Response::clear_response() {
+  response_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Response::response() const {
+  // @@protoc_insertion_point(field_get:helloworld.Response.response)
+  return response_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_response(const ::std::string& value) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Response.response)
+}
+inline void Response::set_response(const char* value) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Response.response)
+}
+inline void Response::set_response(const char* value, size_t size) {
+  
+  response_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Response.response)
+}
+inline ::std::string* Response::mutable_response() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Response.response)
+  return response_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Response::release_response() {
+  
+  return response_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_allocated_response(::std::string* response) {
+  if (response != NULL) {
+    
+  } else {
+    
+  }
+  response_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), response);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Response.response)
+}
+
+// optional string response_date = 5;
+inline void Response::clear_response_date() {
+  response_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Response::response_date() const {
+  // @@protoc_insertion_point(field_get:helloworld.Response.response_date)
+  return response_date_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_response_date(const ::std::string& value) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.Response.response_date)
+}
+inline void Response::set_response_date(const char* value) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.Response.response_date)
+}
+inline void Response::set_response_date(const char* value, size_t size) {
+  
+  response_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.Response.response_date)
+}
+inline ::std::string* Response::mutable_response_date() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.Response.response_date)
+  return response_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Response::release_response_date() {
+  
+  return response_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Response::set_allocated_response_date(::std::string* response_date) {
+  if (response_date != NULL) {
+    
+  } else {
+    
+  }
+  response_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), response_date);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.Response.response_date)
+}
+
+// -------------------------------------------------------------------
+
+// IgnoreMessage
+
+// optional string requestLog_id = 1;
+inline void IgnoreMessage::clear_requestlog_id() {
+  requestlog_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& IgnoreMessage::requestlog_id() const {
+  // @@protoc_insertion_point(field_get:helloworld.IgnoreMessage.requestLog_id)
+  return requestlog_id_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void IgnoreMessage::set_requestlog_id(const ::std::string& value) {
+  
+  requestlog_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.IgnoreMessage.requestLog_id)
+}
+inline void IgnoreMessage::set_requestlog_id(const char* value) {
+  
+  requestlog_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.IgnoreMessage.requestLog_id)
+}
+inline void IgnoreMessage::set_requestlog_id(const char* value, size_t size) {
+  
+  requestlog_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.IgnoreMessage.requestLog_id)
+}
+inline ::std::string* IgnoreMessage::mutable_requestlog_id() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.IgnoreMessage.requestLog_id)
+  return requestlog_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* IgnoreMessage::release_requestlog_id() {
+  
+  return requestlog_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void IgnoreMessage::set_allocated_requestlog_id(::std::string* requestlog_id) {
+  if (requestlog_id != NULL) {
+    
+  } else {
+    
+  }
+  requestlog_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), requestlog_id);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.IgnoreMessage.requestLog_id)
+}
+
+// optional string user = 2;
+inline void IgnoreMessage::clear_user() {
+  user_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& IgnoreMessage::user() const {
+  // @@protoc_insertion_point(field_get:helloworld.IgnoreMessage.user)
+  return user_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void IgnoreMessage::set_user(const ::std::string& value) {
+  
+  user_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.IgnoreMessage.user)
+}
+inline void IgnoreMessage::set_user(const char* value) {
+  
+  user_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.IgnoreMessage.user)
+}
+inline void IgnoreMessage::set_user(const char* value, size_t size) {
+  
+  user_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.IgnoreMessage.user)
+}
+inline ::std::string* IgnoreMessage::mutable_user() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.IgnoreMessage.user)
+  return user_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* IgnoreMessage::release_user() {
+  
+  return user_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void IgnoreMessage::set_allocated_user(::std::string* user) {
+  if (user != NULL) {
+    
+  } else {
+    
+  }
+  user_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), user);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.IgnoreMessage.user)
+}
+
+// -------------------------------------------------------------------
+
+// BillPayment
+
+// optional string bill_id = 1;
+inline void BillPayment::clear_bill_id() {
+  bill_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& BillPayment::bill_id() const {
+  // @@protoc_insertion_point(field_get:helloworld.BillPayment.bill_id)
+  return bill_id_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void BillPayment::set_bill_id(const ::std::string& value) {
+  
+  bill_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.BillPayment.bill_id)
+}
+inline void BillPayment::set_bill_id(const char* value) {
+  
+  bill_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.BillPayment.bill_id)
+}
+inline void BillPayment::set_bill_id(const char* value, size_t size) {
+  
+  bill_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.BillPayment.bill_id)
+}
+inline ::std::string* BillPayment::mutable_bill_id() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.BillPayment.bill_id)
+  return bill_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* BillPayment::release_bill_id() {
+  
+  return bill_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void BillPayment::set_allocated_bill_id(::std::string* bill_id) {
+  if (bill_id != NULL) {
+    
+  } else {
+    
+  }
+  bill_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bill_id);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.BillPayment.bill_id)
+}
+
+// optional string paidStatus = 2;
+inline void BillPayment::clear_paidstatus() {
+  paidstatus_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& BillPayment::paidstatus() const {
+  // @@protoc_insertion_point(field_get:helloworld.BillPayment.paidStatus)
+  return paidstatus_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void BillPayment::set_paidstatus(const ::std::string& value) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:helloworld.BillPayment.paidStatus)
+}
+inline void BillPayment::set_paidstatus(const char* value) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:helloworld.BillPayment.paidStatus)
+}
+inline void BillPayment::set_paidstatus(const char* value, size_t size) {
+  
+  paidstatus_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:helloworld.BillPayment.paidStatus)
+}
+inline ::std::string* BillPayment::mutable_paidstatus() {
+  
+  // @@protoc_insertion_point(field_mutable:helloworld.BillPayment.paidStatus)
+  return paidstatus_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* BillPayment::release_paidstatus() {
+  
+  return paidstatus_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void BillPayment::set_allocated_paidstatus(::std::string* paidstatus) {
+  if (paidstatus != NULL) {
+    
+  } else {
+    
+  }
+  paidstatus_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), paidstatus);
+  // @@protoc_insertion_point(field_set_allocated:helloworld.BillPayment.paidStatus)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -26,6 +26,14 @@ static const char* Greeter_method_names[] = {
   "/helloworld.Greeter/Obtain_bills",
   "/helloworld.Greeter/Send_Img",
   "/helloworld.Greeter/Receive_Img",
+  "/helloworld.Greeter/Reset_Status",
+  "/helloworld.Greeter/Send_request",
+  "/helloworld.Greeter/Obtain_request",
+  "/helloworld.Greeter/Obtain_requestLog",
+  "/helloworld.Greeter/Request_response",
+  "/helloworld.Greeter/MakePayment",
+  "/helloworld.Greeter/IgnoreRequestLog",
+  "/helloworld.Greeter/Create_requestLog",
 };
 
 std::unique_ptr< Greeter::Stub> Greeter::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel) {
@@ -46,6 +54,14 @@ Greeter::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
   , rpcmethod_Obtain_bills_(Greeter_method_names[9], ::grpc::RpcMethod::SERVER_STREAMING, channel->RegisterMethod(Greeter_method_names[9]))
   , rpcmethod_Send_Img_(Greeter_method_names[10], ::grpc::RpcMethod::CLIENT_STREAMING, channel->RegisterMethod(Greeter_method_names[10]))
   , rpcmethod_Receive_Img_(Greeter_method_names[11], ::grpc::RpcMethod::SERVER_STREAMING, channel->RegisterMethod(Greeter_method_names[11]))
+  , rpcmethod_Reset_Status_(Greeter_method_names[12], ::grpc::RpcMethod::NORMAL_RPC, channel->RegisterMethod(Greeter_method_names[12]))
+  , rpcmethod_Send_request_(Greeter_method_names[13], ::grpc::RpcMethod::NORMAL_RPC, channel->RegisterMethod(Greeter_method_names[13]))
+  , rpcmethod_Obtain_request_(Greeter_method_names[14], ::grpc::RpcMethod::SERVER_STREAMING, channel->RegisterMethod(Greeter_method_names[14]))
+  , rpcmethod_Obtain_requestLog_(Greeter_method_names[15], ::grpc::RpcMethod::SERVER_STREAMING, channel->RegisterMethod(Greeter_method_names[15]))
+  , rpcmethod_Request_response_(Greeter_method_names[16], ::grpc::RpcMethod::NORMAL_RPC, channel->RegisterMethod(Greeter_method_names[16]))
+  , rpcmethod_MakePayment_(Greeter_method_names[17], ::grpc::RpcMethod::CLIENT_STREAMING, channel->RegisterMethod(Greeter_method_names[17]))
+  , rpcmethod_IgnoreRequestLog_(Greeter_method_names[18], ::grpc::RpcMethod::NORMAL_RPC, channel->RegisterMethod(Greeter_method_names[18]))
+  , rpcmethod_Create_requestLog_(Greeter_method_names[19], ::grpc::RpcMethod::NORMAL_RPC, channel->RegisterMethod(Greeter_method_names[19]))
   {}
 
 ::grpc::Status Greeter::Stub::SayHello(::grpc::ClientContext* context, const ::helloworld::HelloRequest& request, ::helloworld::HelloReply* response) {
@@ -144,7 +160,71 @@ Greeter::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
   return new ::grpc::ClientAsyncReader< ::helloworld::Image>(channel(), cq, rpcmethod_Receive_Img_, context, request, tag);
 }
 
-Greeter::AsyncService::AsyncService() : ::grpc::AsynchronousService(Greeter_method_names, 12) {}
+::grpc::Status Greeter::Stub::Reset_Status(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::helloworld::Inf* response) {
+  return ::grpc::BlockingUnaryCall(channel(), rpcmethod_Reset_Status_, context, request, response);
+}
+
+::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* Greeter::Stub::AsyncReset_StatusRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>(channel(), cq, rpcmethod_Reset_Status_, context, request);
+}
+
+::grpc::Status Greeter::Stub::Send_request(::grpc::ClientContext* context, const ::helloworld::Request& request, ::helloworld::Inf* response) {
+  return ::grpc::BlockingUnaryCall(channel(), rpcmethod_Send_request_, context, request, response);
+}
+
+::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* Greeter::Stub::AsyncSend_requestRaw(::grpc::ClientContext* context, const ::helloworld::Request& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>(channel(), cq, rpcmethod_Send_request_, context, request);
+}
+
+::grpc::ClientReader< ::helloworld::Request>* Greeter::Stub::Obtain_requestRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) {
+  return new ::grpc::ClientReader< ::helloworld::Request>(channel(), rpcmethod_Obtain_request_, context, request);
+}
+
+::grpc::ClientAsyncReader< ::helloworld::Request>* Greeter::Stub::AsyncObtain_requestRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncReader< ::helloworld::Request>(channel(), cq, rpcmethod_Obtain_request_, context, request, tag);
+}
+
+::grpc::ClientReader< ::helloworld::Request>* Greeter::Stub::Obtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) {
+  return new ::grpc::ClientReader< ::helloworld::Request>(channel(), rpcmethod_Obtain_requestLog_, context, request);
+}
+
+::grpc::ClientAsyncReader< ::helloworld::Request>* Greeter::Stub::AsyncObtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncReader< ::helloworld::Request>(channel(), cq, rpcmethod_Obtain_requestLog_, context, request, tag);
+}
+
+::grpc::Status Greeter::Stub::Request_response(::grpc::ClientContext* context, const ::helloworld::Response& request, ::helloworld::Inf* response) {
+  return ::grpc::BlockingUnaryCall(channel(), rpcmethod_Request_response_, context, request, response);
+}
+
+::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* Greeter::Stub::AsyncRequest_responseRaw(::grpc::ClientContext* context, const ::helloworld::Response& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>(channel(), cq, rpcmethod_Request_response_, context, request);
+}
+
+::grpc::ClientWriter< ::helloworld::BillPayment>* Greeter::Stub::MakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response) {
+  return new ::grpc::ClientWriter< ::helloworld::BillPayment>(channel(), rpcmethod_MakePayment_, context, response);
+}
+
+::grpc::ClientAsyncWriter< ::helloworld::BillPayment>* Greeter::Stub::AsyncMakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncWriter< ::helloworld::BillPayment>(channel(), cq, rpcmethod_MakePayment_, context, response, tag);
+}
+
+::grpc::Status Greeter::Stub::IgnoreRequestLog(::grpc::ClientContext* context, const ::helloworld::IgnoreMessage& request, ::helloworld::Inf* response) {
+  return ::grpc::BlockingUnaryCall(channel(), rpcmethod_IgnoreRequestLog_, context, request, response);
+}
+
+::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* Greeter::Stub::AsyncIgnoreRequestLogRaw(::grpc::ClientContext* context, const ::helloworld::IgnoreMessage& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>(channel(), cq, rpcmethod_IgnoreRequestLog_, context, request);
+}
+
+::grpc::Status Greeter::Stub::Create_requestLog(::grpc::ClientContext* context, const ::helloworld::Request& request, ::helloworld::Inf* response) {
+  return ::grpc::BlockingUnaryCall(channel(), rpcmethod_Create_requestLog_, context, request, response);
+}
+
+::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* Greeter::Stub::AsyncCreate_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Request& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>(channel(), cq, rpcmethod_Create_requestLog_, context, request);
+}
+
+Greeter::AsyncService::AsyncService() : ::grpc::AsynchronousService(Greeter_method_names, 20) {}
 
 Greeter::Service::~Service() {
   delete service_;
@@ -246,6 +326,70 @@ void Greeter::AsyncService::RequestReceive_Img(::grpc::ServerContext* context, :
   AsynchronousService::RequestServerStreaming(11, context, request, writer, new_call_cq, notification_cq, tag);
 }
 
+::grpc::Status Greeter::Service::Reset_Status(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestReset_Status(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::Send_request(::grpc::ServerContext* context, const ::helloworld::Request* request, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestSend_request(::grpc::ServerContext* context, ::helloworld::Request* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::Obtain_request(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::grpc::ServerWriter< ::helloworld::Request>* writer) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestObtain_request(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncWriter< ::helloworld::Request>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestServerStreaming(14, context, request, writer, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::Obtain_requestLog(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::grpc::ServerWriter< ::helloworld::Request>* writer) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestObtain_requestLog(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncWriter< ::helloworld::Request>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestServerStreaming(15, context, request, writer, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::Request_response(::grpc::ServerContext* context, const ::helloworld::Response* request, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestRequest_response(::grpc::ServerContext* context, ::helloworld::Response* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::MakePayment(::grpc::ServerContext* context, ::grpc::ServerReader< ::helloworld::BillPayment>* reader, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestMakePayment(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::helloworld::Inf, ::helloworld::BillPayment>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestClientStreaming(17, context, reader, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::IgnoreRequestLog(::grpc::ServerContext* context, const ::helloworld::IgnoreMessage* request, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestIgnoreRequestLog(::grpc::ServerContext* context, ::helloworld::IgnoreMessage* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestAsyncUnary(18, context, request, response, new_call_cq, notification_cq, tag);
+}
+
+::grpc::Status Greeter::Service::Create_requestLog(::grpc::ServerContext* context, const ::helloworld::Request* request, ::helloworld::Inf* response) {
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED);
+}
+
+void Greeter::AsyncService::RequestCreate_requestLog(::grpc::ServerContext* context, ::helloworld::Request* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+}
+
 ::grpc::RpcService* Greeter::Service::service() {
   if (service_ != nullptr) {
     return service_;
@@ -323,6 +467,54 @@ void Greeter::AsyncService::RequestReceive_Img(::grpc::ServerContext* context, :
       new ::grpc::ServerStreamingHandler< Greeter::Service, ::helloworld::Repeated_string, ::helloworld::Image>(
           std::mem_fn(&Greeter::Service::Receive_Img), this),
       new ::helloworld::Repeated_string, new ::helloworld::Image));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[12],
+      ::grpc::RpcMethod::NORMAL_RPC,
+      new ::grpc::RpcMethodHandler< Greeter::Service, ::helloworld::Inf, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::Reset_Status), this),
+      new ::helloworld::Inf, new ::helloworld::Inf));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[13],
+      ::grpc::RpcMethod::NORMAL_RPC,
+      new ::grpc::RpcMethodHandler< Greeter::Service, ::helloworld::Request, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::Send_request), this),
+      new ::helloworld::Request, new ::helloworld::Inf));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[14],
+      ::grpc::RpcMethod::SERVER_STREAMING,
+      new ::grpc::ServerStreamingHandler< Greeter::Service, ::helloworld::Inf, ::helloworld::Request>(
+          std::mem_fn(&Greeter::Service::Obtain_request), this),
+      new ::helloworld::Inf, new ::helloworld::Request));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[15],
+      ::grpc::RpcMethod::SERVER_STREAMING,
+      new ::grpc::ServerStreamingHandler< Greeter::Service, ::helloworld::Inf, ::helloworld::Request>(
+          std::mem_fn(&Greeter::Service::Obtain_requestLog), this),
+      new ::helloworld::Inf, new ::helloworld::Request));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[16],
+      ::grpc::RpcMethod::NORMAL_RPC,
+      new ::grpc::RpcMethodHandler< Greeter::Service, ::helloworld::Response, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::Request_response), this),
+      new ::helloworld::Response, new ::helloworld::Inf));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[17],
+      ::grpc::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::ClientStreamingHandler< Greeter::Service, ::helloworld::BillPayment, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::MakePayment), this),
+      new ::helloworld::BillPayment, new ::helloworld::Inf));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[18],
+      ::grpc::RpcMethod::NORMAL_RPC,
+      new ::grpc::RpcMethodHandler< Greeter::Service, ::helloworld::IgnoreMessage, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::IgnoreRequestLog), this),
+      new ::helloworld::IgnoreMessage, new ::helloworld::Inf));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      Greeter_method_names[19],
+      ::grpc::RpcMethod::NORMAL_RPC,
+      new ::grpc::RpcMethodHandler< Greeter::Service, ::helloworld::Request, ::helloworld::Inf>(
+          std::mem_fn(&Greeter::Service::Create_requestLog), this),
+      new ::helloworld::Request, new ::helloworld::Inf));
   return service_;
 }
 

@@ -34,6 +34,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <list>
 
 #include <mysql.h>
 #include <grpc/grpc.h>
@@ -69,6 +70,10 @@ using helloworld::Image;
 using helloworld::Share_inf;
 using helloworld::Bill_request;
 using helloworld::Syn_data;
+using helloworld::Request;
+using helloworld::Response;
+using helloworld::IgnoreMessage;
+using helloworld::BillPayment;
 using namespace std;
 
 #define CONN_NUM 10
@@ -97,7 +102,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             printf("Obtain user_inf fail\n");
             printf("%s\n", sql_command.data());
             release_sock_to_sql_pool(sock_node);
-            return Status::OK;
+            return Status::Cancelled;
         }
         res = mysql_use_result(conn);
         while ((row = mysql_fetch_row(res)) != NULL) {
@@ -219,8 +224,8 @@ class GreeterServiceImpl final : public Greeter::Service {
         
         string sql_command = "SELECT username FROM User WHERE username like '%" + request->information() + "%'";
         if (mysql_query(conn, sql_command.data())) {
-            
             printf("%s\n", sql_command.data());
+
         }
         res = mysql_use_result(conn);
         while ((row = mysql_fetch_row(res)) != NULL) {
@@ -243,6 +248,7 @@ class GreeterServiceImpl final : public Greeter::Service {
         string sql_command = "SELECT * FROM iShare_data.Friends where (username_1 = '" + request->content(0) + "' and username_2 = '" + request->content(1) + "') or (username_1 = '" + request->content(1) + "' and username_2 = '" +request->content(0) + "')";
         if (mysql_query(conn, sql_command.data())) {
             printf("%s\n", mysql_error(conn));
+
         }
         res = mysql_use_result(conn);
         while ((row = mysql_fetch_row(res)) != NULL) {
@@ -269,6 +275,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             printf("%s\n", sql_command.data());
             reply->set_information("UPDATE User WRONG");
         }
+
         
         reply->set_information("OK");
         printf("*************Add_friend OUT*************\n");
@@ -289,7 +296,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             printf("%s\n", sql_command.data());
             
             release_sock_to_sql_pool(sock_node);
-            return Status::OK;
+            return Status::Cancelled;
         }
         // delete result check
         if(mysql_affected_rows(conn) != 1) {
@@ -328,7 +335,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             //            ostr << i;
             //            string astr = ostr.str();
             
-            sql_command = "SELECT synchronism_friend FROM User WHERE username ='" + request.information() + "'";
+            sql_command = "SELECT synchronism_friend, synchronism_bill, synchronism_delete, synchronism_request FROM User WHERE username ='" + request.information() + "'";
             if (!mysql_query(conn, sql_command.data())) {
                 
                 //cout << sql_command << endl;
@@ -337,6 +344,9 @@ class GreeterServiceImpl final : public Greeter::Service {
                     row = mysql_fetch_row(res);
                     if (row != NULL) {
                         reply.set_friend_(row[0]);
+                        reply.set_bill(row[1]);
+                        reply.set_delete_(row[2]);
+                        reply.set_request(row[3]);
                     } else {
                         printf("error row == NULL\n");
                         printf("fail %s\n", sql_command.data());
@@ -350,52 +360,7 @@ class GreeterServiceImpl final : public Greeter::Service {
                 printf("error %s\n", mysql_error(conn));
                 printf("%s fail\n", sql_command.data());
             }
-            
-            sql_command = "SELECT synchronism_bill FROM User WHERE username ='" + request.information() + "'";
-            if (!mysql_query(conn, sql_command.data())) {
-                
-                //cout << sql_command << endl;
-                res = mysql_use_result(conn);
-                if (res != NULL) {
-                    row = mysql_fetch_row(res);
-                    if (row != NULL) {
-                        reply.set_bill(row[0]);
-                    } else {
-                        printf("error row == NULL\n");
-                        printf("%s fail\n", sql_command.data());
-                    }
-                } else {
-                    printf("error res == NULL\n");
-                    printf("%s fail\n", sql_command.data());
-                }
-                mysql_free_result(res);
-            } else {
-                printf("error %s\n", mysql_error(conn));
-                printf("%s fail\n", sql_command.data());
-            }
-            
-            sql_command = "SELECT synchronism_delete FROM User WHERE username ='" + request.information() + "'";
-            if (!mysql_query(conn, sql_command.data())) {
-                
-                //cout << sql_command << endl;
-                res = mysql_use_result(conn);
-                if (res != NULL) {
-                    row = mysql_fetch_row(res);
-                    if (row != NULL) {
-                        reply.set_delete_(row[0]);
-                    } else {
-                        printf("error row == NULL\n");
-                        printf("%s fail\n", sql_command.data());
-                    }
-                } else {
-                    printf("error res == NULL\n");
-                    printf("%s fail\n", sql_command.data());
-                }
-                mysql_free_result(res);
-            } else {
-                printf("error %s\n", mysql_error(conn));
-                printf("%s fail\n", sql_command.data());
-            }
+        
             
             
             //check write success or not
@@ -458,7 +423,7 @@ class GreeterServiceImpl final : public Greeter::Service {
         //MYSQL_RES *res;
         //MYSQL_ROW row;
         
-        string sql_command = "INSERT INTO Bills (creater, amount, type, account, date, note, image, member_0, member_1, member_2, member_3, member_4, member_5, member_6, member_7, member_8, member_9) VALUES ('" + request->creater() + "', '" + request->amount() + "' , '" + request->type() + "' , '" + request->account() + "' , '" + request->data() + "' , '" + request->note() + "' , '" + request->image() + "' , '" + request->members(0) + "' , '" + request->members(1) + "' , '" + request->members(2) + "' , '" + request->members(3) + "' , '" + request->members(4) + "' , '" + request->members(5) + "' , '" + request->members(6) + "' , '" + request->members(7) + "' , '" + request->members(8) + "' , '" + request->members(9) + "')";
+        string sql_command = "INSERT INTO Bills (creater, amount, type, paidBy, date, note, image, member_0, member_1, member_2, member_3, member_4, member_5, member_6, member_7, member_8, member_9) VALUES ('" + request->creater() + "', '" + request->amount() + "' , '" + request->type() + "' , '" + request->paidby() + "' , '" + request->data() + "' , '" + request->note() + "' , '" + request->image() + "' , '" + request->members(0) + "' , '" + request->members(1) + "' , '" + request->members(2) + "' , '" + request->members(3) + "' , '" + request->members(4) + "' , '" + request->members(5) + "' , '" + request->members(6) + "' , '" + request->members(7) + "' , '" + request->members(8) + "' , '" + request->members(9) + "')";
         
         printf("%s\n", sql_command.data());
         
@@ -468,7 +433,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             reply->set_information("insert fail");
             
             release_sock_to_sql_pool(sock_node);
-            return Status::OK;
+            return Status::Cancelled;
         }
         
         // update synchronism_bill
@@ -481,7 +446,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             reply->set_information("update fail");
             //printf("%s\n", );
             release_sock_to_sql_pool(sock_node);
-            return Status::OK;
+            return Status::Cancelled;
         }
         
         reply->set_information("OK");
@@ -606,9 +571,9 @@ class GreeterServiceImpl final : public Greeter::Service {
         string sql_command;
         if (request->amount() == "all")
         {
-            sql_command = "SELECT * FROM Bills WHERE member_0 = '" + request->username() + "' OR member_1 = '" + request->username() + "' OR member_2 = '" + request->username() + "' OR member_3 = '" + request->username() + "' OR member_4 = '" + request->username() + "' OR member_5 = '" + request->username() + "' OR member_6 = '" + request->username() + "' OR member_7 = '" + request->username() + "' OR member_8 = '" + request->username() + "' OR member_9 = '" + request->username() + "' order by bill_id desc";
+            sql_command = "SELECT * FROM Bills WHERE member_0 = '" + request->username() + "' OR member_1 = '" + request->username() + "' OR member_2 = '" + request->username() + "' OR member_3 = '" + request->username() + "' OR member_4 = '" + request->username() + "' OR member_5 = '" + request->username() + "' OR member_6 = '" + request->username() + "' OR member_7 = '" + request->username() + "' OR member_8 = '" + request->username() + "' OR member_9 = '" + request->username() + "' OR paidBy = '" + request->username() + "' order by bill_id desc";
         } else  {
-            sql_command = "SELECT * FROM Bills WHERE member_0 = '" + request->username() + "' OR member_1 = '" + request->username() + "' OR member_2 = '" + request->username() + "' OR member_3 = '" + request->username() + "' OR member_4 = '" + request->username() + "' OR member_5 = '" + request->username() + "' OR member_6 = '" + request->username() + "' OR member_7 = '" + request->username() + "' OR member_8 = '" + request->username() + "' OR member_9 = '" + request->username() + "' order by bill_id desc LIMIT " + request->amount();
+            sql_command = "SELECT * FROM Bills WHERE member_0 = '" + request->username() + "' OR member_1 = '" + request->username() + "' OR member_2 = '" + request->username() + "' OR member_3 = '" + request->username() + "' OR member_4 = '" + request->username() + "' OR member_5 = '" + request->username() + "' OR member_6 = '" + request->username() + "' OR member_7 = '" + request->username() + "' OR member_8 = '" + request->username() + "' OR member_9 = '" + request->username() + "' OR paidBy = '" + request->username() + "' order by bill_id desc LIMIT " + request->amount();
         }
         
         
@@ -617,7 +582,7 @@ class GreeterServiceImpl final : public Greeter::Service {
         if (mysql_query(conn, sql_command.data())) {
             printf("error %s\n", mysql_error(conn));
             release_sock_to_sql_pool(sock_node);
-            return Status::OK;
+            return Status::Cancelled;
         }
         res = mysql_use_result(conn);
         while ((row = mysql_fetch_row(res)) != NULL) {
@@ -626,10 +591,10 @@ class GreeterServiceImpl final : public Greeter::Service {
             bill.set_creater(row[1]);
             bill.set_amount(row[2]);
             bill.set_type(row[3]);
-            bill.set_account(row[4]);
             bill.set_data(row[5]);
             bill.set_note(row[6]);
             bill.set_image(row[7]);
+            bill.set_paidby(row[8]);
             bill.add_members(row[9]);
             bill.add_members(row[10]);
             bill.add_members(row[11]);
@@ -640,6 +605,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             bill.add_members(row[16]);
             bill.add_members(row[17]);
             bill.add_members(row[18]);
+            bill.set_paidstatus(row[19]);
             //cout << "amout " << row[2] << endl;
             printf("one result\n");
             reply->Write(bill);
@@ -655,6 +621,280 @@ class GreeterServiceImpl final : public Greeter::Service {
         
         
         printf("*************Obtain_bills OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status Reset_Status (ServerContext *context, const Inf* request, Inf* reply) override { 
+        printf("*************Reset_Status IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        //MYSQL_RES *res;
+        //MYSQL_ROW row;
+
+        string sql_command = "UPDATE User SET synchronism_delete = 0 WHERE username = '" + request->information() + "'";
+        
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Change synchronism_delete = 0 fail\n");
+            printf("%s\n", sql_command.data());
+        }
+        printf("*************Reset_Status OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    // request system
+
+    Status Send_request (ServerContext* content, const Request* request, Inf* reply) override {
+        printf("*************Send_request IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        //MYSQL_RES *res;
+        //MYSQL_ROW row;
+
+        string sql_command = "INSERT INTO Request (sender, receiver, type, content, request_date) VALUES ('" + request->sender() + "', '" + request->receiver() + "', '" + request->type() + "', '" + request->content() + "', '" + request->request_date() + "')";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Send_request insert process fail\n");
+            printf("%s\n", sql_command.data());
+        }
+
+        sql_command = "UPDATE User SET synchronism_request = 1 WHERE username = '" + request->sender() + "' OR username = '" + request->receiver() + "'";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Send_request update process fail\n");
+            printf("%s\n", sql_command.data());
+        }
+
+        printf("*************Send_request OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status Obtain_request (ServerContext* content, const Inf* request, ServerWriter<Request>* reply) override {
+        printf("*************Obtain_request IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        MYSQL_RES *res;
+        MYSQL_ROW row;
+
+        string sql_command = "SELECT * FROM Request WHERE receiver = '" + request->information() + "' order by request_id desc";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Obtain_request fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::OK;
+        }
+        res = mysql_use_result(conn);
+        while ((row = mysql_fetch_row(res)) != NULL) {
+            Request req;
+            req.set_request_id(row[0]);
+            req.set_sender(row[1]);
+            req.set_receiver(row[2]);
+            req.set_type(row[3]);
+            req.set_content(row[4]);
+
+            req.set_request_date(row[6]);
+            printf("one request\n");
+            reply->Write(req);
+        }
+        mysql_free_result(res);
+
+        sql_command = "UPDATE User SET synchronism_request = 0 WHERE username = '" + request->information() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Obtain_request update process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        printf("*************Obtain_request OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status Obtain_requestLog (ServerContext* content, const Inf* request, ServerWriter<Request>* reply) override {
+        printf("*************Obtain_requestLog IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        MYSQL_RES *res;
+        MYSQL_ROW row;
+        printf("t\n");
+        string sql_command = "SELECT * FROM RequestLog WHERE (sender = '" + request->information() + "' AND ignore_sender = 'FALSE') OR (receiver = '" + request->information() + "' AND ignore_receiver = 'FALSE') order by requestLog_id desc";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Obtain_requestLog fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+        printf("%s\n", sql_command.data());
+        res = mysql_use_result(conn);
+        printf("t\n");
+        while ((row = mysql_fetch_row(res)) != NULL) {
+
+            Request req;
+            req.set_request_id(row[0]);
+            req.set_sender(row[1]);
+            req.set_receiver(row[2]);
+            req.set_type(row[3]);
+            req.set_content(row[4]);
+            req.set_response(row[5]);
+            req.set_request_date(row[6]);
+            req.set_response_date(row[7]);
+
+            printf("hello\n");
+            reply->Write(req);
+        }
+        mysql_free_result(res);
+        printf("t\n");
+        sql_command = "UPDATE User SET synchronism_request = 0 WHERE username = '" + request->information() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Obtain_requestLog update process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        sql_command = "UPDATE RequestLog SET ignore_receiver = 'TRUE' WHERE receiver = '" + request->information() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Obtain_requestLog update process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        printf("*************Obtain_requestLog OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status Request_response (ServerContext* content, const Response* request, Inf* reply) override {
+        printf("*************Request_response IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        MYSQL_RES *res;
+        MYSQL_ROW row;
+        Request req;
+        string type;
+
+        string sql_command = "SELECT * FROM Request WHERE request_id = '" + request->request_id() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Request_response SELECT process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+        res = mysql_use_result(conn);
+        row = mysql_fetch_row(res);
+        //char *t = row[3];
+        type = row[3];
+        req.set_request_id(row[0]);
+        req.set_sender(row[1]);
+        req.set_receiver(row[2]);
+        req.set_type(row[3]);
+        req.set_content(row[4]);
+        req.set_response(request->response());
+        req.set_request_date(row[6]);
+        req.set_response_date(request->response_date());
+
+        mysql_free_result(res);
+        if (type == "payment")
+        {
+            
+        } else if (type == "friendInvite")
+        {
+            
+        }
+
+        sql_command = "INSERT INTO RequestLog (sender, receiver, type, content, response, request_date, response_date) VALUES ('" + req.sender() + "', '" + req.receiver() + "', '" + req.type() + "', '" + req.content() + "', '" + req.response() + "', '" + req.request_date() + "', '" + req.response_date() + "')";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Request_response INSERT process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        sql_command = "DELETE * FROM Request WHERE request_id = '" + request->request_id() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Request_response DELETE process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        sql_command = "UPDATE User SET synchronism_request = 1 WHERE username = '" + request->sender() + "' OR username = '" + request->receiver() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Request_response update process fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+
+        printf("*************Request_response OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status MakePayment (ServerContext* content, ServerReader<BillPayment>* reader, Inf* reply) override {
+        printf("*************MakePayment IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        MYSQL_RES *res;
+        MYSQL_ROW row;
+
+        BillPayment request;
+
+        while (reader->Read(&request)) {
+
+            string sql_command = "UPDATE Bills SET paidStatus = '" + request.paidstatus() + "' WHERE bill_id = '" + request.bill_id() + "'";
+            if (mysql_query(conn, sql_command.data())) {
+                printf("ERROR MakePayment fail\n");
+                printf("%s\n", sql_command.data());
+                return Status::Cancelled;
+            }
+            //printf("in");
+        }
+
+        printf("*************MakePayment OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status Create_requestLog (ServerContext* content, const Request* request, Inf* reply) override {
+        printf("*************Create_requestLog IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        //MYSQL_RES *res;
+        //MYSQL_ROW row;
+
+        string sql_command = "INSERT INTO RequestLog (sender, receiver, type, content, response, request_date, response_date) VALUES ('" + request->sender() + "', '" + request->receiver() + "', '" + request->type() + "', '" + request->content() + "', '" + request->response() + "', '" + request->request_date() + "', '" + request->request_date() + "')";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Send_request insert process fail\n");
+            printf("%s\n", sql_command.data());
+        }
+
+        sql_command = "UPDATE User SET synchronism_request = 2, synchronism_delete = 1 WHERE username = '" + request->sender() + "' OR username = '" + request->receiver() + "'";
+
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR Send_request update process fail\n");
+            printf("%s\n", sql_command.data());
+        }
+
+        printf("*************Create_requestLog OUT*************\n");
+        release_sock_to_sql_pool(sock_node);
+        return Status::OK;
+    }
+
+    Status IgnoreRequestLog (ServerContext* content, const IgnoreMessage* request, Inf* reply) override {
+        printf("*************IgnoreRequestLog IN*************\n");
+        SQL_SOCK_NODE* sock_node = get_sock_from_pool();
+        MYSQL* conn = sock_node->sql_sock->sock;
+        //MYSQL_RES *res;
+        //MYSQL_ROW row;
+
+        string sql_command = "UPDATE RequestLog SET ignore_" + request->user() + " = 'TRUE' WHERE requestLog_id = '" + request->requestlog_id() + "'";
+        if (mysql_query(conn, sql_command.data())) {
+            printf("ERROR IgnoreRequestLog fail\n");
+            printf("%s\n", sql_command.data());
+            return Status::Cancelled;
+        }
+
+        printf("*************IgnoreRequestLog OUT*************\n");
         release_sock_to_sql_pool(sock_node);
         return Status::OK;
     }

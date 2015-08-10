@@ -4,12 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>HexColors.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-iShare.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Protobuf.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TSMessages.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,12 +42,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>084E061B2D7003C3D230C7B3F08633A0</key>
+		<key>3C83ACAE435B61B925B274FAB40ED9C9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>863C3CBA63A98BCBBA52625C9F43ADDD</key>
+		<key>66DE95DD422B9E08C6C18164705988D9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,12 +57,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>91036B5EE3854DC5CB68422A78FAE2DD</key>
+		<key>965012B54775778B351D009AFFBEC05D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A99FD39255AB89D83B87CCF6D6D7349F</key>
+		<key>ABB9F0B36D530F7A334EF50F6829C4FC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C4BF013BF45B847AEE9689D76C6C75F8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD2DE08E63BE3CF363C9687E0511F257</key>
 		<dict>
 			<key>primary</key>
 			<true/>

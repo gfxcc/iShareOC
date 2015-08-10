@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A1DD7E02892C52FD6E626C66 /* libPods-iShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */; };
+		DB0E85101B6C653300A1C74D /* payment.png in Resources */ = {isa = PBXBuildFile; fileRef = DB0E850F1B6C653300A1C74D /* payment.png */; };
+		DB0E85131B6D164100A1C74D /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = DB0E85121B6D164100A1C74D /* Request.m */; };
 		DB94B26C1B60FE7C007AEE7F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26B1B60FE7C007AEE7F /* main.m */; };
 		DB94B26F1B60FE7C007AEE7F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26E1B60FE7C007AEE7F /* AppDelegate.m */; };
 		DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B2711B60FE7C007AEE7F /* ViewController.m */; };
@@ -134,6 +136,17 @@
 		DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */; };
 		DB94B3EF1B6119F4007AEE7F /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */; };
 		DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E41B6119F4007AEE7F /* LoginViewController.m */; };
+		DB952E841B6270D600482B00 /* leave.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E811B6270D600482B00 /* leave.png */; };
+		DB952E851B6270D600482B00 /* planner.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E821B6270D600482B00 /* planner.png */; };
+		DB952E861B6270D600482B00 /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E831B6270D600482B00 /* calendar.png */; };
+		DB952E8A1B62A81500482B00 /* calendar_month.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E871B62A81500482B00 /* calendar_month.png */; };
+		DB952E8B1B62A81500482B00 /* calendar_week.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E881B62A81500482B00 /* calendar_week.png */; };
+		DB952E8C1B62A81500482B00 /* calendar_day.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E891B62A81500482B00 /* calendar_day.png */; };
+		DB952E8E1B63357400482B00 /* MY SQL command in Resources */ = {isa = PBXBuildFile; fileRef = DB952E8D1B63357400482B00 /* MY SQL command */; };
+		DB952E971B6349F700482B00 /* DateTranslate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB952E961B6349F700482B00 /* DateTranslate.m */; };
+		DB952E9D1B6799D400482B00 /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB952E9C1B6799D400482B00 /* BillDetailViewController.m */; };
+		DB952EA01B689DE100482B00 /* FriendWithBillTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */; };
+		DB952EA31B6A72B800482B00 /* BillListWithFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB952EA21B6A72B800482B00 /* BillListWithFriendViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +163,9 @@
 		0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7040511EE234A04E8090E0C0 /* Pods-iShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-iShare/Pods-iShare.release.xcconfig"; sourceTree = "<group>"; };
 		95C88CC437DE70749E3BF4C1 /* Pods-iShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iShare/Pods-iShare.debug.xcconfig"; sourceTree = "<group>"; };
+		DB0E850F1B6C653300A1C74D /* payment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = payment.png; path = iShare/Source/payment.png; sourceTree = "<group>"; };
+		DB0E85111B6D164100A1C74D /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
+		DB0E85121B6D164100A1C74D /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 		DB94B2661B60FE7C007AEE7F /* iShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB94B26A1B60FE7C007AEE7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB94B26B1B60FE7C007AEE7F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -321,6 +337,21 @@
 		DB94B3E61B6119F4007AEE7F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		DB94B3E71B6119F4007AEE7F /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		DB94B3E81B6119F4007AEE7F /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		DB952E811B6270D600482B00 /* leave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leave.png; path = iShare/Source/leave.png; sourceTree = "<group>"; };
+		DB952E821B6270D600482B00 /* planner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = planner.png; path = iShare/Source/planner.png; sourceTree = "<group>"; };
+		DB952E831B6270D600482B00 /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = iShare/Source/calendar.png; sourceTree = "<group>"; };
+		DB952E871B62A81500482B00 /* calendar_month.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_month.png; path = iShare/Source/calendar_month.png; sourceTree = "<group>"; };
+		DB952E881B62A81500482B00 /* calendar_week.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_week.png; path = iShare/Source/calendar_week.png; sourceTree = "<group>"; };
+		DB952E891B62A81500482B00 /* calendar_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_day.png; path = iShare/Source/calendar_day.png; sourceTree = "<group>"; };
+		DB952E8D1B63357400482B00 /* MY SQL command */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "MY SQL command"; path = "Server/MY SQL command"; sourceTree = "<group>"; };
+		DB952E951B6349F700482B00 /* DateTranslate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTranslate.h; sourceTree = "<group>"; };
+		DB952E961B6349F700482B00 /* DateTranslate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTranslate.m; sourceTree = "<group>"; };
+		DB952E9B1B6799D400482B00 /* BillDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillDetailViewController.h; sourceTree = "<group>"; };
+		DB952E9C1B6799D400482B00 /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillDetailViewController.m; sourceTree = "<group>"; };
+		DB952E9E1B689DE100482B00 /* FriendWithBillTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendWithBillTableViewCell.h; sourceTree = "<group>"; };
+		DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendWithBillTableViewCell.m; sourceTree = "<group>"; };
+		DB952EA11B6A72B800482B00 /* BillListWithFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillListWithFriendViewController.h; sourceTree = "<group>"; };
+		DB952EA21B6A72B800482B00 /* BillListWithFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillListWithFriendViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -383,22 +414,26 @@
 		DB94B2681B60FE7C007AEE7F /* iShare */ = {
 			isa = PBXGroup;
 			children = (
+				DB952E9B1B6799D400482B00 /* BillDetailViewController.h */,
+				DB952E9C1B6799D400482B00 /* BillDetailViewController.m */,
+				DB952EA11B6A72B800482B00 /* BillListWithFriendViewController.h */,
+				DB952EA21B6A72B800482B00 /* BillListWithFriendViewController.m */,
+				DB94B3E01B6119F4007AEE7F /* AnalyzeViewController.h */,
+				DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */,
 				DB94B3D91B6119F4007AEE7F /* BillListViewController.h */,
 				DB94B3DA1B6119F4007AEE7F /* BillListViewController.m */,
+				DB94B3E71B6119F4007AEE7F /* SearchViewController.h */,
 				DB94B3DB1B6119F4007AEE7F /* SearchViewController.m */,
+				DB94B3E21B6119F4007AEE7F /* LeftMenuViewController.h */,
 				DB94B3DC1B6119F4007AEE7F /* LeftMenuViewController.m */,
+				DB94B3E51B6119F4007AEE7F /* AddNewShareViewController.h */,
 				DB94B3DD1B6119F4007AEE7F /* AddNewShareViewController.m */,
 				DB94B3DE1B6119F4007AEE7F /* MapViewViewController.h */,
 				DB94B3DF1B6119F4007AEE7F /* MapViewViewController.m */,
-				DB94B3E01B6119F4007AEE7F /* AnalyzeViewController.h */,
-				DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */,
-				DB94B3E21B6119F4007AEE7F /* LeftMenuViewController.h */,
-				DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */,
-				DB94B3E41B6119F4007AEE7F /* LoginViewController.m */,
-				DB94B3E51B6119F4007AEE7F /* AddNewShareViewController.h */,
-				DB94B3E61B6119F4007AEE7F /* LoginViewController.h */,
-				DB94B3E71B6119F4007AEE7F /* SearchViewController.h */,
 				DB94B3E81B6119F4007AEE7F /* SignUpViewController.h */,
+				DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */,
+				DB94B3E61B6119F4007AEE7F /* LoginViewController.h */,
+				DB94B3E41B6119F4007AEE7F /* LoginViewController.m */,
 				DB94B26D1B60FE7C007AEE7F /* AppDelegate.h */,
 				DB94B26E1B60FE7C007AEE7F /* AppDelegate.m */,
 				DB94B2701B60FE7C007AEE7F /* ViewController.h */,
@@ -440,6 +475,7 @@
 		DB94B28F1B611485007AEE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DB952E8D1B63357400482B00 /* MY SQL command */,
 				DB94B2F81B6117AD007AEE7F /* YUScreentPoper */,
 				DB94B2EB1B6117AD007AEE7F /* TableBar */,
 				DB94B3341B6117AD007AEE7F /* DaiDodgeKeyboard */,
@@ -447,8 +483,8 @@
 				DB94B2E21B6117AD007AEE7F /* RKTabView */,
 				DB94B3471B6117AD007AEE7F /* Animations */,
 				DB94B3531B6117AD007AEE7F /* Assets */,
-				DB94B2F61B6117AD007AEE7F /* SlideNavigationController.m */,
 				DB94B2F71B6117AD007AEE7F /* SlideNavigationController.h */,
+				DB94B2F61B6117AD007AEE7F /* SlideNavigationController.m */,
 				DB94B3D81B611850007AEE7F /* myClass */,
 				DB94B3D71B611817007AEE7F /* image */,
 			);
@@ -590,6 +626,13 @@
 		DB94B3D71B611817007AEE7F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				DB0E850F1B6C653300A1C74D /* payment.png */,
+				DB952E871B62A81500482B00 /* calendar_month.png */,
+				DB952E881B62A81500482B00 /* calendar_week.png */,
+				DB952E891B62A81500482B00 /* calendar_day.png */,
+				DB952E811B6270D600482B00 /* leave.png */,
+				DB952E821B6270D600482B00 /* planner.png */,
+				DB952E831B6270D600482B00 /* calendar.png */,
 				DB94B2D61B6117AD007AEE7F /* Cash.png */,
 				DB94B2D71B6117AD007AEE7F /* Car.png */,
 				DB94B2D81B6117AD007AEE7F /* lunch && dinner.png */,
@@ -677,6 +720,12 @@
 				DB94B2D51B6117AD007AEE7F /* CYkeyboard.m */,
 				DB94B2EA1B6117AD007AEE7F /* UserListTableViewCell.h */,
 				DB94B2E91B6117AD007AEE7F /* UserListTableViewCell.m */,
+				DB952E951B6349F700482B00 /* DateTranslate.h */,
+				DB952E961B6349F700482B00 /* DateTranslate.m */,
+				DB952E9E1B689DE100482B00 /* FriendWithBillTableViewCell.h */,
+				DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */,
+				DB0E85111B6D164100A1C74D /* Request.h */,
+				DB0E85121B6D164100A1C74D /* Request.m */,
 			);
 			name = myClass;
 			sourceTree = "<group>";
@@ -764,9 +813,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB0E85101B6C653300A1C74D /* payment.png in Resources */,
 				DB94B3D01B6117AE007AEE7F /* KeyboardNumericEntryKeyBackspaceGlyphTextured@2x.png in Resources */,
 				DB94B37D1B6117AD007AEE7F /* TableIcon3@2x.png in Resources */,
 				DB94B3931B6117AE007AEE7F /* camera_enabled@2x.png in Resources */,
+				DB952E8E1B63357400482B00 /* MY SQL command in Resources */,
 				DB94B3721B6117AD007AEE7F /* Rent.png in Resources */,
 				DB94B3911B6117AE007AEE7F /* blurred_background.png in Resources */,
 				DB94B3B21B6117AE007AEE7F /* back_icon.png in Resources */,
@@ -784,6 +835,7 @@
 				DB94B3AE1B6117AE007AEE7F /* watch_enabled@2x.png in Resources */,
 				DB94B3B11B6117AE007AEE7F /* money_icon.png in Resources */,
 				DB94B39C1B6117AE007AEE7F /* paypal@2x.png in Resources */,
+				DB952E841B6270D600482B00 /* leave.png in Resources */,
 				DB94B3731B6117AD007AEE7F /* phone.png in Resources */,
 				DB94B3AC1B6117AE007AEE7F /* visa@2x.png in Resources */,
 				DB94B3921B6117AE007AEE7F /* camera_disabled@2x.png in Resources */,
@@ -805,6 +857,7 @@
 				DB94B3831B6117AD007AEE7F /* TableIcon9@2x.png in Resources */,
 				DB94B3C81B6117AE007AEE7F /* buddy_header_arrow_down@2x.png in Resources */,
 				DB94B3D21B6117AE007AEE7F /* KeyboardNumericEntryKeyTextured@2x.png in Resources */,
+				DB952E8C1B62A81500482B00 /* calendar_day.png in Resources */,
 				DB94B3AA1B6117AE007AEE7F /* user_disabled@2x.png in Resources */,
 				DB94B3A11B6117AE007AEE7F /* tab_contrast_disabled@2x.png in Resources */,
 				DB94B3CF1B6117AE007AEE7F /* KeyboardBackgroundTextured@2x.png in Resources */,
@@ -825,10 +878,13 @@
 				DB94B3D11B6117AE007AEE7F /* KeyboardNumericEntryKeyPressedTextured@2x.png in Resources */,
 				DB94B3C31B6117AE007AEE7F /* menu-button.png in Resources */,
 				DB94B3A71B6117AE007AEE7F /* tab_rotate_disabled@2x.png in Resources */,
+				DB952E851B6270D600482B00 /* planner.png in Resources */,
 				DB94B3711B6117AD007AEE7F /* nodata.png in Resources */,
 				DB94B3801B6117AD007AEE7F /* TableIcon6@2x.png in Resources */,
 				DB94B3BD1B6117AE007AEE7F /* headImage.jpg in Resources */,
 				DB94B3D41B6117AE007AEE7F /* KeyboardTopShadow@2x.png in Resources */,
+				DB952E861B6270D600482B00 /* calendar.png in Resources */,
+				DB952E8A1B62A81500482B00 /* calendar_month.png in Resources */,
 				DB94B3BA1B6117AE007AEE7F /* background2.png in Resources */,
 				DB94B36F1B6117AD007AEE7F /* vertical line.png in Resources */,
 				DB94B36C1B6117AD007AEE7F /* Cash.png in Resources */,
@@ -842,6 +898,7 @@
 				DB94B3BB1B6117AE007AEE7F /* background.jpg in Resources */,
 				DB94B3A31B6117AE007AEE7F /* tab_filters_disabled@2x.png in Resources */,
 				DB94B3C51B6117AE007AEE7F /* PWIcon.png in Resources */,
+				DB952E8B1B62A81500482B00 /* calendar_week.png in Resources */,
 				DB94B3821B6117AD007AEE7F /* TableIcon8@2x.png in Resources */,
 				DB94B3D51B6117AE007AEE7F /* wheel_shadow@2x.png in Resources */,
 				DB94B3AD1B6117AE007AEE7F /* watch_disabled@2x.png in Resources */,
@@ -908,9 +965,12 @@
 				DB94B38A1B6117AE007AEE7F /* UIView+YUStyle.m in Sources */,
 				DB94B3EC1B6119F4007AEE7F /* AddNewShareViewController.m in Sources */,
 				DB94B3ED1B6119F4007AEE7F /* MapViewViewController.m in Sources */,
+				DB952E9D1B6799D400482B00 /* BillDetailViewController.m in Sources */,
 				DB94B3E91B6119F4007AEE7F /* BillListViewController.m in Sources */,
 				DB94B36A1B6117AD007AEE7F /* Bill.m in Sources */,
+				DB952E971B6349F700482B00 /* DateTranslate.m in Sources */,
 				DB94B3B61B6117AE007AEE7F /* DaiDodgeKeyboardObjects.m in Sources */,
+				DB0E85131B6D164100A1C74D /* Request.m in Sources */,
 				DB94B3871B6117AE007AEE7F /* UIButton+Bootstrap.m in Sources */,
 				DB94B38C1B6117AE007AEE7F /* yConst.m in Sources */,
 				DB94B3881B6117AE007AEE7F /* YUDIVView.m in Sources */,
@@ -929,7 +989,9 @@
 				DB94B3781B6117AD007AEE7F /* RKTabView.m in Sources */,
 				DB94B36B1B6117AD007AEE7F /* CYkeyboard.m in Sources */,
 				DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */,
+				DB952EA31B6A72B800482B00 /* BillListWithFriendViewController.m in Sources */,
 				DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */,
+				DB952EA01B689DE100482B00 /* FriendWithBillTableViewCell.m in Sources */,
 				DB94B38F1B6117AE007AEE7F /* YUDarkGlassView.m in Sources */,
 				DB94B3EA1B6119F4007AEE7F /* SearchViewController.m in Sources */,
 				DB94B3C21B6117AE007AEE7F /* SlideNavigationContorllerAnimatorSlideAndFade.m in Sources */,

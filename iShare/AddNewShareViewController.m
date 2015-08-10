@@ -29,6 +29,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add)];
     
+    
     //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
     //set date label
     UIDatePicker *_datepicker = [[UIDatePicker alloc] init];
@@ -47,12 +48,14 @@
     CALayer *line3 = [CALayer layer];
     CALayer *line4 = [CALayer layer];
     CALayer *line5 = [CALayer layer];
+    CALayer *line6 = [CALayer layer];
     
     line1.frame = CGRectMake(_amount.frame.origin.x, _amount.frame.origin.y + _amount.frame.size.height, _amount.frame.size.width, 1.0f);
     line2.frame = CGRectMake(_type.frame.origin.x, _type.frame.origin.y + _type.frame.size.height, _type.frame.size.width, 1.0f);
-    line3.frame = CGRectMake(_account.frame.origin.x, _account.frame.origin.y + _account.frame.size.height, _account.frame.size.width, 1.0f);
-    line4.frame = CGRectMake(_data.frame.origin.x, _data.frame.origin.y + _data.frame.size.height, _data.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_member.frame.origin.x, _member.frame.origin.y + _member.frame.size.height, _member.frame.size.width, 1.0f);
+    line3.frame = CGRectMake(_data.frame.origin.x, _data.frame.origin.y + _data.frame.size.height, _data.frame.size.width, 1.0f);
+    line4.frame = CGRectMake(_member.frame.origin.x, _member.frame.origin.y + _member.frame.size.height, _member.frame.size.width, 1.0f);
+    line5.frame = CGRectMake(_creater.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _member.frame.size.width, 1.0f);
+    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
     
     
     line1.backgroundColor = RGB(204, 204, 204).CGColor;
@@ -60,12 +63,14 @@
     line3.backgroundColor = RGB(204, 204, 204).CGColor;
     line4.backgroundColor = RGB(204, 204, 204).CGColor;
     line5.backgroundColor = RGB(204, 204, 204).CGColor;
+    line6.backgroundColor = RGB(204, 204, 204).CGColor;
     
     [self.view.layer addSublayer:line1];
     [self.view.layer addSublayer:line2];
     [self.view.layer addSublayer:line3];
     [self.view.layer addSublayer:line4];
     [self.view.layer addSublayer:line5];
+    [self.view.layer addSublayer:line6];
     
     UITapGestureRecognizer* myLabelGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label1Clicked)];
     [_amount setUserInteractionEnabled:YES];
@@ -76,8 +81,8 @@
     [_type addGestureRecognizer:myLabelGesture2];
     
     UITapGestureRecognizer* myLabelGesture3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label3Clicked)];
-    [_account setUserInteractionEnabled:YES];
-    [_account addGestureRecognizer:myLabelGesture3];
+    [_paidBy setUserInteractionEnabled:YES];
+    [_paidBy addGestureRecognizer:myLabelGesture3];
     
     UITapGestureRecognizer* myLabelGesture4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label4Clicked)];
     [_data setUserInteractionEnabled:YES];
@@ -90,10 +95,18 @@
     
     
     keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
-    [keyboard setLables:_amount type:_type account:_account data:_data member:_member];
+    [keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
     [self.view addSubview:keyboard];
     
+    // test
+//    UITapGestureRecognizer* fadeOutTest = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fadeoutTouch)];
+//    [keyboard.fadeout setUserInteractionEnabled:YES];
+//    [keyboard.fadeout addGestureRecognizer:fadeOutTest];
     
+//    UITapGestureRecognizer* editTouch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editTouch)];
+//    [keyboard.edit setUserInteractionEnabled:YES];
+//    [keyboard.edit addGestureRecognizer:editTouch];
+
     //
     [self addDoneToolBarToKeyboard:_comment];
     _comment.delegate = self;
@@ -101,28 +114,25 @@
     _comment.textColor = [UIColor lightGrayColor]; //optional
     
     
-    // set idText
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
-    _idText = members[0];
+    _paidBy.text = keyboard.memberArray.count > 0 ? keyboard.memberArray[0] : @"none";
 
 
 }
+
+//- (void)fadeoutTouch {
+//    [keyboard clickFadeOut];
+//}
+//
+//- (void)editTouch {
+//    [keyboard editPage];
+//}
 
 #pragma mark - set mode
 
 - (void)label1Clicked {
     _amount.backgroundColor = RGB(211, 214, 219);
     _type.backgroundColor = RGB(255, 255, 255);
-    _account.backgroundColor = RGB(255, 255, 255);
+    _paidBy.backgroundColor = RGB(255, 255, 255);
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
     
@@ -133,7 +143,7 @@
 - (void)label2Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
     _type.backgroundColor = RGB(211, 214, 219);
-    _account.backgroundColor = RGB(255, 255, 255);
+    _paidBy.backgroundColor = RGB(255, 255, 255);
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
     
@@ -145,18 +155,18 @@
 - (void)label3Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
     _type.backgroundColor = RGB(255, 255, 255);
-    _account.backgroundColor = RGB(211, 214, 219);
+    _paidBy.backgroundColor = RGB(211, 214, 219);
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
     
-    [keyboard accountMode];
+    [keyboard paidByMode];
     [keyboard show];
 }
 
 - (void)label4Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
     _type.backgroundColor = RGB(255, 255, 255);
-    _account.backgroundColor = RGB(255, 255, 255);
+    _paidBy.backgroundColor = RGB(255, 255, 255);
     _data.backgroundColor = RGB(211, 214, 219);
     _member.backgroundColor = RGB(255, 255, 255);
     
@@ -167,7 +177,7 @@
 - (void)label5Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
     _type.backgroundColor = RGB(255, 255, 255);
-    _account.backgroundColor = RGB(255, 255, 255);
+    _paidBy.backgroundColor = RGB(255, 255, 255);
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(211, 214, 219);
     
@@ -180,7 +190,7 @@
 - (void)unlight {
     _amount.backgroundColor = RGB(255, 255, 255);
     _type.backgroundColor = RGB(255, 255, 255);
-    _account.backgroundColor = RGB(255, 255, 255);
+    _paidBy.backgroundColor = RGB(255, 255, 255);
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
 }
@@ -201,7 +211,7 @@
     //NSLog(@"%@",request.creater);
     request.amount = _amount.text;
     request.type = _type.text;
-    request.account = _account.text;
+    request.paidBy = _paidBy.text;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd hh:mm"];

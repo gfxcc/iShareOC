@@ -12,6 +12,8 @@
 #import "BillTableViewCell.h"
 #import "MonthTableViewCell.h"
 #import "Bill.h"
+#import "DateTranslate.h"
+#import "BillDetailViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -24,7 +26,10 @@
 
 @implementation BillListViewController
 
-
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,19 +40,20 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _selectedhead = 12;
     
-    _dayOfMonth = [[NSMutableDictionary alloc] init];
-    [_dayOfMonth setObject:@"01.01-01.31" forKey:@"1"];
-    [_dayOfMonth setObject:@"02.01-02.28" forKey:@"2"];
-    [_dayOfMonth setObject:@"03.01-03.31" forKey:@"3"];
-    [_dayOfMonth setObject:@"04.01-04.30" forKey:@"4"];
-    [_dayOfMonth setObject:@"05.01-05.31" forKey:@"5"];
-    [_dayOfMonth setObject:@"06.01-06.30" forKey:@"6"];
-    [_dayOfMonth setObject:@"07.01-07.31" forKey:@"7"];
-    [_dayOfMonth setObject:@"08.01-08.31" forKey:@"8"];
-    [_dayOfMonth setObject:@"09.01-09.30" forKey:@"9"];
-    [_dayOfMonth setObject:@"10.01-10.31" forKey:@"10"];
-    [_dayOfMonth setObject:@"11.01-11.30" forKey:@"11"];
-    [_dayOfMonth setObject:@"12.01-12.31" forKey:@"12"];
+    DateTranslate *dateTranslate = [[DateTranslate alloc] init];
+    _dayOfMonth = dateTranslate.dayOfMonth;//[[NSMutableDictionary alloc] init];
+//    [_dayOfMonth setObject:@"01.01-01.31" forKey:@"1"];
+//    [_dayOfMonth setObject:@"02.01-02.28" forKey:@"2"];
+//    [_dayOfMonth setObject:@"03.01-03.31" forKey:@"3"];
+//    [_dayOfMonth setObject:@"04.01-04.30" forKey:@"4"];
+//    [_dayOfMonth setObject:@"05.01-05.31" forKey:@"5"];
+//    [_dayOfMonth setObject:@"06.01-06.30" forKey:@"6"];
+//    [_dayOfMonth setObject:@"07.01-07.31" forKey:@"7"];
+//    [_dayOfMonth setObject:@"08.01-08.31" forKey:@"8"];
+//    [_dayOfMonth setObject:@"09.01-09.30" forKey:@"9"];
+//    [_dayOfMonth setObject:@"10.01-10.31" forKey:@"10"];
+//    [_dayOfMonth setObject:@"11.01-11.30" forKey:@"11"];
+//    [_dayOfMonth setObject:@"12.01-12.31" forKey:@"12"];
     
     // analyze this month
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -71,16 +77,52 @@
                                                   usedEncoding:nil
                                                          error:nil];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
+    
     for (NSInteger i = 0; i != bills.count; i++) {
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
         NSMutableArray *members = [[NSMutableArray alloc] init];
         for (int j = 0; j != 10; j++) {
+            if ([bill_content[j + 8] isEqualToString:@""]) {
+                break;
+            }
             [members addObject:bill_content[j + 8]];
         }
         Bill *bill = [[Bill alloc] init];
-        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] account:bill_content[3] date:bill_content[4] members:members creater:bill_content[5] note:bill_content[6] image:bill_content[7]];
+        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18]];
+        
+        
+        
+        
+        if ([bill.paidBy isEqualToString:_idText]) {
+            // LEND mode
+            
+            bill.status = PAID;
+            for (NSInteger i = 0; i != bill.members.count; i++) {
+                if ([bill.paidStatus characterAtIndex:i] == '0') {
+                    bill.status = LEND;
+                    break;
+                }
+            }
+            
+        } else {
+            
+            NSInteger index = 0;
+            for (NSInteger i = 0; i != bill.members.count; i++) {
+                if ([[bill.members objectAtIndex:i] isEqualToString:_idText]) {
+                    index = i;
+                    break;
+                }
+            }
+            
+            if ([bill.paidStatus characterAtIndex:index] == '0') {
+                bill.status = OWE;
+            } else {
+                bill.status = PAID;
+            }
+        }
+        
         // start analyze date
-        NSArray *date = [bill_content[4] componentsSeparatedByString:@"-"];
+        NSArray *date = [bill_content[3] componentsSeparatedByString:@"-"];
         NSString *month = date[1];
         [[_billsWithMonth objectAtIndex:(_billsWithMonth.count - [month intValue])] addObject:bill];
         //[_bills addObject:bill];
@@ -134,15 +176,21 @@
     
     MonthTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     NSInteger month = _billsWithMonth.count - section;
-    NSInteger amount = 0;
+    double amount = 0;
     // count amount
     for (int i = 0; i != [[_billsWithMonth objectAtIndex:section] count]; i++) {
         Bill *bill = [_billsWithMonth objectAtIndex:section][i];
-        amount += bill.amount.intValue;
+        if (bill.status == LEND) {
+            amount += bill.amount.doubleValue;
+        } else if (bill.status == OWE) {
+            amount -= bill.amount.doubleValue / bill.members.count;
+        }
+        
     }
-    
-    [cell initWithMonth:[NSString stringWithFormat:@"%ld", month] dayRange:[_dayOfMonth objectForKey:[NSString stringWithFormat:@"%ld", month]] amount:[NSString stringWithFormat:@"%ld", amount]];
-    UITapGestureRecognizer* myLabelGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(test:)];
+    NSString *monthWithString = [NSString stringWithFormat:@"%ld", month].length == 2 ? [NSString stringWithFormat:@"%ld", month] : [NSString stringWithFormat:@"0%ld", month];
+    NSString *dayRange = [NSString stringWithFormat:@"%@.01-%@.%@", monthWithString, monthWithString, [_dayOfMonth objectForKey:[NSString stringWithFormat:@"%ld", month]]];
+    [cell initWithMonth:[NSString stringWithFormat:@"%ld", month] dayRange:dayRange amount:[NSString stringWithFormat:@"%.1f", amount]];
+    UITapGestureRecognizer* myLabelGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headClick:)];
     cell.tag = section;
     [cell setUserInteractionEnabled:YES];
     [cell addGestureRecognizer:myLabelGesture2];
@@ -168,7 +216,7 @@
     Bill *bill = [[_billsWithMonth objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSArray *date = [bill.date componentsSeparatedByString:@"-"];
     NSString *day = [date[2] componentsSeparatedByString:@" "][0];
-    [cell initWithType:bill.type amount:bill.amount day:day dayHiden:NO];
+    [cell initWithType:bill.type amount:[NSString stringWithFormat:@"%.1f", (bill.amount.doubleValue / bill.members.count)]  memberCount:[NSString stringWithFormat:@"%ld", bill.members.count] day:day dayHiden:NO];
  
     // day hiden or not
     if (indexPath.row != 0) {
@@ -188,11 +236,39 @@
         }
     }
     
+    switch (bill.status) {
+        case OWE:
+            cell.amount.textColor = RGB(255, 121, 100);
+            break;
+        case LEND:
+            cell.amount.textColor = RGB(132, 183, 255);
+            break;
+        case PAID:
+            cell.amount.textColor = RGB(185, 185, 185);
+            break;
+        default:
+            break;
+    }
+    
     return cell;
 
 }
 
-- (void)test:(UITapGestureRecognizer *)sender {
+- (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
+    [self performSegueWithIdentifier:@"billDetail" sender:self];
+}
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"billDetail"]) {
+        BillDetailViewController *billDetail = (BillDetailViewController *)[segue destinationViewController];
+        Bill *bill = [[_billsWithMonth objectAtIndex:[_tableView indexPathForSelectedRow].section] objectAtIndex:[_tableView indexPathForSelectedRow].row];
+        billDetail.billId = bill.bill_id;
+        
+    }
+}
+
+- (void)headClick:(UITapGestureRecognizer *)sender {
     
     _selectedhead = (_selectedhead == sender.view.tag) ? 12 : sender.view.tag;
     

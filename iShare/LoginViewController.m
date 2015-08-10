@@ -117,7 +117,8 @@
                 }
                 
                 ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
-                [mainUI obtail_bills];
+                [mainUI obtain_bills];
+                mainUI.helloWorld.text = @"Welcome to Ishare";
                 [self dismissViewControllerAnimated:true completion:^{
                     NSLog(@"Present Modal View");
                 }];

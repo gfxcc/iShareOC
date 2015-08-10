@@ -23,23 +23,27 @@
 @property (weak, nonatomic) IBOutlet UIButton *grpc_test;
 @property (weak, nonatomic) IBOutlet RKTabView *standardView;
 @property (weak, nonatomic) IBOutlet UIView *statusView;
+@property (weak, nonatomic) IBOutlet UILabel *helloWorld;
 
 - (void)buttonHighlight;
 
 @property(strong, nonatomic) NSMutableArray *bill_latest;
 @property(strong, nonatomic) NSMutableArray *bills;
 @property(strong, nonatomic) LeftMenuViewController *leftMenu;
+@property(strong, nonatomic) NSMutableArray *request;
 
 @property(strong, nonatomic) RKTabItem *billList;
 @property(strong, nonatomic) RKTabItem *analyze;
 @property(strong, nonatomic) RKTabItem *mapView;
-@property(strong, nonatomic) NSString *result;
+@property(atomic) BOOL requestProcessing;
+@property(atomic) BOOL billProcessing;
 
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
 - (void)openLeftMenu;
 - (void)hideMainUI;
 - (void)changeShadow;
-- (void)obtail_bills;
+- (void)obtain_bills;
+- (void)updateAllBills;
 @end
 

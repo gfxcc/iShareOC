@@ -11,13 +11,13 @@
 @interface BillsTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *type_icon;
-@property (weak, nonatomic) IBOutlet UILabel *date_day;
-@property (weak, nonatomic) IBOutlet UILabel *date_month;
+@property (weak, nonatomic) IBOutlet UILabel *noteOrType;
+@property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UILabel *amount;
 @property (weak, nonatomic) IBOutlet UIImageView *shareWith_0;
 @property (weak, nonatomic) IBOutlet UIImageView *shareWith_1;
 @property (weak, nonatomic) IBOutlet UIImageView *shareWith_2;
 @property (weak, nonatomic) IBOutlet UIImageView *shareWith_3;
 
-- (void)initWithTypeIcon:(UIImage *)type_icon date_day:(NSString *)date_day date_month:(NSString *)date_month amount:(NSString *)amount shareWith_0:(UIImage *)shareWith_0 shareWith_1:(UIImage *)shareWith_1 shareWith_2:(UIImage *)shareWith_2 shareWith_3:(UIImage *)shareWith_3;
+- (void)initWithTypeIcon:(UIImage *)type_icon noteOrType:(NSString *)noteOrType date:(NSString *)date amount:(NSString *)amount shareWith_0:(UIImage *)shareWith_0 shareWith_1:(UIImage *)shareWith_1 shareWith_2:(UIImage *)shareWith_2 shareWith_3:(UIImage *)shareWith_3;
 @end

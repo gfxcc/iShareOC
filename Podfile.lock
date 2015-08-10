@@ -22,11 +22,15 @@ PODS:
   - gRPC_pod/Services (0.0.1):
     - gRPC (~> 0.5)
     - gRPC_pod/Messages
+  - HexColors (2.2.1)
   - OpenSSL (1.0.204)
   - Protobuf (3.0.0-alpha-3)
+  - TSMessages (0.9.12):
+    - HexColors (~> 2.2.0)
 
 DEPENDENCIES:
   - gRPC_pod (from `./Server`)
+  - TSMessages
 
 EXTERNAL SOURCES:
   gRPC_pod:
@@ -35,7 +39,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   gRPC: 2b65b35bdb80b2dac889399afb6706ab10d85d51
   gRPC_pod: 4832ce1411a8e5523cfeb88bc335e72014e342f9
+  HexColors: abfd172e329dab59888614ccba6f216cec59289d
   OpenSSL: 576b352e6e6e60793ca133c6785736e3cbc31a09
   Protobuf: c823c03c19e1c6f3ff6688551e31f3fa76fd46cb
+  TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
 
 COCOAPODS: 0.38.0

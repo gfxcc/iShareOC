@@ -9,20 +9,29 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+enum BillStatus {
+    OWE,
+    LEND,
+    PAID
+};
+
 @interface Bill : NSObject 
 
 @property (strong, nonatomic) NSString *bill_id;
 @property (strong, nonatomic) NSString *amount;
 @property (strong, nonatomic) NSString *type;
-@property (strong, nonatomic) NSString *account;
+@property (strong, nonatomic) NSString *paidBy;
 @property (strong, nonatomic) NSString *date;
 @property (strong, nonatomic) NSMutableArray *members;
 @property (strong, nonatomic) NSString *creater;
 @property (strong, nonatomic) NSString *note;
 @property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSString *paidStatus;
+@property (nonatomic) enum BillStatus status;
 
-- (void)initWithAmount:(NSString *)amount type:(NSString *)type account:(NSString *)account date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater note:(NSString *)note image:(UIImage *)image;
+- (void)initWithAmount:(NSString *)amount type:(NSString *)type date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater paidBy:(NSString *)paidBy note:(NSString *)note image:(UIImage *)image;
 
-- (void)initWithID:(NSString *)bill_id amount:(NSString *)amount type:(NSString *)type account:(NSString *)account date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater note:(NSString *)note image:(UIImage *)image;
+- (void)initWithID:(NSString *)bill_id amount:(NSString *)amount type:(NSString *)type date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater paidBy:(NSString *)paidBy note:(NSString *)note image:(UIImage *)image paidStatus:(NSString *)paidStatus;
 
+- (void)initWithBill:(Bill *)bill;
 @end
