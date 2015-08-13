@@ -34,9 +34,10 @@
 
 @property(strong, nonatomic) RKTabItem *billList;
 @property(strong, nonatomic) RKTabItem *analyze;
-@property(strong, nonatomic) RKTabItem *mapView;
+@property(strong, nonatomic) RKTabItem *messageCenter;
 @property(atomic) BOOL requestProcessing;
 @property(atomic) BOOL billProcessing;
+@property(atomic) BOOL updateAllBillsProcessing;
 
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 

@@ -30,6 +30,15 @@
 
 @implementation BillListWithFriendViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.navigationController.isNavigationBarHidden;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -77,12 +86,16 @@
         if ([_username isEqualToString:bill.paidBy]) {
             isMember = YES;
         } else {
-            for (int i = 0; i != bill.members.count; i++) {
-                if ([_username isEqualToString:bill.members[i]]) {
+            for (int i = 0; i != bill.members.count; i++) { // bill not paid by username. so bill need paid by idText and username owe it
+                if ([_username isEqualToString:bill.members[i]] && [bill.paidBy isEqualToString:_idText]) {
                     isMember = YES;
                     break;
                 }
             }
+        }
+        
+        if (!isMember) {
+            continue;
         }
         
         // get login username
@@ -369,11 +382,12 @@
         case 0:
             break;
         case 1:// Sure!
-            if (_sum == 0) {
+            if ([_sum isEqualToString:@"0.0"]) {
+                
                 [TSMessage showNotificationWithTitle:@"NO bill"
-                                            subtitle:@""
+                                            subtitle:@"...."
                                                 type:TSMessageNotificationTypeWarning];
-            } else if (_sum > 0) {
+            } else if (_sum.doubleValue > 0) {
                 [self makePayment];
             } else {
                 [self sendPaymentRequest];
@@ -388,7 +402,6 @@
 
 - (void)makePayment {
     NSString * const kRemoteHost = ServerHost;
-    _countOfMakePayment = 0;
     
     NSMutableArray *paybills = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i != _countOfBillsNeedPaid; i++) {
@@ -468,8 +481,8 @@
     Bill *lastOfPaid = _bills[0];
     Bill *firstOfPaid = _bills[_countOfBillsNeedPaid - 1];
     
-    //formate SENDER:%@ RECEVER:%@ FIRSTID:%@ LASTID:%@ COUNT:%ld
-    request.content = [NSString stringWithFormat:@"%@*%@*%ld",firstOfPaid.bill_id, lastOfPaid.bill_id, _countOfBillsNeedPaid];
+    //formate FIRSTID:%@ LASTID:%@ COUNT:%ld
+    request.content = [NSString stringWithFormat:@"%@*%@*%ld*%@",firstOfPaid.bill_id, lastOfPaid.bill_id, _countOfBillsNeedPaid, [NSString stringWithFormat:@"%.1f", (_sum.doubleValue * -1)]];
     
     NSDate *now = [NSDate date];
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -480,6 +493,9 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service send_requestWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
+            [TSMessage showNotificationWithTitle:@"Message"
+                                        subtitle:@"Your payment request has been send successfully. Please waiting for response!"
+                                            type:TSMessageNotificationTypeMessage];
             
         } else if (error) {
             [TSMessage showNotificationWithTitle:@"GRPC ERROR"

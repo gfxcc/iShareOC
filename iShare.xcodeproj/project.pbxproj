@@ -10,6 +10,11 @@
 		A1DD7E02892C52FD6E626C66 /* libPods-iShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */; };
 		DB0E85101B6C653300A1C74D /* payment.png in Resources */ = {isa = PBXBuildFile; fileRef = DB0E850F1B6C653300A1C74D /* payment.png */; };
 		DB0E85131B6D164100A1C74D /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = DB0E85121B6D164100A1C74D /* Request.m */; };
+		DB4EFC1A1B78F822003F917D /* MessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB4EFC191B78F822003F917D /* MessageCenterViewController.m */; };
+		DB4EFC1D1B793E9A003F917D /* RequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DB4EFC1C1B793E9A003F917D /* RequestTableViewCell.m */; };
+		DB4EFC1F1B7946AA003F917D /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = DB4EFC1E1B7946AA003F917D /* question.png */; };
+		DB4EFC211B794BFB003F917D /* Btn0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DB4EFC201B794BFB003F917D /* Btn0@2x.png */; };
+		DB4EFC231B795176003F917D /* Btn1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DB4EFC221B795176003F917D /* Btn1@2x.png */; };
 		DB94B26C1B60FE7C007AEE7F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26B1B60FE7C007AEE7F /* main.m */; };
 		DB94B26F1B60FE7C007AEE7F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26E1B60FE7C007AEE7F /* AppDelegate.m */; };
 		DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B2711B60FE7C007AEE7F /* ViewController.m */; };
@@ -132,7 +137,6 @@
 		DB94B3EA1B6119F4007AEE7F /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3DB1B6119F4007AEE7F /* SearchViewController.m */; };
 		DB94B3EB1B6119F4007AEE7F /* LeftMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3DC1B6119F4007AEE7F /* LeftMenuViewController.m */; };
 		DB94B3EC1B6119F4007AEE7F /* AddNewShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3DD1B6119F4007AEE7F /* AddNewShareViewController.m */; };
-		DB94B3ED1B6119F4007AEE7F /* MapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3DF1B6119F4007AEE7F /* MapViewViewController.m */; };
 		DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */; };
 		DB94B3EF1B6119F4007AEE7F /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */; };
 		DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E41B6119F4007AEE7F /* LoginViewController.m */; };
@@ -166,6 +170,13 @@
 		DB0E850F1B6C653300A1C74D /* payment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = payment.png; path = iShare/Source/payment.png; sourceTree = "<group>"; };
 		DB0E85111B6D164100A1C74D /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
 		DB0E85121B6D164100A1C74D /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
+		DB4EFC181B78F822003F917D /* MessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCenterViewController.h; sourceTree = "<group>"; };
+		DB4EFC191B78F822003F917D /* MessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCenterViewController.m; sourceTree = "<group>"; };
+		DB4EFC1B1B793E9A003F917D /* RequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RequestTableViewCell.h; path = iShare/RequestTableViewCell.h; sourceTree = "<group>"; };
+		DB4EFC1C1B793E9A003F917D /* RequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RequestTableViewCell.m; path = iShare/RequestTableViewCell.m; sourceTree = "<group>"; };
+		DB4EFC1E1B7946AA003F917D /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = question.png; path = iShare/Source/question.png; sourceTree = "<group>"; };
+		DB4EFC201B794BFB003F917D /* Btn0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Btn0@2x.png"; path = "iShare/Source/Btn0@2x.png"; sourceTree = "<group>"; };
+		DB4EFC221B795176003F917D /* Btn1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Btn1@2x.png"; path = "iShare/Source/Btn1@2x.png"; sourceTree = "<group>"; };
 		DB94B2661B60FE7C007AEE7F /* iShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB94B26A1B60FE7C007AEE7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB94B26B1B60FE7C007AEE7F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -326,8 +337,6 @@
 		DB94B3DB1B6119F4007AEE7F /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		DB94B3DC1B6119F4007AEE7F /* LeftMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuViewController.m; sourceTree = "<group>"; };
 		DB94B3DD1B6119F4007AEE7F /* AddNewShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewShareViewController.m; sourceTree = "<group>"; };
-		DB94B3DE1B6119F4007AEE7F /* MapViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewViewController.h; sourceTree = "<group>"; };
-		DB94B3DF1B6119F4007AEE7F /* MapViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewViewController.m; sourceTree = "<group>"; };
 		DB94B3E01B6119F4007AEE7F /* AnalyzeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyzeViewController.h; sourceTree = "<group>"; };
 		DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyzeViewController.m; sourceTree = "<group>"; };
 		DB94B3E21B6119F4007AEE7F /* LeftMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuViewController.h; sourceTree = "<group>"; };
@@ -428,8 +437,8 @@
 				DB94B3DC1B6119F4007AEE7F /* LeftMenuViewController.m */,
 				DB94B3E51B6119F4007AEE7F /* AddNewShareViewController.h */,
 				DB94B3DD1B6119F4007AEE7F /* AddNewShareViewController.m */,
-				DB94B3DE1B6119F4007AEE7F /* MapViewViewController.h */,
-				DB94B3DF1B6119F4007AEE7F /* MapViewViewController.m */,
+				DB4EFC181B78F822003F917D /* MessageCenterViewController.h */,
+				DB4EFC191B78F822003F917D /* MessageCenterViewController.m */,
 				DB94B3E81B6119F4007AEE7F /* SignUpViewController.h */,
 				DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */,
 				DB94B3E61B6119F4007AEE7F /* LoginViewController.h */,
@@ -626,6 +635,9 @@
 		DB94B3D71B611817007AEE7F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				DB4EFC221B795176003F917D /* Btn1@2x.png */,
+				DB4EFC201B794BFB003F917D /* Btn0@2x.png */,
+				DB4EFC1E1B7946AA003F917D /* question.png */,
 				DB0E850F1B6C653300A1C74D /* payment.png */,
 				DB952E871B62A81500482B00 /* calendar_month.png */,
 				DB952E881B62A81500482B00 /* calendar_week.png */,
@@ -726,6 +738,8 @@
 				DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */,
 				DB0E85111B6D164100A1C74D /* Request.h */,
 				DB0E85121B6D164100A1C74D /* Request.m */,
+				DB4EFC1B1B793E9A003F917D /* RequestTableViewCell.h */,
+				DB4EFC1C1B793E9A003F917D /* RequestTableViewCell.m */,
 			);
 			name = myClass;
 			sourceTree = "<group>";
@@ -819,12 +833,14 @@
 				DB94B3931B6117AE007AEE7F /* camera_enabled@2x.png in Resources */,
 				DB952E8E1B63357400482B00 /* MY SQL command in Resources */,
 				DB94B3721B6117AD007AEE7F /* Rent.png in Resources */,
+				DB4EFC211B794BFB003F917D /* Btn0@2x.png in Resources */,
 				DB94B3911B6117AE007AEE7F /* blurred_background.png in Resources */,
 				DB94B3B21B6117AE007AEE7F /* back_icon.png in Resources */,
 				DB94B3D61B6117AE007AEE7F /* Allura-Regular.ttf in Resources */,
 				DB94B3951B6117AE007AEE7F /* cloud_enabled@2x.png in Resources */,
 				DB94B3A81B6117AE007AEE7F /* tab_rotate_enabled@2x.png in Resources */,
 				DB94B3971B6117AE007AEE7F /* flickr@2x.png in Resources */,
+				DB4EFC1F1B7946AA003F917D /* question.png in Resources */,
 				DB94B37C1B6117AD007AEE7F /* TableIcon2@2x.png in Resources */,
 				DB94B3901B6117AE007AEE7F /* icon-user-default.png in Resources */,
 				DB94B3991B6117AE007AEE7F /* globe_enabled@2x.png in Resources */,
@@ -834,6 +850,7 @@
 				DB94B36E1B6117AD007AEE7F /* lunch && dinner.png in Resources */,
 				DB94B3AE1B6117AE007AEE7F /* watch_enabled@2x.png in Resources */,
 				DB94B3B11B6117AE007AEE7F /* money_icon.png in Resources */,
+				DB4EFC231B795176003F917D /* Btn1@2x.png in Resources */,
 				DB94B39C1B6117AE007AEE7F /* paypal@2x.png in Resources */,
 				DB952E841B6270D600482B00 /* leave.png in Resources */,
 				DB94B3731B6117AD007AEE7F /* phone.png in Resources */,
@@ -964,7 +981,6 @@
 				DB94B3EF1B6119F4007AEE7F /* SignUpViewController.m in Sources */,
 				DB94B38A1B6117AE007AEE7F /* UIView+YUStyle.m in Sources */,
 				DB94B3EC1B6119F4007AEE7F /* AddNewShareViewController.m in Sources */,
-				DB94B3ED1B6119F4007AEE7F /* MapViewViewController.m in Sources */,
 				DB952E9D1B6799D400482B00 /* BillDetailViewController.m in Sources */,
 				DB94B3E91B6119F4007AEE7F /* BillListViewController.m in Sources */,
 				DB94B36A1B6117AD007AEE7F /* Bill.m in Sources */,
@@ -973,6 +989,7 @@
 				DB0E85131B6D164100A1C74D /* Request.m in Sources */,
 				DB94B3871B6117AE007AEE7F /* UIButton+Bootstrap.m in Sources */,
 				DB94B38C1B6117AE007AEE7F /* yConst.m in Sources */,
+				DB4EFC1D1B793E9A003F917D /* RequestTableViewCell.m in Sources */,
 				DB94B3881B6117AE007AEE7F /* YUDIVView.m in Sources */,
 				DB94B3771B6117AD007AEE7F /* RKTabItem.m in Sources */,
 				DB94B3841B6117AD007AEE7F /* SlideNavigationController.m in Sources */,
@@ -991,6 +1008,7 @@
 				DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */,
 				DB952EA31B6A72B800482B00 /* BillListWithFriendViewController.m in Sources */,
 				DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */,
+				DB4EFC1A1B78F822003F917D /* MessageCenterViewController.m in Sources */,
 				DB952EA01B689DE100482B00 /* FriendWithBillTableViewCell.m in Sources */,
 				DB94B38F1B6117AE007AEE7F /* YUDarkGlassView.m in Sources */,
 				DB94B3EA1B6119F4007AEE7F /* SearchViewController.m in Sources */,

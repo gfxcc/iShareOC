@@ -17,6 +17,15 @@
 
 @implementation AnalyzeViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+}
+
+//- (BOOL)prefersStatusBarHidden {
+//    return self.navigationController.isNavigationBarHidden;
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

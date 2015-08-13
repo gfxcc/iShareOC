@@ -29,6 +29,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.navigationController.isNavigationBarHidden;
 }
 
 - (void)viewDidLoad {
@@ -98,7 +103,7 @@
             
             bill.status = PAID;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([bill.paidStatus characterAtIndex:i] == '0') {
+                if ([bill.paidStatus characterAtIndex:i] == '0' && ![[bill.members objectAtIndex:i] isEqualToString:_idText]) {
                     bill.status = LEND;
                     break;
                 }

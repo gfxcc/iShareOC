@@ -17,7 +17,6 @@
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSMutableArray *bills;
 @property (nonatomic) NSInteger countOfBillsNeedPaid;
-@property (nonatomic) NSInteger countOfMakePayment;
 @property (strong, nonatomic) NSMutableArray *billsWithMonth;
 @property (strong, nonatomic) NSString *sum;
 

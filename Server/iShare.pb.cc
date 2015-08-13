@@ -449,7 +449,7 @@ void protobuf_AddDesc_iShare_2eproto() {
     " \001(\t\022\020\n\010response\030\004 \001(\t\022\025\n\rresponse_date\030"
     "\005 \001(\t\"4\n\rIgnoreMessage\022\025\n\rrequestLog_id\030"
     "\001 \001(\t\022\014\n\004user\030\002 \001(\t\"2\n\013BillPayment\022\017\n\007bi"
-    "ll_id\030\001 \001(\t\022\022\n\npaidStatus\030\002 \001(\t2\260\t\n\007Gree"
+    "ll_id\030\001 \001(\t\022\022\n\npaidStatus\030\002 \001(\t2\366\t\n\007Gree"
     "ter\022>\n\010SayHello\022\030.helloworld.HelloReques"
     "t\032\026.helloworld.HelloReply\"\000\022/\n\005Login\022\023.h"
     "elloworld.Login_m\032\017.helloworld.Inf\"\000\0220\n\007"
@@ -473,14 +473,16 @@ void protobuf_AddDesc_iShare_2eproto() {
     "est\032\017.helloworld.Inf\"\000\022:\n\016Obtain_request"
     "\022\017.helloworld.Inf\032\023.helloworld.Request\"\000"
     "0\001\022=\n\021Obtain_requestLog\022\017.helloworld.Inf"
-    "\032\023.helloworld.Request\"\0000\001\022;\n\020Request_res"
-    "ponse\022\024.helloworld.Response\032\017.helloworld"
-    ".Inf\"\000\022;\n\013MakePayment\022\027.helloworld.BillP"
-    "ayment\032\017.helloworld.Inf\"\000(\001\022@\n\020IgnoreReq"
-    "uestLog\022\031.helloworld.IgnoreMessage\032\017.hel"
-    "loworld.Inf\"\000\022;\n\021Create_requestLog\022\023.hel"
-    "loworld.Request\032\017.helloworld.Inf\"\000B\022\n\020io"
-    ".grpc.examplesb\006proto3", 2342);
+    "\032\023.helloworld.Request\"\0000\001\022D\n\030Obtain_requ"
+    "estLogHistory\022\017.helloworld.Inf\032\023.hellowo"
+    "rld.Request\"\0000\001\022;\n\020Request_response\022\024.he"
+    "lloworld.Response\032\017.helloworld.Inf\"\000\022;\n\013"
+    "MakePayment\022\027.helloworld.BillPayment\032\017.h"
+    "elloworld.Inf\"\000(\001\022@\n\020IgnoreRequestLog\022\031."
+    "helloworld.IgnoreMessage\032\017.helloworld.In"
+    "f\"\000\022;\n\021Create_requestLog\022\023.helloworld.Re"
+    "quest\032\017.helloworld.Inf\"\000B\022\n\020io.grpc.exam"
+    "plesb\006proto3", 2412);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "iShare.proto", &protobuf_RegisterTypes);
   Login_m::default_instance_ = new Login_m();

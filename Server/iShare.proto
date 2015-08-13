@@ -119,6 +119,11 @@ rpc Obtain_requestLog (Inf) returns (stream Request) {}
 // 
 // 
 // 
+rpc Obtain_requestLogHistory (Inf) returns (stream Request) {}
+
+// 
+// 
+// 
 rpc Request_response (Response) returns (Inf) {}
 
 // 

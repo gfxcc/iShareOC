@@ -18,6 +18,7 @@
 #import "BillDetailViewController.h"
 #import "BillListViewController.h"
 #import "Request.h"
+#import "MessageCenterViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -34,18 +35,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-//    for (int i = 0; i != 3; i++) {
-//        RKTabItem *item = (RKTabItem *)_standardView.tabItems[i];
-//        if (0 == item.tabState) {
-//            [_standardView switchTabIndex:i];
-//        }
-//    }
-    
-    [super viewWillAppear:animated];
+
     [_standardView disableAllItems];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    
+    //self.navigationController.hidesBarsOnSwipe = true;
 }
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -56,7 +53,7 @@
     self.navigationController.navigationBar.barTintColor = RGB(78, 107, 165);
     
     self.view.backgroundColor = RGB(211, 214, 219);
-    
+    [TSMessage setDefaultViewController:self.navigationController];
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
                                                              bundle: nil];
@@ -99,14 +96,14 @@
     
     _billList = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon6@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon7@2x.png"]];
     _analyze = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon2@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon3@2x.png"]];
-    _mapView = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon0@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon1@2x.png"]];
+    _messageCenter = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon0@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon1@2x.png"]];
     
     
     self.standardView.horizontalInsets = HorizontalEdgeInsetsMake(25, 25);
     
     self.standardView.darkensBackgroundForEnabledTabs = YES;
     self.standardView.drawSeparators = YES;
-    self.standardView.tabItems = @[_billList, _analyze, _mapView];
+    self.standardView.tabItems = @[_billList, _analyze, _messageCenter];
     self.standardView.delegate = (id<RKTabViewDelegate>)self;
     
     _statusView.layer.cornerRadius = 5.0f;
@@ -177,7 +174,9 @@
             }
             
             if ([response.delete_p isEqualToString:@"0"]) {
-            } else if ([response.delete_p isEqualToString:@"1"]) {
+                _updateAllBillsProcessing = NO;
+            } else if ([response.delete_p isEqualToString:@"1"] && !_updateAllBillsProcessing) {
+                _updateAllBillsProcessing = YES;
                 [self updateAllBills];
             }
             
@@ -203,6 +202,7 @@
 
 - (void)obtain_requestLog {
     
+    [_request removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
     request.information = _leftMenu.idText.text;
@@ -211,7 +211,7 @@
     [service obtain_requestLogWithRequest:request handler:^(BOOL done, Request *response, NSError *error){
         if (!done) {
             Request_ *req = [[Request_ alloc] init];
-            [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:nil request_date:response.requestDate response_date:nil];
+            [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:response.response request_date:response.requestDate response_date:response.responseDate];
             [_request addObject:req];
             
         } else if (error) {
@@ -220,14 +220,32 @@
                                             type:TSMessageNotificationTypeError];
         } else {
             if (_request.count > 0) {
-                Request *req = _request[0];
-                NSArray *content = [req.content componentsSeparatedByString:@"*"];
-                
-                [TSMessage showNotificationWithTitle:@"Success"
-                                            subtitle:[NSString stringWithFormat:@"%@ paid %@ : %@ successed", req.receiver, req.sender, content[3]]
-                                                type:TSMessageNotificationTypeSuccess];
+                Request_ *req = _request[0];
+                if ([req.type isEqualToString:@"payment"]) {
+                    if ([req.response isEqualToString:@"OK"]) {
+                        NSArray *content = [req.content componentsSeparatedByString:@"*"];
+                        
+                        [TSMessage showNotificationWithTitle:@"Success"
+                                                    subtitle:[NSString stringWithFormat:@"%@ paid %@ : %@ successed", req.sender, req.receiver, content[3]]
+                                                        type:TSMessageNotificationTypeSuccess];
+                    } else {
+                        NSArray *content = [req.content componentsSeparatedByString:@"*"];
+                        
+                        [TSMessage showNotificationWithTitle:@"Rejected"
+                                                    subtitle:[NSString stringWithFormat:@"%@ paid %@ : %@ was rejected", req.receiver, req.sender, content[3]]
+                                                        type:TSMessageNotificationTypeWarning];
+                    }
+                } else if ([req.type isEqualToString:@"receivePayment"]) {
+                    if ([req.response isEqualToString:@"OK"]) {
+                        NSArray *content = [req.content componentsSeparatedByString:@"*"];
+                        
+                        [TSMessage showNotificationWithTitle:@"Success"
+                                                    subtitle:[NSString stringWithFormat:@"%@ paid %@ : %@ successed", req.receiver, req.sender, content[3]]
+                                                        type:TSMessageNotificationTypeSuccess];
+                    }
+                }
             }
-            //_requestProcessing = NO;
+
         }
     }];
     
@@ -263,7 +281,7 @@
                                                callback:nil
                                             buttonTitle:@"Check"
                                          buttonCallback:^{
-                                             [self performSegueWithIdentifier:@"mapview" sender:self];
+                                             [self performSegueWithIdentifier:@"messageCenter" sender:self];
                                          }
                                              atPosition:TSMessageNotificationPositionTop
                                    canBeDismissedByUser:YES];
@@ -396,7 +414,7 @@
             [self performSegueWithIdentifier:@"analyze" sender:self];
             break;
         case 2:
-            [self performSegueWithIdentifier:@"mapview" sender:self];
+            [self performSegueWithIdentifier:@"messageCenter" sender:self];
             break;
         default:
             break;
@@ -549,7 +567,9 @@
     } else if ([segue.identifier isEqualToString:@"billList"]) {
         BillListViewController *billList = (BillListViewController *)[segue destinationViewController];
         billList.idText = _leftMenu.idText.text;
-    
+    } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
+        MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
+        messageCenter.idText = _leftMenu.idText.text;
     }
 }
 

@@ -213,6 +213,18 @@ static NSString *const kServiceName = @"Greeter";
              responseClass:[Request class]
         responsesWriteable:[GRXWriteable writeableWithStreamHandler:handler]];
 }
+#pragma mark Obtain_requestLogHistory(Inf) returns (stream Request)
+
+- (void)obtain_requestLogHistoryWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  [[self RPCToObtain_requestLogHistoryWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToObtain_requestLogHistoryWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler{
+  return [self RPCToMethod:@"Obtain_requestLogHistory"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Request class]
+        responsesWriteable:[GRXWriteable writeableWithStreamHandler:handler]];
+}
 #pragma mark Request_response(Response) returns (Inf)
 
 - (void)request_responseWithRequest:(Response *)request handler:(void(^)(Inf *response, NSError *error))handler{

@@ -104,6 +104,12 @@ class Greeter GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>> AsyncObtain_requestLog(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>>(AsyncObtain_requestLogRaw(context, request, cq, tag));
     }
+    std::unique_ptr< ::grpc::ClientReaderInterface< ::helloworld::Request>> Obtain_requestLogHistory(::grpc::ClientContext* context, const ::helloworld::Inf& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< ::helloworld::Request>>(Obtain_requestLogHistoryRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>> AsyncObtain_requestLogHistory(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>>(AsyncObtain_requestLogHistoryRaw(context, request, cq, tag));
+    }
     virtual ::grpc::Status Request_response(::grpc::ClientContext* context, const ::helloworld::Response& request, ::helloworld::Inf* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::helloworld::Inf>> AsyncRequest_response(::grpc::ClientContext* context, const ::helloworld::Response& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::helloworld::Inf>>(AsyncRequest_responseRaw(context, request, cq));
@@ -145,6 +151,8 @@ class Greeter GRPC_FINAL {
     virtual ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>* AsyncObtain_requestRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientReaderInterface< ::helloworld::Request>* Obtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>* AsyncObtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientReaderInterface< ::helloworld::Request>* Obtain_requestLogHistoryRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::helloworld::Request>* AsyncObtain_requestLogHistoryRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::helloworld::Inf>* AsyncRequest_responseRaw(::grpc::ClientContext* context, const ::helloworld::Response& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientWriterInterface< ::helloworld::BillPayment>* MakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::helloworld::BillPayment>* AsyncMakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
@@ -230,6 +238,12 @@ class Greeter GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncReader< ::helloworld::Request>> AsyncObtain_requestLog(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::helloworld::Request>>(AsyncObtain_requestLogRaw(context, request, cq, tag));
     }
+    std::unique_ptr< ::grpc::ClientReader< ::helloworld::Request>> Obtain_requestLogHistory(::grpc::ClientContext* context, const ::helloworld::Inf& request) {
+      return std::unique_ptr< ::grpc::ClientReader< ::helloworld::Request>>(Obtain_requestLogHistoryRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::helloworld::Request>> AsyncObtain_requestLogHistory(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::helloworld::Request>>(AsyncObtain_requestLogHistoryRaw(context, request, cq, tag));
+    }
     ::grpc::Status Request_response(::grpc::ClientContext* context, const ::helloworld::Response& request, ::helloworld::Inf* response) GRPC_OVERRIDE;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>> AsyncRequest_response(::grpc::ClientContext* context, const ::helloworld::Response& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>>(AsyncRequest_responseRaw(context, request, cq));
@@ -272,6 +286,8 @@ class Greeter GRPC_FINAL {
     ::grpc::ClientAsyncReader< ::helloworld::Request>* AsyncObtain_requestRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) GRPC_OVERRIDE;
     ::grpc::ClientReader< ::helloworld::Request>* Obtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) GRPC_OVERRIDE;
     ::grpc::ClientAsyncReader< ::helloworld::Request>* AsyncObtain_requestLogRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) GRPC_OVERRIDE;
+    ::grpc::ClientReader< ::helloworld::Request>* Obtain_requestLogHistoryRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncReader< ::helloworld::Request>* AsyncObtain_requestLogHistoryRaw(::grpc::ClientContext* context, const ::helloworld::Inf& request, ::grpc::CompletionQueue* cq, void* tag) GRPC_OVERRIDE;
     ::grpc::ClientAsyncResponseReader< ::helloworld::Inf>* AsyncRequest_responseRaw(::grpc::ClientContext* context, const ::helloworld::Response& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
     ::grpc::ClientWriter< ::helloworld::BillPayment>* MakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response) GRPC_OVERRIDE;
     ::grpc::ClientAsyncWriter< ::helloworld::BillPayment>* AsyncMakePaymentRaw(::grpc::ClientContext* context, ::helloworld::Inf* response, ::grpc::CompletionQueue* cq, void* tag) GRPC_OVERRIDE;
@@ -293,6 +309,7 @@ class Greeter GRPC_FINAL {
     const ::grpc::RpcMethod rpcmethod_Send_request_;
     const ::grpc::RpcMethod rpcmethod_Obtain_request_;
     const ::grpc::RpcMethod rpcmethod_Obtain_requestLog_;
+    const ::grpc::RpcMethod rpcmethod_Obtain_requestLogHistory_;
     const ::grpc::RpcMethod rpcmethod_Request_response_;
     const ::grpc::RpcMethod rpcmethod_MakePayment_;
     const ::grpc::RpcMethod rpcmethod_IgnoreRequestLog_;
@@ -320,6 +337,7 @@ class Greeter GRPC_FINAL {
     virtual ::grpc::Status Send_request(::grpc::ServerContext* context, const ::helloworld::Request* request, ::helloworld::Inf* response);
     virtual ::grpc::Status Obtain_request(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::grpc::ServerWriter< ::helloworld::Request>* writer);
     virtual ::grpc::Status Obtain_requestLog(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::grpc::ServerWriter< ::helloworld::Request>* writer);
+    virtual ::grpc::Status Obtain_requestLogHistory(::grpc::ServerContext* context, const ::helloworld::Inf* request, ::grpc::ServerWriter< ::helloworld::Request>* writer);
     virtual ::grpc::Status Request_response(::grpc::ServerContext* context, const ::helloworld::Response* request, ::helloworld::Inf* response);
     virtual ::grpc::Status MakePayment(::grpc::ServerContext* context, ::grpc::ServerReader< ::helloworld::BillPayment>* reader, ::helloworld::Inf* response);
     virtual ::grpc::Status IgnoreRequestLog(::grpc::ServerContext* context, const ::helloworld::IgnoreMessage* request, ::helloworld::Inf* response);
@@ -348,6 +366,7 @@ class Greeter GRPC_FINAL {
     void RequestSend_request(::grpc::ServerContext* context, ::helloworld::Request* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void RequestObtain_request(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncWriter< ::helloworld::Request>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void RequestObtain_requestLog(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncWriter< ::helloworld::Request>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
+    void RequestObtain_requestLogHistory(::grpc::ServerContext* context, ::helloworld::Inf* request, ::grpc::ServerAsyncWriter< ::helloworld::Request>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void RequestRequest_response(::grpc::ServerContext* context, ::helloworld::Response* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void RequestMakePayment(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::helloworld::Inf, ::helloworld::BillPayment>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void RequestIgnoreRequestLog(::grpc::ServerContext* context, ::helloworld::IgnoreMessage* request, ::grpc::ServerAsyncResponseWriter< ::helloworld::Inf>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);

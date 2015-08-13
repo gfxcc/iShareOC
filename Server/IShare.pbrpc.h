@@ -3,7 +3,6 @@
 
 #define ServerHost @"http://192.168.1.3:50051"
 
-
 @protocol GRXWriteable;
 @protocol GRXWriter;
 
@@ -119,6 +118,13 @@
 - (void)obtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
 
 - (ProtoRPC *)RPCToObtain_requestLogWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+
+#pragma mark Obtain_requestLogHistory(Inf) returns (stream Request)
+
+- (void)obtain_requestLogHistoryWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToObtain_requestLogHistoryWithRequest:(Inf *)request handler:(void(^)(BOOL done, Request *response, NSError *error))handler;
 
 
 #pragma mark Request_response(Response) returns (Inf)

@@ -26,7 +26,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="22" sectionFooterHeight="22" id="pgW-An-Cv7">
-                                <rect key="frame" x="0.0" y="297.00000106394299" width="320" height="220"/>
+                                <rect key="frame" x="0.0" y="297.00000223283962" width="320" height="220"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -136,7 +136,7 @@
                         <outlet property="tableView" destination="pgW-An-Cv7" id="T9M-Kv-cGT"/>
                         <segue destination="HYF-Bk-JFd" kind="push" identifier="analyze" id="Br1-4F-q5g"/>
                         <segue destination="cpe-Sa-hql" kind="push" identifier="billList" id="6c0-Hn-fXa"/>
-                        <segue destination="9At-cw-Let" kind="push" identifier="mapview" id="uVL-6m-UP9"/>
+                        <segue destination="9At-cw-Let" kind="push" identifier="messageCenter" id="uVL-6m-UP9"/>
                         <segue destination="3ko-3M-PRO" kind="push" identifier="lastBillDetail" id="Y9Q-BV-sYG"/>
                     </connections>
                 </viewController>
@@ -1011,23 +1011,82 @@
             </objects>
             <point key="canvasLocation" x="2205" y="1814"/>
         </scene>
-        <!--map view-->
+        <!--Message Center View Controller-->
         <scene sceneID="CG8-GG-Fcm">
             <objects>
-                <viewController id="9At-cw-Let" customClass="MapViewViewController" sceneMemberID="viewController">
+                <viewController id="9At-cw-Let" customClass="MessageCenterViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="E9p-nq-dd1">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="YB9-m6-0hh">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="22" sectionFooterHeight="22" id="YB9-m6-0hh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="requestCell" id="UlB-XF-Zpg" customClass="RequestTableViewCell">
+                                        <rect key="frame" x="0.0" y="86" width="320" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UlB-XF-Zpg" id="mto-Gw-JNq">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="c7g-aq-s4q">
+                                                    <rect key="frame" x="8" y="5" width="70" height="70"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="asX-6t-Oka">
+                                                    <rect key="frame" x="86" y="41" width="110" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Confirm" backgroundImage="Btn0.png">
+                                                        <color key="titleColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="a36-y3-jkt">
+                                                    <rect key="frame" x="200" y="41" width="110" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Delete" backgroundImage="Btn1.png">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="832-Mq-6lZ">
+                                                    <rect key="frame" x="86" y="8" width="224" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <outlet property="confrimButton" destination="asX-6t-Oka" id="fsj-PW-kbk"/>
+                                            <outlet property="deleteButton" destination="a36-y3-jkt" id="Fzs-MP-OrK"/>
+                                            <outlet property="icon" destination="c7g-aq-s4q" id="4RC-qr-i7Y"/>
+                                            <outlet property="label" destination="832-Mq-6lZ" id="G37-2r-p8l"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="map view" id="HEw-cN-SNt"/>
+                    <navigationItem key="navigationItem" id="HEw-cN-SNt">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="iYp-Yc-xGw">
+                            <rect key="frame" x="67" y="8" width="186" height="29"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Unread"/>
+                                <segment title="History"/>
+                            </segments>
+                        </segmentedControl>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="segmentedControl" destination="iYp-Yc-xGw" id="FZf-os-peU"/>
+                        <outlet property="tableView" destination="YB9-m6-0hh" id="aig-gT-v6i"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wiv-bQ-HZG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1035,6 +1094,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Btn0.png" width="183" height="53"/>
+        <image name="Btn1.png" width="183" height="53"/>
         <image name="TableIcon0.png" width="31" height="31"/>
         <image name="back_icon.png" width="32" height="32"/>
         <image name="camera.png" width="124" height="124"/>
