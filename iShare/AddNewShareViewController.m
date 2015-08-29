@@ -115,8 +115,7 @@
     
     
     _paidBy.text = keyboard.memberArray.count > 0 ? keyboard.memberArray[0] : @"none";
-
-
+    _creater.text = keyboard.memberArray.count > 0 ? keyboard.memberArray[0] : @"none";
 }
 
 //- (void)fadeoutTouch {
@@ -223,7 +222,16 @@
         request.data_p = prettyVersion;
     }
     request.note = _comment.text;
+    
     request.image = NULL;
+    if (_customPic) {
+        NSDate *now = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm:ss";
+        NSString *time = [dateFormat stringFromDate:now];
+        request.image = [NSString stringWithFormat:@"%@-%@", request.creater, time];
+        [self send_imgae:_takePicture.imageView.image name:request.image path:@"billsImage"];
+    }
     
     for (int i = 0; i != keyboard.selectedItems.count; i++) {
         NSInteger index = [keyboard.selectedItems[i] integerValue];
@@ -249,6 +257,36 @@
         NSLog(@"Present Modal View");
     }];
 
+}
+
+- (void)send_imgae:(UIImage *)image name:(NSString *)name path:(NSString *)path {
+    NSString *const kRemoteHost = ServerHost;
+    
+    // Example gRPC call using a generated proto client library:
+    
+    Image *image_name = [Image message];
+    Image *image_path = [Image message];
+    Image *image_pkg = [Image message];
+    
+    image_name.data_p = [name dataUsingEncoding:NSUTF8StringEncoding];
+    image_path.data_p = [path dataUsingEncoding:NSUTF8StringEncoding];
+    image_pkg.data_p = UIImagePNGRepresentation(image);
+    
+    NSArray *pkgs = @[image_name, image_path, image_pkg];
+    GRXWriter *_requestsWriter = [GRXWriter writerWithContainer:pkgs];
+    
+    //[_requestsWriter startWithWriteable:writable];
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    
+    [service send_ImgWithRequestsWriter:_requestsWriter handler:^(Inf *response, NSError *error) {
+        if (response) {
+            NSLog(@"%@", response.information);
+            
+        } else if(error){
+            NSLog(@"Finished with error: %@", error);
+        }
+    }];
+    
 }
 
 - (IBAction)takePictureClick:(id)sender {
@@ -292,6 +330,7 @@
     
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     [_takePicture setImage:chosenImage forState:UIControlStateNormal];
+    _customPic = YES;
     [picker dismissViewControllerAnimated:YES completion:NULL];
     
 }

@@ -69,6 +69,10 @@
                                                   usedEncoding:nil
                                                          error:nil];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
+    
+    if ([bills[0] isEqualToString:@""]) {
+        bills = [[NSArray alloc] init];
+    }
     _countOfBillsNeedPaid = 0;
     for (NSInteger i = 0; i != bills.count; i++) {
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];

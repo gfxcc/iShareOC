@@ -1,7 +1,7 @@
 #import "IShare.pbobjc.h"
 #import <gRPC/ProtoRPC/ProtoService.h>
 
-#define ServerHost @"http://192.168.1.3:50051"
+#define ServerHost @"http://54.201.29.228:50051"
 
 @protocol GRXWriteable;
 @protocol GRXWriter;

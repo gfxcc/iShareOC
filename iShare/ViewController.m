@@ -308,7 +308,7 @@
     [service obtain_billsWithRequest:request handler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
             Bill *bill = [[Bill alloc] init];
-            [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:nil paidStatus:response.paidStatus];
+            [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus];
 
             [_bill_latest addObject:bill];
             NSLog(@"%@", response.data_p);
@@ -750,7 +750,7 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
     
-    dataPath = [documentsDirectory stringByAppendingPathComponent:@"/bills"];
+    dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder

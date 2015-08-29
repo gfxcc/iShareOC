@@ -47,7 +47,7 @@
     {
         [_tableView reloadData];
     } else if (segment.selectedSegmentIndex == 1) {
-        [_tableView reloadData];
+        [segment setSelectedSegmentIndex:0];
     }
     
     NSLog(@"%ld", segment.selectedSegmentIndex);

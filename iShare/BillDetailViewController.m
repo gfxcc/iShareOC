@@ -109,6 +109,20 @@
             _paidBy.text = billContent[5];
             _comment.text = billContent[6];
             
+            NSString *imageName = billContent[7];
+            if (![imageName isEqualToString:@""]) {
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+                NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
+                dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, imageName];
+                BOOL imageExist = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+                if (imageExist) {
+                    [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath] forState:UIControlStateNormal];
+                } else {
+                    [self downloadPicture:imageName];
+                }
+            }
+            
             for (int j = 8; j != 18; j++) {
                 if ([billContent[j] isEqualToString:@""]) {
                     break;
@@ -125,11 +139,52 @@
             break;
         }
     }
+
     
     _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
     _keyboard.memberArray = _memberArray;
     [self.view addSubview:_keyboard];
 
+}
+
+
+- (void)downloadPicture:(NSString*)image {
+    NSString * const kRemoteHost = ServerHost;
+    
+    Repeated_string *request = [Repeated_string message];
+    
+    // better?
+    
+    [request.contentArray insertObject:@"billsImage" atIndex:0];
+    [request.contentArray insertObject:image atIndex:1];
+    
+    for (int i = 0; i != request.contentArray.count; i++) {
+        NSLog(@"%@", request.contentArray[i]);
+    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service receive_ImgWithRequest:request handler:^(BOOL done, Image *response, NSError *error) {
+        if (!done) {
+            if (response.data_p.length == 0) {
+                return;
+            }
+            NSLog(@"%lu", (unsigned long)response.data_p.length);
+            [response.data_p writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, response.name] atomically:YES];
+        } else if (error) {
+            
+        } else { // done
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+            NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
+            dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, image];
+            [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath ] forState:UIControlStateNormal];
+        }
+    }];
+    
 }
 
 #pragma mark - set mode

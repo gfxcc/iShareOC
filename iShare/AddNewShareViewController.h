@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CYkeyboard.h"
 #import "DaiDodgeKeyboard.h"
+#import <gRPC/RxLibrary/GRXWriter.h>
+#import <gRPC/RxLibrary/GRXWriteable.h>
+#import <gRPC/RxLibrary/GRXWriter+Immediate.h>
 
 @interface AddNewShareViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 
@@ -31,7 +34,7 @@
 
 //@property (weak, nonatomic) NSString *idText;
 @property (strong, nonatomic) NSDate *mydate;
-
+@property(nonatomic) BOOL customPic;
 
 - (void)unlight;
 @end

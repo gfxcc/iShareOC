@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CYkeyboard.h"
+#import <gRPC_pod/IShare.pbrpc.h>
+#import <gRPC_pod/IShare.pbobjc.h>
 
 @interface BillDetailViewController : UIViewController
 
