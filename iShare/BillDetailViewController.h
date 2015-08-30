@@ -10,10 +10,12 @@
 #import "CYkeyboard.h"
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import "FullSizeView.h"
+#import "tview.h"
 
 @interface BillDetailViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIButton *takePicture;
+@property (weak, nonatomic) IBOutlet UIImageView *takePicture;
 
 @property (weak, nonatomic) IBOutlet UILabel *amount;
 
@@ -31,6 +33,10 @@
 @property (strong, nonatomic) NSMutableArray *memberArray;
 @property (strong, nonatomic) NSDate *mydate;
 @property (strong, nonatomic) NSString *billId;
+
+@property (strong, nonatomic) UIImage *image;
+
+@property (strong, nonatomic) FullSizeView *fullSizeView;
 
 @property (strong, nonatomic) CYkeyboard *keyboard;
 

@@ -44,9 +44,20 @@
         //fade corner
         _edit.layer.cornerRadius = 5;
         _edit.clipsToBounds = YES;
-        
-        
         [self addSubview:_edit];
+        
+        // shareMode button
+        _shareMode = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_shareMode setFrame:CGRectMake(0, self.bounds.origin.y - 40 + 4, 120, 40)];
+        _shareMode.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_shareMode setTitle:@"    Share Mode" forState:UIControlStateNormal];
+        [_shareMode setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
+        [_shareMode addTarget:self action:@selector(shareModePage) forControlEvents:UIControlEventTouchUpInside];
+        _shareMode.backgroundColor = RGB(98, 98, 98);
+        //fade corner
+        _shareMode.layer.cornerRadius = 5;
+        _shareMode.clipsToBounds = YES;
+        [self addSubview:_shareMode];
         
         CALayer *TopBorder = [CALayer layer];
         UIColor *borderColor = RGB(73, 71, 72);
@@ -143,6 +154,8 @@
     [self addSubview:_textfield];
     [_textfield becomeFirstResponder];
     
+    // custom button
+    
 }
 
 -(void)doneButtonClickedDismissKeyboard
@@ -167,6 +180,10 @@
     [self addSubview:_typePicker];
     [self sendSubviewToBack:_typePicker];
     
+    // custom button
+    _edit.hidden = NO;
+    _shareMode.hidden = YES;
+    
 }
 - (void)paidByMode {
     [_textfield removeFromSuperview];
@@ -183,6 +200,10 @@
     _paidByPicker.delegate = self;
     [self addSubview:_paidByPicker];
     [self sendSubviewToBack:_paidByPicker];
+    
+    // custom button
+    _edit.hidden = YES;
+    _shareMode.hidden = YES;
 
 }
 - (void)dataMode {
@@ -203,6 +224,10 @@
           forControlEvents:UIControlEventValueChanged];
     [self addSubview:_datepicker];
     [self sendSubviewToBack:_datepicker];
+    
+    // custom button
+    _edit.hidden = YES;
+    _shareMode.hidden = YES;
 }
 - (void)memberMode {
     [_textfield removeFromSuperview];
@@ -219,6 +244,10 @@
     _memberPicker.delegate = self;
     [self addSubview:_memberPicker];
     [self sendSubviewToBack:_memberPicker];
+    
+    // custom button
+    _edit.hidden = YES;
+    _shareMode.hidden = NO;
 }
 
 - (void)setLables:(UILabel *)amount type:(UILabel *)type data:(UILabel *)data member:(UILabel *)member paidBy:(UILabel *)paidBy {
@@ -293,6 +322,10 @@
 }
 
 - (void)editPage {
+    
+}
+
+- (void)shareModePage {
     
 }
 

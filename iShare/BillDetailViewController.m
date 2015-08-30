@@ -8,6 +8,7 @@
 
 #import "BillDetailViewController.h"
 
+
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface BillDetailViewController ()
@@ -19,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationController.navigationBar.barTintColor = RGB(78, 107, 165);
+    self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
     //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     
@@ -109,6 +110,7 @@
             _paidBy.text = billContent[5];
             _comment.text = billContent[6];
             
+            _image = NULL;
             NSString *imageName = billContent[7];
             if (![imageName isEqualToString:@""]) {
                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -117,7 +119,8 @@
                 dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, imageName];
                 BOOL imageExist = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
                 if (imageExist) {
-                    [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath] forState:UIControlStateNormal];
+                    [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath]];
+                    _image = [UIImage imageWithContentsOfFile:dataPath];
                 } else {
                     [self downloadPicture:imageName];
                 }
@@ -139,16 +142,27 @@
             break;
         }
     }
-
     
     _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
     _keyboard.memberArray = _memberArray;
     [self.view addSubview:_keyboard];
 
+    if (_image) {
+        _fullSizeView = [[FullSizeView alloc] initWithBounds:self.view.bounds SuperView:self.view ImageView:_takePicture Image:_image];
+        [self.view addSubview:_fullSizeView];
+    }
+    
 }
 
 
 - (void)downloadPicture:(NSString*)image {
+    
+    
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithFrame:_takePicture.frame];
+    activityView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [self.view addSubview:activityView];
+    [activityView startAnimating];
+    
     NSString * const kRemoteHost = ServerHost;
     
     Repeated_string *request = [Repeated_string message];
@@ -181,7 +195,15 @@
             NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
             NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
             dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, image];
-            [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath ] forState:UIControlStateNormal];
+            [_takePicture setImage:[UIImage imageWithContentsOfFile:dataPath]];
+            
+            _image = [UIImage imageWithContentsOfFile:dataPath];
+            
+            _fullSizeView = [[FullSizeView alloc] initWithBounds:self.view.bounds SuperView:self.view ImageView:_takePicture Image:_image];
+            [self.view addSubview:_fullSizeView];
+            
+            //stop UIActivityIndicatorView animation
+            [activityView stopAnimating];
         }
     }];
     
@@ -245,10 +267,13 @@
     [_keyboard show];
 }
 
+
 - (void)cancel {
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

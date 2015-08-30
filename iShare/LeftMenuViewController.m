@@ -20,6 +20,7 @@
 #import "ViewController.h"
 #import "UserListTableViewCell.h"
 
+
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @implementation LeftMenuViewController
@@ -432,6 +433,12 @@
         [cell initWith:_friendsArray[indexPath.row] icon:[UIImage imageNamed:@"icon-user-default.png"]];
     }
     
+    FullSizeView *fullSizeImage = [[FullSizeView alloc] initWithBounds:self.view.bounds SuperView:self.view ImageView:cell.icon Image:cell.icon.image];
+    fullSizeImage.delegate = self;
+    [self.view addSubview:fullSizeImage];
+    
+    
+    
     return cell;
 }
 
@@ -447,6 +454,18 @@
         //[self obtain_friends];
         
     }
+}
+
+#pragma mark - FullSizeView delegate -
+- (void)originalImageViewTapped {
+    ViewController *mainUI = (ViewController *)_mainUIView;
+    [mainUI hideMainUI];
+    
+}
+
+- (void)fullSizeViewTapped {
+    ViewController *mainUI = (ViewController *)_mainUIView;
+    [mainUI hideMainUI];
 }
 
 

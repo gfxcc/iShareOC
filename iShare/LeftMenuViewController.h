@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FullSizeView.h"
 
-@interface LeftMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@interface LeftMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FullSizeViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *headImage;

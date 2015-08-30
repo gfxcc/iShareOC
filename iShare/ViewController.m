@@ -50,7 +50,7 @@
     
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
     //[self.navigationController.navigationBar setBackgroundColor:RGB(78, 107, 165)];
-    self.navigationController.navigationBar.barTintColor = RGB(78, 107, 165);
+    self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     
     self.view.backgroundColor = RGB(211, 214, 219);
     [TSMessage setDefaultViewController:self.navigationController];
@@ -118,12 +118,12 @@
 
 - (void)buttonHighlight {
 
-    _addNewButtion.backgroundColor = RGB(78, 107, 165);
+    _addNewButtion.backgroundColor = RGB(23, 102, 137);
 }
 
 - (void)buttonNormal {
 
-    _addNewButtion.backgroundColor = RGB(118, 137, 166);
+    _addNewButtion.backgroundColor = RGB(26, 142, 180);
 }
 
 - (IBAction)addNewShare:(id)sender {
@@ -192,6 +192,8 @@
             
         } else if (error) {
             NSLog(@"Finished with error: %@", error);
+            
+            [self performSelector:@selector(keepSyn) withObject:nil afterDelay:1.0f];
         } else {
             _requestsWriter.state = GRXWriterStateStarted;
             NSLog(@"%li", (long)_requestsWriter.state);

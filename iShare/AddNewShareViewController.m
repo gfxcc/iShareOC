@@ -24,7 +24,7 @@
     // Do any additional setup after loading the view.
     [DaiDodgeKeyboard addRegisterTheViewNeedDodgeKeyboard:self.view];
     
-    self.navigationController.navigationBar.barTintColor = RGB(78, 107, 165);
+    self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add)];

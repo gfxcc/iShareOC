@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, CYkeyboardKind) {
 
 @property (strong, nonatomic) UIButton *fadeout;
 @property (strong, nonatomic) UIButton *edit;
+@property (strong, nonatomic) UIButton *shareMode;
 @property (strong, nonatomic) UITextField *textfield;
 @property (strong, nonatomic) UIPickerView *typePicker;
 @property (strong, nonatomic) UIPickerView *paidByPicker;

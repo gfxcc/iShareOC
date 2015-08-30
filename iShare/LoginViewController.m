@@ -15,8 +15,16 @@
 
 @interface LoginViewController ()
 
-@property (strong, nonatomic) UITextField *userTextField;
-@property (strong, nonatomic) UITextField *pwTextField;
+//@property (strong, nonatomic) UITextField *userTextField;
+//@property (strong, nonatomic) UITextField *pwTextField;
+//
+//@property (strong, nonatomic) UIImageView* imgLeftHand;
+//@property (strong, nonatomic) UIImageView* imgRightHand;
+//
+//@property (strong, nonatomic) UIImageView* imgLeftHandGone;
+//@property (strong, nonatomic) UIImageView* imgRightHandGone;
+
+@property (nonatomic) LogingAnimationType AnimationType;
 
 @end
 
@@ -24,71 +32,106 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    self.view.backgroundColor = [UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.0];
-    
-    
-    
-    CALayer *TopBorder = [CALayer layer];
-    UIColor *borderColor = RGB(232, 232, 232);
-    TopBorder.frame = CGRectMake(0.0f, 200, [UIScreen mainScreen].bounds.size.width, 1.0f);
-    TopBorder.backgroundColor = borderColor.CGColor;
-    [self.view.layer addSublayer:TopBorder];
-    
-    CALayer *TopBorder1 = [CALayer layer];
-    TopBorder1.frame = CGRectMake(0.0f, 300, [UIScreen mainScreen].bounds.size.width, 1.0f);
-    TopBorder1.backgroundColor = borderColor.CGColor;
-    [self.view.layer addSublayer:TopBorder1];
-    
-    UIImageView *content = [[UIImageView alloc] initWithFrame:CGRectMake(0, 201, [UIScreen mainScreen].bounds.size.width, 99)];
-    content.backgroundColor = RGB(255, 255, 255);
-    [self.view addSubview:content];
-    
-    CALayer *TopBorder2 = [CALayer layer];
-    TopBorder2.frame = CGRectMake(10.0f, 250, [UIScreen mainScreen].bounds.size.width - 20, 1.0f);
-    TopBorder2.backgroundColor = borderColor.CGColor;
-    [self.view.layer addSublayer:TopBorder2];
-    
-    
-    UIImageView *userIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 210, 30, 30)];
-    userIcon.image = [UIImage imageNamed:@"userIcon.png"];
-    [self.view addSubview:userIcon];
-    UIImageView *pwIcon = [[UIImageView alloc] initWithFrame:CGRectMake(20, 260, 30, 30)];
-    pwIcon.image = [UIImage imageNamed:@"PWIcon.png"];
-    [self.view addSubview:pwIcon];
-    
-    _userTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 205, [UIScreen mainScreen].bounds.size.width - 70, 40)];
-    [_userTextField setKeyboardType:UIKeyboardTypeASCIICapable];
-    _userTextField.delegate = self;
-    [self.view addSubview:_userTextField];
-    
-    _pwTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 255, [UIScreen mainScreen].bounds.size.width - 70, 40)];
-    [_pwTextField setKeyboardType:UIKeyboardTypeASCIICapable];
-    _pwTextField.delegate = self;
-    [self.view addSubview:_pwTextField];
-    
-    
-    // add image
-    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 113) / 2, 40, 130, 130)];
-    imageHolder.image = [UIImage imageNamed:@"money_icon.png"];
-    UIButton *login_button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [login_button setFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 300) / 2, 320, 300, 40)];
-    
-    login_button.backgroundColor = RGB(118, 137, 166);//255 135 43
-    [login_button setTitle:@"Log in" forState:UIControlStateNormal];
-    [login_button setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
-    [login_button addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:imageHolder];
-    [self.view addSubview:login_button];
+    [self UISetting];
 }
 
-- (void)logIn {
+-(void)UISetting{
+    
+    _AnimationType = LogingAnimationType_NONE;
+    
+    UIColor* boColor = [UIColor colorWithRed:221.0/255.0 green:221.0/255.0 blue:221.0/255.0 alpha:100];
+    
+    _UserNameTextField.layer.borderColor = boColor.CGColor;
+    _UserNameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    _UserNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    UIImageView* imgUser = [[UIImageView alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
+    imgUser.image = [UIImage imageNamed:@"iconfont-user"];
+    [_UserNameTextField.leftView addSubview:imgUser];
+    
+    _PasswordTextField.layer.borderColor = boColor.CGColor;
+    _PasswordTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    _PasswordTextField.leftViewMode = UITextFieldViewModeAlways;
+    UIImageView* imgPwd = [[UIImageView alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
+    imgPwd.image = [UIImage imageNamed:@"iconfont-password"];
+    [_PasswordTextField.leftView addSubview:imgPwd];
+    
+    _loginView.layer.borderColor = boColor.CGColor;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if ([textField isEqual:_PasswordTextField]) {
+        _AnimationType = LogingAnimationType_PWD;
+        [self AnimationUserToPassword];
+        
+    }else{
+        
+        if (_AnimationType == LogingAnimationType_NONE) {
+            _AnimationType = LogingAnimationType_USER;
+            return;
+        }
+        _AnimationType = LogingAnimationType_USER;
+        [self AnimationPasswordToUser];
+        
+    }
+    
+}
+
+
+#pragma mark 移开手动画
+-(void)AnimationPasswordToUser{
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        
+        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x - 80, self.left_look.frame.origin.y, 40, 40);
+        self.right_look.frame = CGRectMake(self.right_look.frame.origin.x + 40, self.right_look.frame.origin.y, 40, 40);
+        
+        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x+55, self.right_hidden.frame.origin.y+40, 40, 66);
+        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x-60, self.left_hidden.frame.origin.y+40, 40, 66);
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+}
+
+#pragma mark 捂眼
+-(void)AnimationUserToPassword{
+    [UIView animateWithDuration:0.5f animations:^{
+        
+        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x + 80, self.left_look.frame.origin.y, 0, 0);
+        self.right_look.frame = CGRectMake(self.right_look.frame.origin.x - 40, self.right_look.frame.origin.y, 0, 0);
+        
+        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x-55, self.right_hidden.frame.origin.y-40, 40, 66);
+        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x+60, self.left_hidden.frame.origin.y-40, 40, 66);
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (IBAction)EndEDitTap:(id)sender {
+    if (_AnimationType == LogingAnimationType_PWD) {
+        [self AnimationPasswordToUser];
+    }
+    _AnimationType = LogingAnimationType_NONE;
+    [self.view endEditing:YES];
+}
+
+
+- (IBAction)logIn:(id)sender {
+    
+    if ([_UserNameTextField.text isEqualToString:@""] || [_PasswordTextField.text isEqualToString:@""]) {
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Warming" message: @"Invalid Email or Password." delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
+        [updateAlert show];
+        
+        return;
+    }
+    
     NSString * const kRemoteHost = ServerHost;
     Login_m *request = [[Login_m alloc] init];
-    request.username = _userTextField.text;
-    request.password = _pwTextField.text;
+    request.username = _UserNameTextField.text;
+    request.password = _PasswordTextField.text;
     
     // Example gRPC call using a generated proto client library:
     
@@ -100,7 +143,7 @@
                 
                 [_LeftMenuView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
                 [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
-                [_LeftMenuView.idText setText:_userTextField.text];
+                [_LeftMenuView.idText setText:_UserNameTextField.text];
                 [_LeftMenuView obtain_friends];
                 
                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -127,20 +170,21 @@
                 
                 [updateAlert show];
             }
-
+            
         } else if (error) {
             //NSLog(@"Finished with error: %@", error);
         }
     }];
-    
+
 }
+
+
 - (IBAction)back_mainUI:(id)sender {
     
     [self dismissViewControllerAnimated:true completion:^{
         NSLog(@"Present Modal View");
     }];
 }
-
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField{
     
