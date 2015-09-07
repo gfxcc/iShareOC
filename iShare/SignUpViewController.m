@@ -10,6 +10,7 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
+#import "LeftMenuViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -99,12 +100,13 @@
         if (response) {
             if ([response.information isEqualToString:@"OK"]) {
                 
-                [_LeftMenuView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
-                [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
-                [_LeftMenuView.idText setText:_userTextField.text];
-                [_LeftMenuView obtain_friends];
+                LeftMenuViewController *leftView = (LeftMenuViewController *)_LeftMenuView;
+                [leftView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
+                [leftView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
+                [leftView.idText setText:_userTextField.text];
+                [leftView obtain_friends];
                 
-                ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
+                ViewController *mainUI = (ViewController *)leftView;
                 [mainUI obtain_bills];
                 
                 [self dismissViewControllerAnimated:true completion:^{

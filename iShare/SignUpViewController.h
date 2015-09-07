@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LeftMenuViewController.h"
+
 
 @interface SignUpViewController : UIViewController <UITextFieldDelegate>
 
-@property (weak, nonatomic) LeftMenuViewController *LeftMenuView;
+@property (weak, nonatomic) UIViewController *LeftMenuView;
 
 @end

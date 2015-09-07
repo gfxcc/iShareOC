@@ -34,10 +34,10 @@
 
 //@property (weak, nonatomic) NSString *idText;
 @property (strong, nonatomic) NSDate *mydate;
+@property (weak, nonatomic) UIViewController *mainUIView;
 @property(nonatomic) BOOL customPic;
-
+@property (strong, nonatomic) CYkeyboard *keyboard;
 - (void)unlight;
 @end
 
 
-CYkeyboard *keyboard;

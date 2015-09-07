@@ -11,7 +11,6 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "FullSizeView.h"
-#import "tview.h"
 
 @interface BillDetailViewController : UIViewController
 

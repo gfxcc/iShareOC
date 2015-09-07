@@ -26,7 +26,7 @@
     // Do any additional setup after loading the view.
     
     UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 60)];
-    navbar.barTintColor = RGB(78, 107, 165);
+    navbar.barTintColor = RGB(26, 142, 180);
     [navbar setTintColor:RGB(255, 255, 255)];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                     style:UIBarButtonItemStyleDone target:nil action:@selector(back_to_mainUI)];

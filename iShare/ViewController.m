@@ -19,6 +19,8 @@
 #import "BillListViewController.h"
 #import "Request.h"
 #import "MessageCenterViewController.h"
+#import "AddNewShareViewController.h"
+
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -320,11 +322,11 @@
         } else {
             [_tableView reloadData];
             
-            if (_billProcessing) {
-                [TSMessage showNotificationWithTitle:@"New Bill"
-                                            subtitle:@"you get a new bill share with you!"
-                                                type:TSMessageNotificationTypeMessage];
-            }
+//            if (0) { //_billProcessing
+//                [TSMessage showNotificationWithTitle:@"New Bill"
+//                                            subtitle:@"you get a new bill share with you!"
+//                                                type:TSMessageNotificationTypeMessage];
+//            }
             
             if ([self noBillRecord]) {
                 [self updateAllBills];
@@ -343,6 +345,9 @@
                             NSString *bill_string = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", bill.bill_id, bill.amount, bill.type, bill.date, bill.creater, bill.paidBy, bill.note, bill.image, bill.members[0], bill.members[1], bill.members[2], bill.members[3], bill.members[4], bill.members[5], bill.members[6], bill.members[7], bill.members[8], bill.members[9], bill.paidStatus];
                             [self addBillToFile:bill_string];
                         }
+                        [TSMessage showNotificationWithTitle:@"New Bill"
+                                                    subtitle:@"you get a new bill share with you!"
+                                                        type:TSMessageNotificationTypeMessage];
                         break;
                     }
                     // do not update
@@ -399,6 +404,7 @@
     }];
     
 }
+
 
 #pragma mark - RKTabViewDelegate
 
@@ -572,6 +578,11 @@
     } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
         MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
         messageCenter.idText = _leftMenu.idText.text;
+    } else if ([segue.identifier isEqualToString:@"createNewBill"]) {
+        UINavigationController *navgation = (UINavigationController *)[segue destinationViewController];
+        //
+        AddNewShareViewController *addNewBill = (AddNewShareViewController *)([navgation viewControllers][0]);
+        addNewBill.mainUIView = self;
     }
 }
 

@@ -10,6 +10,7 @@
 #import "UIWindow+YUBottomPoper.h"
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import "ViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -94,9 +95,9 @@
     
     
     
-    keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
-    [keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
-    [self.view addSubview:keyboard];
+    _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
+    [_keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
+    [self.view addSubview:_keyboard];
     
     // test
 //    UITapGestureRecognizer* fadeOutTest = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fadeoutTouch)];
@@ -114,8 +115,8 @@
     _comment.textColor = [UIColor lightGrayColor]; //optional
     
     
-    _paidBy.text = keyboard.memberArray.count > 0 ? keyboard.memberArray[0] : @"none";
-    _creater.text = keyboard.memberArray.count > 0 ? keyboard.memberArray[0] : @"none";
+    _paidBy.text = _keyboard.memberArray.count > 0 ? _keyboard.memberArray[0] : @"none";
+    _creater.text = _keyboard.memberArray.count > 0 ? _keyboard.memberArray[0] : @"none";
 }
 
 //- (void)fadeoutTouch {
@@ -135,7 +136,7 @@
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
     
-    [keyboard amountMode];
+    [_keyboard amountMode];
     //[keyboard show];
 }
 
@@ -147,8 +148,8 @@
     _member.backgroundColor = RGB(255, 255, 255);
     
 
-    [keyboard typeMode];
-    [keyboard show];
+    [_keyboard typeMode];
+    [_keyboard show];
 }
 
 - (void)label3Clicked {
@@ -158,8 +159,8 @@
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(255, 255, 255);
     
-    [keyboard paidByMode];
-    [keyboard show];
+    [_keyboard paidByMode];
+    [_keyboard show];
 }
 
 - (void)label4Clicked {
@@ -169,8 +170,8 @@
     _data.backgroundColor = RGB(211, 214, 219);
     _member.backgroundColor = RGB(255, 255, 255);
     
-    [keyboard dataMode];
-    [keyboard show];
+    [_keyboard dataMode];
+    [_keyboard show];
 }
 
 - (void)label5Clicked {
@@ -180,8 +181,8 @@
     _data.backgroundColor = RGB(255, 255, 255);
     _member.backgroundColor = RGB(211, 214, 219);
     
-    [keyboard memberMode];
-    [keyboard show];
+    [_keyboard memberMode];
+    [_keyboard show];
 }
 
 #pragma mark - custom functions
@@ -204,9 +205,17 @@
 
 - (void)add {
     
+    if ([_amount.text isEqualToString:@"$ 0.00"] || _keyboard.selectedItems.count == 0) {
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"Invalid bill" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        
+        [updateAlert show];
+        
+        return;
+    }
+    
     NSString * const kRemoteHost = ServerHost;
     Share_inf *request = [Share_inf message];
-    request.creater = keyboard.memberArray[0];
+    request.creater = _keyboard.memberArray[0];
     //NSLog(@"%@",request.creater);
     request.amount = _amount.text;
     request.type = _type.text;
@@ -214,8 +223,8 @@
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd hh:mm"];
-    if (keyboard.mydata) {
-        NSString *prettyVersion = [dateFormat stringFromDate:keyboard.mydata];
+    if (_keyboard.mydata) {
+        NSString *prettyVersion = [dateFormat stringFromDate:_keyboard.mydata];
         request.data_p = prettyVersion;
     } else {
         NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
@@ -233,12 +242,12 @@
         [self send_imgae:_takePicture.imageView.image name:request.image path:@"billsImage"];
     }
     
-    for (int i = 0; i != keyboard.selectedItems.count; i++) {
-        NSInteger index = [keyboard.selectedItems[i] integerValue];
-        [request.membersArray addObject:[keyboard.memberArray objectAtIndex:index]];
-        NSLog(@"%@", keyboard.selectedItems[i]);
+    for (int i = 0; i != _keyboard.selectedItems.count; i++) {
+        NSInteger index = [_keyboard.selectedItems[i] integerValue];
+        [request.membersArray addObject:[_keyboard.memberArray objectAtIndex:index]];
+        NSLog(@"%@", _keyboard.selectedItems[i]);
     }
-    for (int i = (int)keyboard.selectedItems.count; i != 10; i++) {
+    for (int i = (int)_keyboard.selectedItems.count; i != 10; i++) {
         [request.membersArray addObject:@""];
     }
     
@@ -248,6 +257,8 @@
             
             NSLog(@"%@", response.information);
             
+            ViewController *mainUI = (ViewController *)_mainUIView;
+            [mainUI obtain_bills];
         } else if (error) {
             
         }

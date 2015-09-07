@@ -17,7 +17,7 @@
 		DB4EFC231B795176003F917D /* Btn1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DB4EFC221B795176003F917D /* Btn1@2x.png */; };
 		DB914CD31B91148E00267BC9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DB914CD21B91148E00267BC9 /* icon.png */; };
 		DB914CD71B92AA3800267BC9 /* FullSizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = DB914CD61B92AA3800267BC9 /* FullSizeView.m */; };
-		DB914CDA1B9374AA00267BC9 /* tview.m in Sources */ = {isa = PBXBuildFile; fileRef = DB914CD91B9374AA00267BC9 /* tview.m */; };
+		DB914D251B9D485E00267BC9 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = DB914D241B9D485E00267BC9 /* x.png */; };
 		DB94B26C1B60FE7C007AEE7F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26B1B60FE7C007AEE7F /* main.m */; };
 		DB94B26F1B60FE7C007AEE7F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B26E1B60FE7C007AEE7F /* AppDelegate.m */; };
 		DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B2711B60FE7C007AEE7F /* ViewController.m */; };
@@ -183,8 +183,7 @@
 		DB914CD21B91148E00267BC9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = iShare/Source/icon.png; sourceTree = "<group>"; };
 		DB914CD51B92AA3800267BC9 /* FullSizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullSizeView.h; sourceTree = "<group>"; };
 		DB914CD61B92AA3800267BC9 /* FullSizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullSizeView.m; sourceTree = "<group>"; };
-		DB914CD81B9374AA00267BC9 /* tview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tview.h; sourceTree = "<group>"; };
-		DB914CD91B9374AA00267BC9 /* tview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tview.m; sourceTree = "<group>"; };
+		DB914D241B9D485E00267BC9 /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = x.png; path = iShare/Source/x.png; sourceTree = "<group>"; };
 		DB94B2661B60FE7C007AEE7F /* iShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB94B26A1B60FE7C007AEE7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB94B26B1B60FE7C007AEE7F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -412,8 +411,6 @@
 			children = (
 				DB914CD51B92AA3800267BC9 /* FullSizeView.h */,
 				DB914CD61B92AA3800267BC9 /* FullSizeView.m */,
-				DB914CD81B9374AA00267BC9 /* tview.h */,
-				DB914CD91B9374AA00267BC9 /* tview.m */,
 			);
 			name = FullSizeImage;
 			sourceTree = "<group>";
@@ -655,6 +652,7 @@
 		DB94B3D71B611817007AEE7F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				DB914D241B9D485E00267BC9 /* x.png */,
 				DB914CD21B91148E00267BC9 /* icon.png */,
 				DB4EFC221B795176003F917D /* Btn1@2x.png */,
 				DB4EFC201B794BFB003F917D /* Btn0@2x.png */,
@@ -855,6 +853,7 @@
 				DB952E8E1B63357400482B00 /* MY SQL command in Resources */,
 				DB94B3721B6117AD007AEE7F /* Rent.png in Resources */,
 				DB4EFC211B794BFB003F917D /* Btn0@2x.png in Resources */,
+				DB914D251B9D485E00267BC9 /* x.png in Resources */,
 				DB94B3911B6117AE007AEE7F /* blurred_background.png in Resources */,
 				DB94B3B21B6117AE007AEE7F /* back_icon.png in Resources */,
 				DB94B3D61B6117AE007AEE7F /* Allura-Regular.ttf in Resources */,
@@ -1032,7 +1031,6 @@
 				DB952EA31B6A72B800482B00 /* BillListWithFriendViewController.m in Sources */,
 				DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */,
 				DB4EFC1A1B78F822003F917D /* MessageCenterViewController.m in Sources */,
-				DB914CDA1B9374AA00267BC9 /* tview.m in Sources */,
 				DB952EA01B689DE100482B00 /* FriendWithBillTableViewCell.m in Sources */,
 				DB94B38F1B6117AE007AEE7F /* YUDarkGlassView.m in Sources */,
 				DB94B3EA1B6119F4007AEE7F /* SearchViewController.m in Sources */,
