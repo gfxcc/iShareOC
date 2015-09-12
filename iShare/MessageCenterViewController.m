@@ -55,8 +55,19 @@
 
 - (void)confirmButtonClick:(UIButton *)sender {
     NSLog(@"%ld", sender.tag);
-    [self makePayment:sender.tag];
+    Request_ *req = [_requestArray objectAtIndex:sender.tag];
+    if ([req.type isEqualToString:@"payment"]) {
+        [self makePayment:sender.tag];
+    } else {
+        [self addFriend:sender.tag];
+    }
     
+    
+}
+
+- (void)deleteButtonClick:(UIButton *)sender {
+    NSLog(@"%ld", sender.tag);
+    [self rejectRequest:sender.tag];
 }
 
 - (void)obtain_request {
@@ -136,9 +147,11 @@
             [self responseToRequestID:index];
             
         } else {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"makePayment"
-                                            type:TSMessageNotificationTypeError];
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"makePaymentWithRequestsWriter"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         }
     }];
 }
@@ -170,12 +183,74 @@
             [_tableView reloadData];
             
         } else {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"request_responseWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+    
+}
+
+- (void)addFriend:(NSInteger)index {
+    
+    Request_ *req = [_requestArray objectAtIndex:index];
+    
+    NSString * const kRemoteHost = ServerHost;
+    Repeated_string *request = [[Repeated_string alloc] init];
+    [request.contentArray addObject:req.sender];
+    [request.contentArray addObject:req.receiver];
+    
+    // Example gRPC call using a generated proto client library:
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service add_friendWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            [self responseToRequestID:index];
+        } else if (error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"add_friendWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+
+}
+
+- (void)rejectRequest:(NSInteger)index {
+    NSString * const kRemoteHost = ServerHost;
+    
+    Request_ *req = [_requestArray objectAtIndex:index];
+    
+    Response *request = [Response message];
+    request.requestId = req.request_id;
+    request.response = @"REJECTED";
+    request.sender = req.sender;
+    request.receiver = req.receiver;
+    
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd hh:mm"];
+    NSString *prettyVersion = [dateFormat stringFromDate:now];
+    request.responseDate = prettyVersion;
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service request_responseWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            //[self obtain_request];
+            //[_tableView reloadData];
+            [_requestArray removeObjectAtIndex:index];
+            [_tableView reloadData];
+            
+        } else {
             [TSMessage showNotificationWithTitle:@"GRPC ERROR"
                                         subtitle:@"responseToRequestID"
                                             type:TSMessageNotificationTypeError];
         }
     }];
-    
 }
 
 - (NSMutableArray *)getBills:(Request_ *)req {
@@ -323,10 +398,69 @@
     
     NSArray *req_content = [req.content componentsSeparatedByString:@"*"];
     
-    [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"%@ has paid you %@ $", req.sender, req_content[3]]];
-    cell.confrimButton.tag = indexPath.row;
-    [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    if ([req.type isEqualToString:@"payment"]) {
+        [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"%@ has paid you %@ $", req.sender, req_content[3]]];
+        cell.confrimButton.tag = indexPath.row;
+        [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        cell.deleteButton.tag = indexPath.row;
+        [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    } else if ([req.type isEqualToString:@"friendInvite"]) {
+        if (!iconExist) {
+            [self downloadPicture:req.sender];
+        }
+        
+        [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"Friend invite: %@", req.content]];
+        cell.confrimButton.tag = indexPath.row;
+        [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        cell.deleteButton.tag = indexPath.row;
+        [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    }
+    
     return cell;
+}
+
+- (void)downloadPicture:(NSString*)image {
+    
+    NSString * const kRemoteHost = ServerHost;
+    
+    Repeated_string *request = [Repeated_string message];
+    
+    // better?
+    
+    [request.contentArray insertObject:@"icon" atIndex:0];
+    [request.contentArray insertObject:image atIndex:1];
+    
+//    for (int i = 0; i != request.contentArray.count; i++) {
+//        NSLog(@"%@", request.contentArray[i]);
+//    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service receive_ImgWithRequest:request handler:^(BOOL done, Image *response, NSError *error) {
+        if (!done) {
+            if (response.data_p.length == 0) {
+                return;
+            }
+            NSLog(@"%lu", (unsigned long)response.data_p.length);
+            [response.data_p writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, response.name] atomically:YES];
+        } else if (error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"receive_ImgWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        } else { // done
+            BOOL iconExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, image]];
+            if (iconExist) {
+                [_tableView reloadData];
+            }
+        }
+    }];
+    
 }
 
 - (void)didReceiveMemoryWarning {

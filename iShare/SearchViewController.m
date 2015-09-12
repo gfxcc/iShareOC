@@ -10,6 +10,8 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
+#import <TSMessageView.h>
+
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -66,37 +68,71 @@
 }
 
 - (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
-    NSString * const kRemoteHost = ServerHost;
-    Repeated_string *request = [[Repeated_string alloc] init];
-    [request.contentArray addObject:_LeftMenuView.idText.text];
-    [request.contentArray addObject:_search_result[indexPath.row]];
+    _selectedIndex = indexPath.row;
+    _requestView = [[RequestView alloc] initWithTitle:[NSString stringWithFormat:@"I am %@", _LeftMenuView.idText.text] subtitle:@"t"];
+    _requestView.delegate = self;
+    [self.view addSubview:_requestView];
+    [_requestView show];
+
+}
+
+#pragma mark - RequestViewDelegate -
+- (void)sendRequest {
     
-    // Example gRPC call using a generated proto client library:
+    // check already be friend.
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
+                          documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                    usedEncoding:nil
+                                                           error:nil];
+    NSArray *members = [content componentsSeparatedByString:@"\n"];
     
-    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service add_friendWithRequest:request handler:^(Inf *response, NSError *error) {
-        if (response) {
-            NSString *message;
-            if ([response.information isEqualToString:@"OK"]) {
-                message = @"You have add a new friend successfully!";
-                
-            } else {
-                message = response.information;
-            }
-            
-            
-            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Success" message: message delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
-            
-            [updateAlert show];
-            
-            
-            
-        } else if (error) {
-            //NSLog(@"Finished with error: %@", error);
+    for (int i = 0; i != members.count; i++) {
+        if ([members[i] isEqualToString:_search_result[_selectedIndex]]) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"Wrong"
+                                               subtitle:@"You are already friend."
+                                                   type:TSMessageNotificationTypeWarning
+                                               duration:TSMessageNotificationDurationAutomatic];
             return;
         }
-    }];//SELECT * FROM iShare_data.Friends where (username_1 = 'gfxcc' and username_2 = 'dxt') or (username_1 = 'dxt' and username_2 = 'gfxcc')
+    }
 
+    // start grpc
+    NSString * const kRemoteHost = ServerHost;
+    Request *request = [Request message];
+    request.sender = _LeftMenuView.idText.text;
+    request.receiver = _search_result[_selectedIndex];
+    request.type = @"friendInvite";
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd hh:mm"];
+    NSString *prettyVersion = [dateFormat stringFromDate:now];
+    request.requestDate = prettyVersion;
+    
+    request.content = _requestView.PasswordTextField.text;
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service send_requestWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            NSString *message = @"Your request have been send successfully";
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"Success"
+                                               subtitle:message
+                                                   type:TSMessageNotificationTypeMessage
+                                               duration:TSMessageNotificationDurationAutomatic];
+
+        } else if (error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"send_requestWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
     
 }
 

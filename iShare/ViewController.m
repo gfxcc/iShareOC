@@ -247,6 +247,17 @@
                                                     subtitle:[NSString stringWithFormat:@"%@ paid %@ : %@ successed", req.receiver, req.sender, content[3]]
                                                         type:TSMessageNotificationTypeSuccess];
                     }
+                } else if ([req.type isEqualToString:@"friendInvite"]) {
+                    if ([req.response isEqualToString:@"OK"]) {
+                        [TSMessage showNotificationWithTitle:@"Success"
+                                                    subtitle:[NSString stringWithFormat:@"%@ friendInvite approved", req.sender]
+                                                        type:TSMessageNotificationTypeSuccess];
+                    } else {
+                        [TSMessage showNotificationWithTitle:@"Rejected"
+                                                    subtitle:[NSString stringWithFormat:@"%@ friendInvite rejected", req.sender]
+                                                        type:TSMessageNotificationTypeWarning];
+                    }
+                
                 }
             }
 
@@ -271,9 +282,11 @@
             [_request addObject:req];
             
         } else if (error) {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"obtain_request"
-                                            type:TSMessageNotificationTypeError];
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"obtain_requestWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         } else {
 
             [TSMessage showNotificationInViewController:self
@@ -412,6 +425,12 @@
     NSLog(@"Tab № %tu became enabled on tab view", index);
     
     if ([_leftMenu.idText.text isEqualToString:@""]) {
+        [TSMessage showNotificationWithTitle:(NSString *)@"Warning"
+                                    subtitle:(NSString *)@"You need Login or Sign in."
+                                        type:(TSMessageNotificationType)TSMessageNotificationTypeWarning];
+        
+        //[_standardView disableAllItems];
+        
         return;
     }
     switch (index) {
@@ -767,6 +786,8 @@
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
+    
+    
 }
 
 

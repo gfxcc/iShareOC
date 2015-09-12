@@ -7,6 +7,7 @@
 //
 
 #import "CYkeyboard.h"
+#import "AddNewShareViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -48,9 +49,9 @@
         
         // shareMode button
         _shareMode = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_shareMode setFrame:CGRectMake(0, self.bounds.origin.y - 40 + 4, 120, 40)];
+        [_shareMode setFrame:CGRectMake(0, self.bounds.origin.y - 40 + 4, 60, 40)];
         _shareMode.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [_shareMode setTitle:@"    Share Mode" forState:UIControlStateNormal];
+        [_shareMode setTitle:@"   Mode" forState:UIControlStateNormal];
         [_shareMode setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
         [_shareMode addTarget:self action:@selector(shareModePage) forControlEvents:UIControlEventTouchUpInside];
         _shareMode.backgroundColor = RGB(98, 98, 98);
@@ -67,8 +68,6 @@
         
     }
     
-    _typeArray = [[NSMutableArray alloc] initWithObjects:@"lunch && dinner", @"PSEG && Network", @"SuperMarket", @"Rent", nil];
-    _selectedItems = [[NSMutableArray alloc] init];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -84,7 +83,7 @@
     _memberArray = [NSMutableArray arrayWithArray:members];
     
     _mydata = NULL;
-    
+    _selectedItems = [[NSMutableArray alloc] init];
     // load member icon
     _memberIcons = [[NSMutableArray alloc] init];
     for (int i = 0; i != _memberArray.count; i++) {
@@ -97,6 +96,111 @@
         UIImage *icon = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"];
         [_memberIcons addObject:icon];
     }
+    
+    // ##load billType file.
+    fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    content = [[NSString alloc] initWithContentsOfFile:fileName
+                                          usedEncoding:nil
+                                                 error:nil];
+    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    
+    // check empty or not
+    _typeArray = [[NSMutableArray alloc] init];
+    if (linesOfFile.count == 1 || !linesOfFile) { // not necessary
+        
+        NSMutableArray *array1 = [[NSMutableArray alloc] init];
+        [array1 addObject:@"Food and Drind"];// type name
+        [array1 addObject:@"Food and Drind"];// type icon name
+        [array1 addObject:@"hamburger"];
+        [array1 addObject:@"hamburger"];
+        [array1 addObject:@"cafe"];
+        [array1 addObject:@"cafe"];
+        [_typeArray addObject:array1];
+        
+        NSMutableArray *array2 = [[NSMutableArray alloc] init];
+        [array2 addObject:@"Rent and Fee"];
+        [array2 addObject:@"Rent and Fee"];
+        [array2 addObject:@"house"];
+        [array2 addObject:@"house"];
+        [array2 addObject:@"PSEG"];
+        [array2 addObject:@"PSEG"];
+        [array2 addObject:@"network"];
+        [array2 addObject:@"network"];
+        [_typeArray addObject:array2];
+        
+        NSMutableArray *array3 = [[NSMutableArray alloc] init];
+        [array3 addObject:@"Car and Bus"];
+        [array3 addObject:@"Car and Bus"];
+        [array3 addObject:@"bus"];
+        [array3 addObject:@"bus"];
+        [_typeArray addObject:array3];
+        
+        NSMutableArray *array4 = [[NSMutableArray alloc] init];
+        [array4 addObject:@"Shopping"];
+        [array4 addObject:@"Shopping"];
+        [array4 addObject:@"SuperMarket"];
+        [array4 addObject:@"SuperMarket"];
+        [_typeArray addObject:array4];
+        
+        NSMutableArray *array5 = [[NSMutableArray alloc] init];
+        [array5 addObject:@"Entertament"];
+        [array5 addObject:@"Entertament"];
+        [array5 addObject:@"game"];
+        [array5 addObject:@"game"];
+        [_typeArray addObject:array5];
+        
+        NSMutableArray *array6 = [[NSMutableArray alloc] init];
+        [array6 addObject:@"Borrow and Lend"];
+        [array6 addObject:@"Borrow and Lend"];
+        [array6 addObject:@"lend"];
+        [array6 addObject:@"lend"];
+        [_typeArray addObject:array6];
+        
+        // save to file
+        
+        for (int i = 0; i != 6; i++) {
+            NSString *typeString = @"";
+            NSMutableArray *type = _typeArray[i];
+            for (int j = 0; j != type.count; j++) {
+                if (j == 0) {
+                    typeString = type[0];
+                } else {
+                    typeString = [NSString stringWithFormat:@"%@#%@", typeString, type[j]];
+                }
+            }
+            
+            if (i == 0) {
+                content = typeString;
+            } else {
+                content = [NSString stringWithFormat:@"%@\n%@", content, typeString];
+            }
+        }
+        
+        [content writeToFile:fileName
+              atomically:NO
+                encoding:NSUTF8StringEncoding
+                   error:nil];
+        
+        
+    } else {
+        
+        for (int i = 0; i != linesOfFile.count; i++) {
+            NSString *stringOfLine = linesOfFile[i];
+            NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+            [_typeArray addObject:contentOfLine];
+            
+        }
+    
+    }
+    
+//    _typeArray = [[NSMutableArray alloc] initWithObjects:@"lunch && dinner", @"PSEG && Network", @"SuperMarket", @"Rent", nil];
+    
+//    [@"" writeToFile:fileName
+//          atomically:NO
+//            encoding:NSUTF8StringEncoding
+//               error:nil];
+
     
     return self;
 }
@@ -322,27 +426,40 @@
 }
 
 - (void)editPage {
-    
+    AddNewShareViewController *mainUI_ = (AddNewShareViewController *)_mainUI;
+    [mainUI_ performSegueWithIdentifier:@"typeEdit" sender:mainUI_];
 }
 
 - (void)shareModePage {
-    
+    AddNewShareViewController *mainUI_ = (AddNewShareViewController *)_mainUI;
+    [mainUI_ performSegueWithIdentifier:@"shareMode" sender:mainUI_];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 }
 
 #pragma mark -
 #pragma mark UIPiker delegate
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return 1;
+    if ([pickerView isEqual:_typePicker]) {
+        return 2;
+    } else if ([pickerView isEqual:_paidByPicker]) {
+        return 1;
+    }
+    return 0;
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     if ([pickerView isEqual:_typePicker]) {
-        return _typeArray.count;
-    }
-    
-    if ([pickerView isEqual:_paidByPicker]) {
+        if (component == 0) {
+            return _typeArray.count;
+        } else if (component == 1) {
+            NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
+            return (type.count / 2) - 1;// type name and icon name
+        }
+    } else if ([pickerView isEqual:_paidByPicker]) {
         return _memberArray.count;
     }
     
@@ -359,20 +476,37 @@
 //}
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
-    if ([pickerView isEqual:_typePicker]) {
-        UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
-        
-        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(-40, 5, 40, 40)];
-        image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", _typeArray[row]]];
-        [typeView addSubview:image];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 150, 40)];
-        label.text = _typeArray[row];
-        [typeView addSubview:label];
-        return typeView;
-    }
     
-    if ([pickerView isEqual:_paidByPicker]) {
+    if ([pickerView isEqual:_typePicker]) {
+        if (component == 0) {
+            UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width / 2, 40)];
+            
+            NSMutableArray *type = _typeArray[row];
+            
+            UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
+            image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", type[1]]];
+            [typeView addSubview:image];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, ([UIScreen mainScreen].bounds.size.width / 2) - 40, 40)];
+            label.text = type[0];
+            [typeView addSubview:label];
+            return typeView;
+        } else if (component == 1) {
+            UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width / 2, 40)];
+            
+            NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
+            
+            UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
+            image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", type[(row + 1)*2 + 1]]];
+            [typeView addSubview:image];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, ([UIScreen mainScreen].bounds.size.width / 2) - 40, 40)];
+            label.text = type[(row + 1)*2];
+            [typeView addSubview:label];
+            return typeView;
+        }
+        
+    } else if ([pickerView isEqual:_paidByPicker]) {
         
         UIView *typeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
         
@@ -393,7 +527,12 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if ([pickerView isEqual:_typePicker]) {
-        type_.text = [_typeArray objectAtIndex:row];
+        if (component == 1) {
+            NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
+            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[row + 1]];
+        } else if (component == 0){
+            [_typePicker reloadComponent:1];
+        }
     }
     
     if ([pickerView isEqual:_paidByPicker]) {

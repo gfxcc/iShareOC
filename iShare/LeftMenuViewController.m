@@ -354,6 +354,7 @@
     }
 }
 
+// clean data like friends file, billRecord fill, billType
 - (void)clean {
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -363,8 +364,17 @@
              atomically:NO
                encoding:NSUTF8StringEncoding
                   error:nil];
+    
     fileName = [NSString stringWithFormat:@"%@/billRecord",
                 documentsDirectory];
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    
     [@"" writeToFile:fileName
           atomically:NO
             encoding:NSUTF8StringEncoding

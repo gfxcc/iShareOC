@@ -97,6 +97,7 @@
     
     _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
     [_keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
+    _keyboard.mainUI = self;
     [self.view addSubview:_keyboard];
     
     // test
