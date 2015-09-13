@@ -52,6 +52,10 @@
         SecondTypeViewController *secondTypeView = (SecondTypeViewController *)[segue destinationViewController];
         NSIndexPath *selectedRowPath = [_tableView indexPathForSelectedRow];
         secondTypeView.indexOfType = selectedRowPath.row;
+        
+        // set navigation title
+        //NSMutableArray
+        secondTypeView.navigationItem.title = [_typeArray[selectedRowPath.row] objectAtIndex:0];
     }
 }
 

@@ -37,6 +37,23 @@
     
 }
 
+- (IBAction)editButtonClick:(id)sender {
+    
+    if ([_editButton.titleLabel.text isEqualToString:@"Edit"]) {
+        [UIView animateWithDuration:0.4 animations:^{
+            _editButton.frame = CGRectMake(_editButton.frame.origin.x, _editButton.frame.origin.y, [UIScreen mainScreen].bounds.size.width, _editButton.frame.size.height);
+        }];
+        [_tableView setEditing: YES animated: YES];
+        [_editButton setTitle:@"done" forState:UIControlStateNormal];
+    } else if ([_editButton.titleLabel.text isEqualToString:@"done"]) {
+        [UIView animateWithDuration:0.4 animations:^{
+            _editButton.frame = CGRectMake(_editButton.frame.origin.x, _editButton.frame.origin.y, [UIScreen mainScreen].bounds.size.width / 2, _editButton.frame.size.height);
+        }];
+        [_tableView setEditing: NO animated: YES];
+        [_editButton setTitle:@"Edit" forState:UIControlStateNormal];
+        //[_tableView reloadData];
+    }
+}
 #pragma mark -
 #pragma mark TableView delegate
 
@@ -62,6 +79,17 @@
     [cell initWithIcon:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", _typeArray[(indexPath.row + 1) * 2 + 1]]] typeName:_typeArray[(indexPath.row + 1) * 2]];
     
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    //NSString *stringToMove = [self.reorderingRows objectAtIndex:sourceIndexPath.row];
+    //[self.reorderingRows removeObjectAtIndex:sourceIndexPath.row];
+    //[self.reorderingRows insertObject:stringToMove atIndex:destinationIndexPath.row];
 }
 
 - (void)didReceiveMemoryWarning {

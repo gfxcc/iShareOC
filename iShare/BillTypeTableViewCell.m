@@ -16,23 +16,34 @@
 
     _icon.image = icon;
     _typeName.text = typeName;
+    //self.contentView.backgroundColor = [UIColor blackColor];
+    //self.backgroundColor =
     
     //return self;
 }
 
-- (void)willTransitionToState:(UITableViewCellStateMask)state {
-    
-    [super willTransitionToState:state];
-    
-    _icon.frame = CGRectMake(40, 5, 50, 50);
-}
-
-- (void)didTransitionToState:(UITableViewCellStateMask)state {
-    
-    [super didTransitionToState:state];
-    
-    _icon.frame = CGRectMake(5, 5, 50, 50);
-    
-}
+//- (void)layoutSubviews {
+//    if (self.editing) {
+//        //_icon.frame = CGRectMake(40, 5, 50, 50);
+//    }
+//    else {
+//        //_icon.frame = CGRectMake(5, 5, 50, 50);
+//    }
+//    [super layoutSubviews];
+//}
+//
+//- (void)willTransitionToState:(UITableViewCellStateMask)state {
+//    //_icon.frame = CGRectMake(40, 5, 50, 50);
+//    [super willTransitionToState:state];
+//    
+//    
+//}
+//
+//- (void)didTransitionToState:(UITableViewCellStateMask)state {
+//    
+//    //_icon.frame = CGRectMake(5, 5, 50, 50);
+//    [super didTransitionToState:state];
+//    
+//}
 
 @end

@@ -529,7 +529,7 @@
     if ([pickerView isEqual:_typePicker]) {
         if (component == 1) {
             NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
-            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[row + 1]];
+            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[(row + 1) * 2]];
         } else if (component == 0){
             [_typePicker reloadComponent:1];
         }

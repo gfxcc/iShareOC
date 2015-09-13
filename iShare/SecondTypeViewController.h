@@ -11,6 +11,7 @@
 @interface SecondTypeViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 @property (nonatomic) NSInteger indexOfType;
 @property (strong, nonatomic) NSMutableArray *typeArray;
