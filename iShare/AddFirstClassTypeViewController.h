@@ -1,5 +1,5 @@
 //
-//  AddNewTypeViewController.h
+//  AddFirstClassTypeViewController.h
 //  iShare
 //
 //  Created by caoyong on 9/12/15.
@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddNewTypeViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface AddFirstClassTypeViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UITextField *typeName;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (strong, nonatomic) NSString *imageName;
+@property (strong, nonatomic) UIViewController *typeEditerView;
 
 @end

@@ -9,6 +9,7 @@
 #import "TypeEditerViewController.h"
 #import "BillTypeTableViewCell.h"
 #import "SecondTypeViewController.h"
+#import "AddFirstClassTypeViewController.h"
 
 @interface TypeEditerViewController ()
 
@@ -16,9 +17,11 @@
 
 @implementation TypeEditerViewController
 
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    [self reloadType];
 }
 
 - (void)viewDidLoad {
@@ -46,18 +49,7 @@
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([segue.identifier isEqualToString:@"secondClassType"]) {
-        SecondTypeViewController *secondTypeView = (SecondTypeViewController *)[segue destinationViewController];
-        NSIndexPath *selectedRowPath = [_tableView indexPathForSelectedRow];
-        secondTypeView.indexOfType = selectedRowPath.row;
-        
-        // set navigation title
-        //NSMutableArray
-        secondTypeView.navigationItem.title = [_typeArray[selectedRowPath.row] objectAtIndex:0];
-    }
-}
 
 - (IBAction)editButtonClick:(id)sender {
     
@@ -78,6 +70,44 @@
     
 }
 
+- (void)reloadType {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                          documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                    usedEncoding:nil
+                                                           error:nil];
+    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    
+    // check empty or not
+    _typeArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i != linesOfFile.count; i++) {
+        NSString *stringOfLine = linesOfFile[i];
+        NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+        [_typeArray addObject:contentOfLine];
+        
+    }
+    [_tableView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:@"secondClassType"]) {
+        SecondTypeViewController *secondTypeView = (SecondTypeViewController *)[segue destinationViewController];
+        NSIndexPath *selectedRowPath = [_tableView indexPathForSelectedRow];
+        secondTypeView.indexOfType = selectedRowPath.row;
+        
+        // set navigation title
+        //NSMutableArray
+        secondTypeView.navigationItem.title = [_typeArray[selectedRowPath.row] objectAtIndex:0];
+    } else if ([segue.identifier isEqualToString:@"createFirstClassType"]) {
+        AddFirstClassTypeViewController *addTypeView = (AddFirstClassTypeViewController *)[segue destinationViewController];
+
+        addTypeView.typeEditerView = self;
+        addTypeView.navigationItem.title = @"Create first class type";
+    }
+}
 
 #pragma mark -
 #pragma mark TableView delegate
@@ -120,11 +150,113 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
-    //NSString *stringToMove = [self.reorderingRows objectAtIndex:sourceIndexPath.row];
-    //[self.reorderingRows removeObjectAtIndex:sourceIndexPath.row];
-    //[self.reorderingRows insertObject:stringToMove atIndex:destinationIndexPath.row];
+    
+    NSLog(@"%ld   %ld",(long)sourceIndexPath.row, (long)destinationIndexPath.row);
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                          documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                    usedEncoding:nil
+                                                           error:nil];
+    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    
+    
+    NSMutableArray *newOrderType = [[NSMutableArray alloc] initWithArray:linesOfFile];
+    /*
+    // just mode 1-3 or 3-1
+    if (sourceIndexPath.row > destinationIndexPath.row) { // 3-1 mode
+        // load first part (does not involved)
+        for (int i = 0; i != destinationIndexPath.row; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+        
+        // load second part (moved part)
+        [newOrderType addObject:linesOfFile[sourceIndexPath.row]];
+        for (int i = (int)destinationIndexPath.row; i != sourceIndexPath.row; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+        
+        // load third part (does not involved)
+        for (int i = (int)sourceIndexPath.row + 1; i != linesOfFile.count; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+    } else {                                              // 1-3 mode
+        for (int i = 0; i != sourceIndexPath.row; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+        
+        for (int i = (int)sourceIndexPath.row + 1; i != (int)destinationIndexPath.row + 1; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+        [newOrderType addObject:linesOfFile[sourceIndexPath.row]];
+        
+        for (int i = (int)destinationIndexPath.row + 1; i != linesOfFile.count; i++) {
+            [newOrderType addObject:linesOfFile[i]];
+        }
+    }
+    */
+    
+    NSString *movedLine = linesOfFile[sourceIndexPath.row];
+    [newOrderType removeObjectAtIndex:sourceIndexPath.row];
+    [newOrderType insertObject:movedLine atIndex:destinationIndexPath.row];
+    
+    
+    // save to file
+    content = newOrderType[0];
+    for (int i = 1; i != newOrderType.count; i++) {
+        content = [NSString stringWithFormat:@"%@\n%@", content, newOrderType[i]];
+    }
+    
+    [content writeToFile:fileName
+             atomically:NO
+               encoding:NSUTF8StringEncoding
+                  error:nil];
 }
 
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
+    return YES;
+}
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //[_chats removeObjectAtIndex:indexPath.row];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                              documentsDirectory];
+        NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                        usedEncoding:nil
+                                                               error:nil];
+        NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+        NSMutableArray *types = [[NSMutableArray alloc] initWithArray:linesOfFile];
+        
+        // check count of first class type. At least 3
+        if (types.count <= 3) {
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You need have at least 3 first class type" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [updateAlert show];
+            return;
+        }
+        
+        [types removeObjectAtIndex:indexPath.row];
+        content = types[0];
+        for (int i = 1; i != types.count; i++) {
+            content = [NSString stringWithFormat:@"%@\n%@", content, types[i]];
+        }
+        [content writeToFile:fileName
+                  atomically:NO
+                    encoding:NSUTF8StringEncoding
+                       error:nil];
+        [_typeArray removeObjectAtIndex:indexPath.row];
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {

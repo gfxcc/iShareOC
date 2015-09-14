@@ -204,8 +204,10 @@
 		DBA988D31BA26FA200836FE7 /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A51BA26FA200836FE7 /* network.png */; };
 		DBA988D61BA28ED700836FE7 /* BillTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA988D51BA28ED700836FE7 /* BillTypeTableViewCell.m */; };
 		DBA988D91BA295F800836FE7 /* SecondTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */; };
+		DBD1CCF31BA5311600571B5B /* AddSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */; };
+		DBD1CCF91BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */; };
 		DBE695121BA34F6000B3CD62 /* CustomIconCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */; };
-		DBE695181BA3E40300B3CD62 /* AddNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695171BA3E40300B3CD62 /* AddNewTypeViewController.m */; };
+		DBE695181BA3E40300B3CD62 /* AddFirstClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -474,10 +476,14 @@
 		DBA988D51BA28ED700836FE7 /* BillTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BillTypeTableViewCell.m; path = iShare/BillTypeTableViewCell.m; sourceTree = "<group>"; };
 		DBA988D71BA295F800836FE7 /* SecondTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondTypeViewController.h; sourceTree = "<group>"; };
 		DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondTypeViewController.m; sourceTree = "<group>"; };
+		DBD1CCF11BA5311600571B5B /* AddSecondClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSecondClassTypeViewController.h; sourceTree = "<group>"; };
+		DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSecondClassTypeViewController.m; sourceTree = "<group>"; };
+		DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewSecondClassTypeViewController.h; sourceTree = "<group>"; };
+		DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewSecondClassTypeViewController.m; sourceTree = "<group>"; };
 		DBE695101BA34F6000B3CD62 /* CustomIconCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomIconCollectionViewCell.h; path = iShare/CustomIconCollectionViewCell.h; sourceTree = "<group>"; };
 		DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomIconCollectionViewCell.m; path = iShare/CustomIconCollectionViewCell.m; sourceTree = "<group>"; };
-		DBE695161BA3E40300B3CD62 /* AddNewTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewTypeViewController.h; sourceTree = "<group>"; };
-		DBE695171BA3E40300B3CD62 /* AddNewTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewTypeViewController.m; sourceTree = "<group>"; };
+		DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFirstClassTypeViewController.h; sourceTree = "<group>"; };
+		DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFirstClassTypeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -549,8 +555,12 @@
 		DB94B2681B60FE7C007AEE7F /* iShare */ = {
 			isa = PBXGroup;
 			children = (
-				DBE695161BA3E40300B3CD62 /* AddNewTypeViewController.h */,
-				DBE695171BA3E40300B3CD62 /* AddNewTypeViewController.m */,
+				DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */,
+				DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */,
+				DBD1CCF11BA5311600571B5B /* AddSecondClassTypeViewController.h */,
+				DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */,
+				DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */,
+				DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */,
 				DBA988D71BA295F800836FE7 /* SecondTypeViewController.h */,
 				DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */,
 				DBA988741BA21B3F00836FE7 /* TypeEditerViewController.h */,
@@ -1221,6 +1231,7 @@
 				DB94B3701B6117AD007AEE7F /* MonthTableViewCell.m in Sources */,
 				DB94B3891B6117AE007AEE7F /* UIColor+YUColor.m in Sources */,
 				DB94B3B71B6117AE007AEE7F /* UIView+FirstResponderNotify.m in Sources */,
+				DBD1CCF91BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m in Sources */,
 				DB94B3EF1B6119F4007AEE7F /* SignUpViewController.m in Sources */,
 				DB94B38A1B6117AE007AEE7F /* UIView+YUStyle.m in Sources */,
 				DB94B3EC1B6119F4007AEE7F /* AddNewShareViewController.m in Sources */,
@@ -1231,6 +1242,7 @@
 				DB952E971B6349F700482B00 /* DateTranslate.m in Sources */,
 				DB94B3B61B6117AE007AEE7F /* DaiDodgeKeyboardObjects.m in Sources */,
 				DBA988D61BA28ED700836FE7 /* BillTypeTableViewCell.m in Sources */,
+				DBD1CCF31BA5311600571B5B /* AddSecondClassTypeViewController.m in Sources */,
 				DB0E85131B6D164100A1C74D /* Request.m in Sources */,
 				DB94B3871B6117AE007AEE7F /* UIButton+Bootstrap.m in Sources */,
 				DB94B38C1B6117AE007AEE7F /* yConst.m in Sources */,
@@ -1266,7 +1278,7 @@
 				DB94B3BF1B6117AE007AEE7F /* SlideNavigationContorllerAnimatorScale.m in Sources */,
 				DB94B26F1B60FE7C007AEE7F /* AppDelegate.m in Sources */,
 				DB94B26C1B60FE7C007AEE7F /* main.m in Sources */,
-				DBE695181BA3E40300B3CD62 /* AddNewTypeViewController.m in Sources */,
+				DBE695181BA3E40300B3CD62 /* AddFirstClassTypeViewController.m in Sources */,
 				DB94B3B81B6117AE007AEE7F /* ZenKeyboard.m in Sources */,
 				DB94B3B31B6117AE007AEE7F /* DaiDodgeKeyboard+AccessObject.m in Sources */,
 			);

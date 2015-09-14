@@ -14,6 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 @property (nonatomic) NSInteger indexOfType;
-@property (strong, nonatomic) NSMutableArray *typeArray;
+@property (strong, nonatomic) NSMutableArray *typeArray; // !!!! this array contain all element of a type. The really count of second type should be (_typeArray.count / 2) - 1
 
 @end

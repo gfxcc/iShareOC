@@ -20,6 +20,15 @@
 
 @implementation AddNewShareViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [_keyboard reloadType];
+//    _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
+//    [_keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
+//    _keyboard.mainUI = self;
+//    [self.view addSubview:_keyboard];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

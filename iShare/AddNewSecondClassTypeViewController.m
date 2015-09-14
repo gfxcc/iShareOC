@@ -1,18 +1,18 @@
 //
-//  AddNewTypeViewController.m
+//  AddNewSecondClassTypeViewController.m
 //  iShare
 //
-//  Created by caoyong on 9/12/15.
+//  Created by caoyong on 9/13/15.
 //  Copyright (c) 2015 caoyong. All rights reserved.
 //
 
-#import "AddNewTypeViewController.h"
+#import "AddNewSecondClassTypeViewController.h"
 
-@interface AddNewTypeViewController ()
+@interface AddNewSecondClassTypeViewController ()
 
 @end
 
-@implementation AddNewTypeViewController
+@implementation AddNewSecondClassTypeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,18 +28,44 @@
 
 
 - (void)cellClick:(UITapGestureRecognizer *)sender{
-    _icon.image = [self getImageWithTag:sender.view.tag];
+    _icon.image = [UIImage imageNamed:[self getImageNameWithTag:sender.view.tag]];
+    _imageName = [self getImageNameWithTag:sender.view.tag];
 }
 
 - (void)saveType {
     
+    [self.navigationController popToViewController:_firstClassTypeView animated:YES];
+    // save first class type;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                          documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                    usedEncoding:nil
+                                                           error:nil];
+    NSMutableArray *linesOfFile = [[NSMutableArray alloc] initWithArray:[content componentsSeparatedByString:@"\n"]];
+    NSString *newType = [NSString stringWithFormat:@"%@#%@", _typeName.text, _imageName];
+    
+    NSString *newline = [NSString stringWithFormat:@"%@#%@", linesOfFile[_indexOfFirstClassType], newType];
+    
+    [linesOfFile removeObjectAtIndex:_indexOfFirstClassType];
+    [linesOfFile insertObject:newline atIndex:_indexOfFirstClassType];
+    
+    content = linesOfFile[0];
+    for (int i = 1; i != linesOfFile.count; i++) {
+        content = [NSString stringWithFormat:@"%@\n%@", content, linesOfFile[i]];
+    }
+    
+    [content writeToFile:fileName
+              atomically:NO
+                encoding:NSUTF8StringEncoding
+                   error:nil];
 }
 
 #pragma mark -
 #pragma mark UICollectionView delegate
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return 35;
 }
 
@@ -51,7 +77,7 @@
     //cell[cell initWithFrame:CGRectMake(0, 0, 50, 50)];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-    imageView.image = [self getImageWithTag:indexPath.row];
+    imageView.image = [UIImage imageNamed:[self getImageNameWithTag:indexPath.row]];
     [cell addSubview:imageView];
     
     
@@ -70,156 +96,158 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(-50, 10, 10, 10);
+    return UIEdgeInsetsMake(10, 10, 10, 10);
 }
 
-- (UIImage *)getImageWithTag:(NSInteger)tag {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+- (NSString *)getImageNameWithTag:(NSInteger)tag {
+    //UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    NSString *imageName;
     switch (tag) {
         case 0:
-            imageView.image = [UIImage imageNamed:@"ballet_shoes.png"];
+            imageName = @"ballet_shoes.png";
             break;
         case 1:
-            imageView.image = [UIImage imageNamed:@"Rent and Fee.png"];
+            imageName = @"Rent and Fee.png";
             break;
         case 2:
-            imageView.image = [UIImage imageNamed:@"barbell.png"];
+            imageName = @"barbell.png";
             break;
         case 3:
-            imageView.image = [UIImage imageNamed:@"bed.png"];
+            imageName = @"bed.png";
             break;
         case 4:
-            imageView.image = [UIImage imageNamed:@"Food and Drind.png"];
+            imageName = @"Food and Drind.png";
             break;
         case 5:
-            imageView.image = [UIImage imageNamed:@"bowler_hat.png"];
+            imageName = @"bowler_hat.png";
             break;
         case 6:
-            imageView.image = [UIImage imageNamed:@"bread.png"];
+            imageName = @"bread.png";
             break;
         case 7:
-            imageView.image = [UIImage imageNamed:@"bus.png"];
+            imageName = @"bus.png";
             break;
         case 8:
-            imageView.image = [UIImage imageNamed:@"businesswoman.png"];
+            imageName = @"businesswoman.png";
             break;
         case 9:
-            imageView.image = [UIImage imageNamed:@"supermarket.png"];
+            imageName = @"SuperMarket.png";
             break;
         case 10:
-            imageView.image = [UIImage imageNamed:@"carrot.png"];
+            imageName = @"carrot.png";
             break;
         case 11:
-            imageView.image = [UIImage imageNamed:@"clinic.png"];
+            imageName = @"clinic.png";
             break;
         case 12:
-            imageView.image = [UIImage imageNamed:@"cloakroom.png"];
+            imageName = @"cloakroom.png";
             break;
         case 13:
-            imageView.image = [UIImage imageNamed:@"clothes.png"];
+            imageName = @"clothes.png";
             break;
         case 14:
-            imageView.image = [UIImage imageNamed:@"cafe.png"];
+            imageName = @"cafe.png";
             break;
         case 15:
-            imageView.image = [UIImage imageNamed:@"game.png"];
+            imageName = @"game.png";
             break;
         case 16:
-            imageView.image = [UIImage imageNamed:@"cookies.png"];
+            imageName = @"cookies.png";
             break;
         case 17:
-            imageView.image = [UIImage imageNamed:@"house.png"];
+            imageName = @"house.png";
             break;
         case 18:
-            imageView.image = [UIImage imageNamed:@"Borrow and Lend.png"];
+            imageName = @"Borrow and Lend.png";
             break;
         case 19:
-            imageView.image = [UIImage imageNamed:@"dog.png"];
+            imageName = @"dog.png";
             break;
         case 20:
-            imageView.image = [UIImage imageNamed:@"PSEG.png"];
+            imageName = @"PSEG.png";
             break;
         case 21:
-            imageView.image = [UIImage imageNamed:@"food.png"];
+            imageName = @"food.png";
             break;
         case 22:
-            imageView.image = [UIImage imageNamed:@"french_fries.png"];
+            imageName = @"french_fries.png";
             break;
         case 23:
-            imageView.image = [UIImage imageNamed:@"gas_station.png"];
+            imageName = @"gas_station.png";
             break;
         case 24:
-            imageView.image = [UIImage imageNamed:@"gift.png"];
+            imageName = @"gift.png";
             break;
         case 25:
-            imageView.image = [UIImage imageNamed:@"hamburger.png"];
+            imageName = @"hamburger.png";
             break;
         case 26:
-            imageView.image = [UIImage imageNamed:@"interstate_truck.png"];
+            imageName = @"interstate_truck.png";
             break;
         case 27:
-            imageView.image = [UIImage imageNamed:@"kebab.png"];
+            imageName = @"kebab.png";
             break;
         case 28:
-            imageView.image = [UIImage imageNamed:@"milk_bottle.png"];
+            imageName = @"milk_bottle.png";
             break;
         case 29:
-            imageView.image = [UIImage imageNamed:@"lend.png"];
+            imageName = @"lend.png";
             break;
         case 30:
-            imageView.image = [UIImage imageNamed:@"package.png"];
+            imageName = @"package.png";
             break;
         case 31:
-            imageView.image = [UIImage imageNamed:@"park_and_charge.png"];
+            imageName = @"park_and_charge.png";
             break;
         case 32:
-            imageView.image = [UIImage imageNamed:@"pen.png"];
+            imageName = @"pen.png";
             break;
         case 33:
-            imageView.image = [UIImage imageNamed:@"pizza.png"];
+            imageName = @"pizza.png";
             break;
         case 34:
-            imageView.image = [UIImage imageNamed:@"price_tag_usd.png"];
+            imageName = @"price_tag_usd.png";
             break;
         case 35:
-            imageView.image = [UIImage imageNamed:@"sent.png"];
+            imageName = @"sent.png";
             break;
         case 36:
-            imageView.image = [UIImage imageNamed:@"Shopping.png"];
+            imageName = @"Shopping.png";
             break;
         case 37:
-            imageView.image = [UIImage imageNamed:@"soap.png"];
+            imageName = @"soap.png";
             break;
         case 38:
-            imageView.image = [UIImage imageNamed:@"sofa.png"];
+            imageName = @"sofa.png";
             break;
         case 39:
-            imageView.image = [UIImage imageNamed:@"students.png"];
+            imageName = @"students.png";
             break;
         case 40:
-            imageView.image = [UIImage imageNamed:@"Car and Bus.png"];
+            imageName = @"Car and Bus.png";
             break;
         case 41:
-            imageView.image = [UIImage imageNamed:@"traffic_light.png"];
+            imageName = @"traffic_light.png";
             break;
         case 42:
-            imageView.image = [UIImage imageNamed:@"truck.png"];
+            imageName = @"truck.png";
             break;
         case 43:
-            imageView.image = [UIImage imageNamed:@"Entertament.png"];
+            imageName = @"Entertament.png";
             break;
         case 44:
-            imageView.image = [UIImage imageNamed:@"water.png"];
+            imageName = @"water.png";
             break;
         case 45:
-            imageView.image = [UIImage imageNamed:@"network.png"];
+            imageName = @"network.png";
             break;
             
         default:
             break;
     }
-    return imageView.image;
+    return imageName;
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

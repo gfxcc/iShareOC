@@ -107,7 +107,7 @@
     
     // check empty or not
     _typeArray = [[NSMutableArray alloc] init];
-    if (linesOfFile.count == 1 || !linesOfFile) { // not necessary
+    if (linesOfFile.count == 1 || !linesOfFile || 1) { // not necessary
         
         NSMutableArray *array1 = [[NSMutableArray alloc] init];
         [array1 addObject:@"Food and Drind"];// type name
@@ -203,6 +203,108 @@
 
     
     return self;
+}
+
+- (void)reloadType {
+    // ##load billType file.
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                          usedEncoding:nil
+                                                 error:nil];
+    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    
+    // check empty or not
+    _typeArray = [[NSMutableArray alloc] init];
+    if (linesOfFile.count == 1 || !linesOfFile) { // not necessary
+        
+        NSMutableArray *array1 = [[NSMutableArray alloc] init];
+        [array1 addObject:@"Food and Drind"];// type name
+        [array1 addObject:@"Food and Drind"];// type icon name
+        [array1 addObject:@"hamburger"];
+        [array1 addObject:@"hamburger"];
+        [array1 addObject:@"cafe"];
+        [array1 addObject:@"cafe"];
+        [_typeArray addObject:array1];
+        
+        NSMutableArray *array2 = [[NSMutableArray alloc] init];
+        [array2 addObject:@"Rent and Fee"];
+        [array2 addObject:@"Rent and Fee"];
+        [array2 addObject:@"house"];
+        [array2 addObject:@"house"];
+        [array2 addObject:@"PSEG"];
+        [array2 addObject:@"PSEG"];
+        [array2 addObject:@"network"];
+        [array2 addObject:@"network"];
+        [_typeArray addObject:array2];
+        
+        NSMutableArray *array3 = [[NSMutableArray alloc] init];
+        [array3 addObject:@"Car and Bus"];
+        [array3 addObject:@"Car and Bus"];
+        [array3 addObject:@"bus"];
+        [array3 addObject:@"bus"];
+        [_typeArray addObject:array3];
+        
+        NSMutableArray *array4 = [[NSMutableArray alloc] init];
+        [array4 addObject:@"Shopping"];
+        [array4 addObject:@"Shopping"];
+        [array4 addObject:@"SuperMarket"];
+        [array4 addObject:@"SuperMarket"];
+        [_typeArray addObject:array4];
+        
+        NSMutableArray *array5 = [[NSMutableArray alloc] init];
+        [array5 addObject:@"Entertament"];
+        [array5 addObject:@"Entertament"];
+        [array5 addObject:@"game"];
+        [array5 addObject:@"game"];
+        [_typeArray addObject:array5];
+        
+        NSMutableArray *array6 = [[NSMutableArray alloc] init];
+        [array6 addObject:@"Borrow and Lend"];
+        [array6 addObject:@"Borrow and Lend"];
+        [array6 addObject:@"lend"];
+        [array6 addObject:@"lend"];
+        [_typeArray addObject:array6];
+        
+        // save to file
+        
+        for (int i = 0; i != 6; i++) {
+            NSString *typeString = @"";
+            NSMutableArray *type = _typeArray[i];
+            for (int j = 0; j != type.count; j++) {
+                if (j == 0) {
+                    typeString = type[0];
+                } else {
+                    typeString = [NSString stringWithFormat:@"%@#%@", typeString, type[j]];
+                }
+            }
+            
+            if (i == 0) {
+                content = typeString;
+            } else {
+                content = [NSString stringWithFormat:@"%@\n%@", content, typeString];
+            }
+        }
+        
+        [content writeToFile:fileName
+                  atomically:NO
+                    encoding:NSUTF8StringEncoding
+                       error:nil];
+        
+        
+    } else {
+        
+        for (int i = 0; i != linesOfFile.count; i++) {
+            NSString *stringOfLine = linesOfFile[i];
+            NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+            [_typeArray addObject:contentOfLine];
+            
+        }
+        
+    }
+    [_typePicker reloadAllComponents];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event

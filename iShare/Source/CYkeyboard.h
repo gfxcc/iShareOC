@@ -67,4 +67,6 @@ typedef NS_ENUM(NSInteger, CYkeyboardKind) {
 - (void)dataMode;
 - (void)memberMode;
 - (void)editPage;
+
+- (void)reloadType;
 @end
