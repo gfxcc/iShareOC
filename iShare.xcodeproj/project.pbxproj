@@ -206,6 +206,9 @@
 		DBA988D91BA295F800836FE7 /* SecondTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */; };
 		DBD1CCF31BA5311600571B5B /* AddSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */; };
 		DBD1CCF91BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */; };
+		DBE5C5151BA769A50050A5B1 /* todayBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C5141BA769A50050A5B1 /* todayBillsViewController.m */; };
+		DBE5C5181BA769B00050A5B1 /* thisWeekBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C5171BA769B00050A5B1 /* thisWeekBillsViewController.m */; };
+		DBE5C51B1BA769C00050A5B1 /* thisMonthBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C51A1BA769C00050A5B1 /* thisMonthBillsViewController.m */; };
 		DBE695121BA34F6000B3CD62 /* CustomIconCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */; };
 		DBE695181BA3E40300B3CD62 /* AddFirstClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */; };
 /* End PBXBuildFile section */
@@ -480,6 +483,12 @@
 		DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSecondClassTypeViewController.m; sourceTree = "<group>"; };
 		DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewSecondClassTypeViewController.h; sourceTree = "<group>"; };
 		DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewSecondClassTypeViewController.m; sourceTree = "<group>"; };
+		DBE5C5131BA769A50050A5B1 /* todayBillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = todayBillsViewController.h; sourceTree = "<group>"; };
+		DBE5C5141BA769A50050A5B1 /* todayBillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = todayBillsViewController.m; sourceTree = "<group>"; };
+		DBE5C5161BA769B00050A5B1 /* thisWeekBillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thisWeekBillsViewController.h; sourceTree = "<group>"; };
+		DBE5C5171BA769B00050A5B1 /* thisWeekBillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = thisWeekBillsViewController.m; sourceTree = "<group>"; };
+		DBE5C5191BA769C00050A5B1 /* thisMonthBillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thisMonthBillsViewController.h; sourceTree = "<group>"; };
+		DBE5C51A1BA769C00050A5B1 /* thisMonthBillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = thisMonthBillsViewController.m; sourceTree = "<group>"; };
 		DBE695101BA34F6000B3CD62 /* CustomIconCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomIconCollectionViewCell.h; path = iShare/CustomIconCollectionViewCell.h; sourceTree = "<group>"; };
 		DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomIconCollectionViewCell.m; path = iShare/CustomIconCollectionViewCell.m; sourceTree = "<group>"; };
 		DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFirstClassTypeViewController.h; sourceTree = "<group>"; };
@@ -555,16 +564,8 @@
 		DB94B2681B60FE7C007AEE7F /* iShare */ = {
 			isa = PBXGroup;
 			children = (
-				DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */,
-				DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */,
-				DBD1CCF11BA5311600571B5B /* AddSecondClassTypeViewController.h */,
-				DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */,
-				DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */,
-				DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */,
-				DBA988D71BA295F800836FE7 /* SecondTypeViewController.h */,
-				DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */,
-				DBA988741BA21B3F00836FE7 /* TypeEditerViewController.h */,
-				DBA988751BA21B3F00836FE7 /* TypeEditerViewController.m */,
+				DBE5C5121BA768930050A5B1 /* briefReportOfBills */,
+				DBE5C5111BA768680050A5B1 /* typeEditerClass */,
 				DB952E9B1B6799D400482B00 /* BillDetailViewController.h */,
 				DB952E9C1B6799D400482B00 /* BillDetailViewController.m */,
 				DB952EA11B6A72B800482B00 /* BillListWithFriendViewController.h */,
@@ -949,6 +950,36 @@
 			name = typeIcom;
 			sourceTree = "<group>";
 		};
+		DBE5C5111BA768680050A5B1 /* typeEditerClass */ = {
+			isa = PBXGroup;
+			children = (
+				DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */,
+				DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */,
+				DBD1CCF11BA5311600571B5B /* AddSecondClassTypeViewController.h */,
+				DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */,
+				DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */,
+				DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */,
+				DBA988D71BA295F800836FE7 /* SecondTypeViewController.h */,
+				DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */,
+				DBA988741BA21B3F00836FE7 /* TypeEditerViewController.h */,
+				DBA988751BA21B3F00836FE7 /* TypeEditerViewController.m */,
+			);
+			name = typeEditerClass;
+			sourceTree = "<group>";
+		};
+		DBE5C5121BA768930050A5B1 /* briefReportOfBills */ = {
+			isa = PBXGroup;
+			children = (
+				DBE5C5131BA769A50050A5B1 /* todayBillsViewController.h */,
+				DBE5C5141BA769A50050A5B1 /* todayBillsViewController.m */,
+				DBE5C5161BA769B00050A5B1 /* thisWeekBillsViewController.h */,
+				DBE5C5171BA769B00050A5B1 /* thisWeekBillsViewController.m */,
+				DBE5C5191BA769C00050A5B1 /* thisMonthBillsViewController.h */,
+				DBE5C51A1BA769C00050A5B1 /* thisMonthBillsViewController.m */,
+			);
+			name = briefReportOfBills;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1226,9 +1257,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB94B3BE1B6117AE007AEE7F /* SlideNavigationContorllerAnimatorFade.m in Sources */,
+				DBE5C51B1BA769C00050A5B1 /* thisMonthBillsViewController.m in Sources */,
 				DB94B38D1B6117AE007AEE7F /* YUBottomPopSelctModel.m in Sources */,
 				DB94B3B51B6117AE007AEE7F /* DaiDodgeKeyboard.m in Sources */,
 				DB94B3701B6117AD007AEE7F /* MonthTableViewCell.m in Sources */,
+				DBE5C5151BA769A50050A5B1 /* todayBillsViewController.m in Sources */,
 				DB94B3891B6117AE007AEE7F /* UIColor+YUColor.m in Sources */,
 				DB94B3B71B6117AE007AEE7F /* UIView+FirstResponderNotify.m in Sources */,
 				DBD1CCF91BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m in Sources */,
@@ -1237,6 +1270,7 @@
 				DB94B3EC1B6119F4007AEE7F /* AddNewShareViewController.m in Sources */,
 				DBE695121BA34F6000B3CD62 /* CustomIconCollectionViewCell.m in Sources */,
 				DB952E9D1B6799D400482B00 /* BillDetailViewController.m in Sources */,
+				DBE5C5181BA769B00050A5B1 /* thisWeekBillsViewController.m in Sources */,
 				DB94B3E91B6119F4007AEE7F /* BillListViewController.m in Sources */,
 				DB94B36A1B6117AD007AEE7F /* Bill.m in Sources */,
 				DB952E971B6349F700482B00 /* DateTranslate.m in Sources */,
@@ -1407,11 +1441,13 @@
 			baseConfigurationReference = 95C88CC437DE70749E3BF4C1 /* Pods-iShare.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1420,11 +1456,13 @@
 			baseConfigurationReference = 7040511EE234A04E8090E0C0 /* Pods-iShare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

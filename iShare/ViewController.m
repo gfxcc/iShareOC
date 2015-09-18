@@ -113,8 +113,10 @@
     
 
     [self obtain_bills];
-    [self keepSyn];
+    //[self keepSyn];
     [self create_folder];
+    
+    
     
 }
 
@@ -574,10 +576,13 @@
             [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
             break;
         case 1:
+            [self performSegueWithIdentifier:@"todayBills" sender:self];
             break;
         case 2:
+            [self performSegueWithIdentifier:@"thisWeekBills" sender:self];
             break;
         case 3:
+            [self performSegueWithIdentifier:@"thisMonthBills" sender:self];
             break;
         default:
             break;
@@ -607,70 +612,6 @@
 
 #pragma mark - HELP functions
 
-//- (void)addRequestToFile:(NSString *)request {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    
-//    //make a file name to write the data to using the documents directory:
-//    NSString *fileName = [NSString stringWithFormat:@"%@/RequestRecord",
-//                          documentsDirectory];
-//    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-//                                                  usedEncoding:nil
-//                                                         error:nil];
-//    NSString *newRequest;
-//    if (![exist isEqualToString:@""]) {
-//        newRequest = [NSString stringWithFormat:@"%@\n%@", request, exist];
-//    } else {
-//        newRequest = [NSString stringWithFormat:@"%@", request];
-//    }
-//    
-//    
-//    [newRequest writeToFile:fileName
-//               atomically:NO
-//                 encoding:NSUTF8StringEncoding
-//                    error:nil];
-//}
-//
-//- (void)deleteAllRequests {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    
-//    //make a file name to write the data to using the documents directory:
-//    NSString *fileName = [NSString stringWithFormat:@"%@/RequestRecord",
-//                          documentsDirectory];
-//    [@"" writeToFile:fileName
-//          atomically:NO
-//            encoding:NSUTF8StringEncoding
-//               error:nil];
-//}
-//
-//- (NSString *)getLatestRequest {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    
-//    //make a file name to write the data to using the documents directory:
-//    NSString *fileName = [NSString stringWithFormat:@"%@/RequestRecord",
-//                          documentsDirectory];
-//    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-//                                                  usedEncoding:nil
-//                                                         error:nil];
-//    NSArray *request = [exist componentsSeparatedByString:@"\n"];
-//    
-//    return request.count == 0 ? nil : request[0];
-//}
-//
-//- (BOOL)noRequestRecord {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    
-//    //make a file name to write the data to using the documents directory:
-//    NSString *fileName = [NSString stringWithFormat:@"%@/RequestRecord",
-//                          documentsDirectory];
-//    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-//                                                  usedEncoding:nil
-//                                                         error:nil];
-//    return [exist isEqualToString:@""]||!exist ? YES : NO;
-//}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -789,6 +730,9 @@
     
     
 }
+
+
+
 
 
 

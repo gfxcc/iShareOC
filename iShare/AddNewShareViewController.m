@@ -61,10 +61,10 @@
     CALayer *line6 = [CALayer layer];
     
     line1.frame = CGRectMake(_amount.frame.origin.x, _amount.frame.origin.y + _amount.frame.size.height, _amount.frame.size.width, 1.0f);
-    line2.frame = CGRectMake(_type.frame.origin.x, _type.frame.origin.y + _type.frame.size.height, _type.frame.size.width, 1.0f);
-    line3.frame = CGRectMake(_data.frame.origin.x, _data.frame.origin.y + _data.frame.size.height, _data.frame.size.width, 1.0f);
-    line4.frame = CGRectMake(_member.frame.origin.x, _member.frame.origin.y + _member.frame.size.height, _member.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_creater.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _member.frame.size.width, 1.0f);
+    line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
+    line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
+    line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line5.frame = CGRectMake(_creater.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
     line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
     
     
@@ -87,20 +87,20 @@
     [_amount addGestureRecognizer:myLabelGesture1];
     
     UITapGestureRecognizer* myLabelGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label2Clicked)];
-    [_type setUserInteractionEnabled:YES];
-    [_type addGestureRecognizer:myLabelGesture2];
+    [_typeBackground setUserInteractionEnabled:YES];
+    [_typeBackground addGestureRecognizer:myLabelGesture2];
     
     UITapGestureRecognizer* myLabelGesture3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label3Clicked)];
-    [_paidBy setUserInteractionEnabled:YES];
-    [_paidBy addGestureRecognizer:myLabelGesture3];
+    [_paidByBackground setUserInteractionEnabled:YES];
+    [_paidByBackground addGestureRecognizer:myLabelGesture3];
     
     UITapGestureRecognizer* myLabelGesture4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label4Clicked)];
-    [_data setUserInteractionEnabled:YES];
-    [_data addGestureRecognizer:myLabelGesture4];
+    [_dataBackground setUserInteractionEnabled:YES];
+    [_dataBackground addGestureRecognizer:myLabelGesture4];
     
     UITapGestureRecognizer* myLabelGesture5 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label5Clicked)];
-    [_member setUserInteractionEnabled:YES];
-    [_member addGestureRecognizer:myLabelGesture5];
+    [_memberBackground setUserInteractionEnabled:YES];
+    [_memberBackground addGestureRecognizer:myLabelGesture5];
     
     
     
@@ -139,12 +139,20 @@
 
 #pragma mark - set mode
 
+- (void)resetAllBackground {
+    _amount.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
+}
+
 - (void)label1Clicked {
     _amount.backgroundColor = RGB(211, 214, 219);
-    _type.backgroundColor = RGB(255, 255, 255);
-    _paidBy.backgroundColor = RGB(255, 255, 255);
-    _data.backgroundColor = RGB(255, 255, 255);
-    _member.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
     
     [_keyboard amountMode];
     //[keyboard show];
@@ -152,10 +160,10 @@
 
 - (void)label2Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
-    _type.backgroundColor = RGB(211, 214, 219);
-    _paidBy.backgroundColor = RGB(255, 255, 255);
-    _data.backgroundColor = RGB(255, 255, 255);
-    _member.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(211, 214, 219);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
     
 
     [_keyboard typeMode];
@@ -164,10 +172,10 @@
 
 - (void)label3Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
-    _type.backgroundColor = RGB(255, 255, 255);
-    _paidBy.backgroundColor = RGB(211, 214, 219);
-    _data.backgroundColor = RGB(255, 255, 255);
-    _member.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(211, 214, 219);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
     
     [_keyboard paidByMode];
     [_keyboard show];
@@ -175,10 +183,10 @@
 
 - (void)label4Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
-    _type.backgroundColor = RGB(255, 255, 255);
-    _paidBy.backgroundColor = RGB(255, 255, 255);
-    _data.backgroundColor = RGB(211, 214, 219);
-    _member.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(211, 214, 219);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
     
     [_keyboard dataMode];
     [_keyboard show];
@@ -186,10 +194,10 @@
 
 - (void)label5Clicked {
     _amount.backgroundColor = RGB(255, 255, 255);
-    _type.backgroundColor = RGB(255, 255, 255);
-    _paidBy.backgroundColor = RGB(255, 255, 255);
-    _data.backgroundColor = RGB(255, 255, 255);
-    _member.backgroundColor = RGB(211, 214, 219);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(211, 214, 219);
     
     [_keyboard memberMode];
     [_keyboard show];
@@ -199,10 +207,10 @@
 
 - (void)unlight {
     _amount.backgroundColor = RGB(255, 255, 255);
-    _type.backgroundColor = RGB(255, 255, 255);
-    _paidBy.backgroundColor = RGB(255, 255, 255);
-    _data.backgroundColor = RGB(255, 255, 255);
-    _member.backgroundColor = RGB(255, 255, 255);
+    _typeBackground.backgroundColor = RGB(255, 255, 255);
+    _paidByBackground.backgroundColor = RGB(255, 255, 255);
+    _dataBackground.backgroundColor = RGB(255, 255, 255);
+    _memberBackground.backgroundColor = RGB(255, 255, 255);
 }
 
 

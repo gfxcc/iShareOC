@@ -19,12 +19,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *amount;
 
 @property (weak, nonatomic) IBOutlet UILabel *type;
+@property (weak, nonatomic) IBOutlet UIView *typeBackground;
 
 @property (weak, nonatomic) IBOutlet UILabel *paidBy;
+@property (weak, nonatomic) IBOutlet UIView *paidByBackground;
 
 @property (weak, nonatomic) IBOutlet UILabel *data;
+@property (weak, nonatomic) IBOutlet UIView *dataBackground;
 
 @property (weak, nonatomic) IBOutlet UILabel *member;
+@property (weak, nonatomic) IBOutlet UIView *memberBackground;
 
 @property (weak, nonatomic) IBOutlet UITextView *comment;
 @property (weak, nonatomic) IBOutlet UILabel *creater;

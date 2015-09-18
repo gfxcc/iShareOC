@@ -107,7 +107,7 @@
     
     // check empty or not
     _typeArray = [[NSMutableArray alloc] init];
-    if (linesOfFile.count == 1 || !linesOfFile || 1) { // not necessary
+    if (linesOfFile.count == 1 || !linesOfFile) { // not necessary
         
         NSMutableArray *array1 = [[NSMutableArray alloc] init];
         [array1 addObject:@"Food and Drind"];// type name
@@ -466,11 +466,14 @@
 
 - (void)clickFadeOut {
     [self fadeMeOut];
-    amount_.backgroundColor = RGB(255, 255, 255);
-    type_.backgroundColor = RGB(255, 255, 255);
-    paidBy_.backgroundColor = RGB(255, 255, 255);
-    data_.backgroundColor = RGB(255, 255, 255);
-    member_.backgroundColor = RGB(255, 255, 255);
+    AddNewShareViewController *mainUI_ = (AddNewShareViewController *)_mainUI;
+    //[mainUI_ performSegueWithIdentifier:@"typeEdit" sender:mainUI_];
+    [mainUI_ resetAllBackground];
+//    amount_.backgroundColor = RGB(255, 255, 255);
+//    type_.backgroundColor = RGB(255, 255, 255);
+//    paidBy_.backgroundColor = RGB(255, 255, 255);
+//    data_.backgroundColor = RGB(255, 255, 255);
+//    member_.backgroundColor = RGB(255, 255, 255);
 }
 
 - (void)show {
@@ -634,6 +637,8 @@
             type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[(row + 1) * 2]];
         } else if (component == 0){
             [_typePicker reloadComponent:1];
+            NSMutableArray *type = _typeArray[row];
+            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[2]];
         }
     }
     

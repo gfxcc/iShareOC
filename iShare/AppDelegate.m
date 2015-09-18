@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#include <TSMessage.h>
+#import <gRPC_pod/IShare.pbrpc.h>
+#import <gRPC_pod/IShare.pbobjc.h>
 
 @interface AppDelegate ()
 
@@ -17,8 +20,48 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+    
+    //判断是否注册了远程通知
+    if (![application isRegisteredForRemoteNotifications]) {
+        UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
+        [application registerUserNotificationSettings:uns];
+        //注册远程通知
+        [application registerForRemoteNotifications];
+    }
     return YES;
 }
+
+//注册成功，返回deviceToken
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"DeviceTaken" message:[NSString stringWithFormat:@"%@", deviceToken] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    
+    [updateAlert show];
+    NSLog(@"%@", deviceToken);
+}
+
+//注册失败
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    [TSMessage showNotificationWithTitle:@"RegisterFail"
+                                subtitle:[NSString stringWithFormat:@"%@", error]
+                                    type:TSMessageNotificationTypeError];
+    NSLog(@"%@", error);
+}
+
+//接收到推送消息
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Get Remote Notification" message:[NSString stringWithFormat:@"%@", userInfo] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    
+    [updateAlert show];
+    NSLog(@"%@", userInfo);
+}
+///////////////////
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
