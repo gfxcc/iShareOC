@@ -34,9 +34,6 @@
 }
 
 - (void)nextToSecondClassType {
-    [self performSegueWithIdentifier:@"createSecondClassType" sender:self];
-    
-    // save first class type;
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"%@/billType",
@@ -44,6 +41,22 @@
     NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
                                                     usedEncoding:nil
                                                            error:nil];
+    NSArray *linesOfFile = [content componentsSeparatedByString:@"\n"];
+    for (int i = 0; i != linesOfFile.count; i++) {
+        NSArray *types = [linesOfFile[i] componentsSeparatedByString:@"#"];
+        if ([types[0] isEqualToString:_typeName.text]) {
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"The first class type name has been used. Please enter a new type name" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [updateAlert show];
+            return;
+        }
+    }
+    
+    
+    [self performSegueWithIdentifier:@"createSecondClassType" sender:self];
+    
+    // save first class type;
+    
     NSString *newType = [NSString stringWithFormat:@"%@#%@", _typeName.text, _imageName];
     content = [NSString stringWithFormat:@"%@\n%@", content, newType];
     

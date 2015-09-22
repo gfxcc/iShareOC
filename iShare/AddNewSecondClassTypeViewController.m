@@ -33,9 +33,6 @@
 }
 
 - (void)saveType {
-    
-    [self.navigationController popToViewController:_firstClassTypeView animated:YES];
-    // save first class type;
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"%@/billType",
@@ -44,6 +41,21 @@
                                                     usedEncoding:nil
                                                            error:nil];
     NSMutableArray *linesOfFile = [[NSMutableArray alloc] initWithArray:[content componentsSeparatedByString:@"\n"]];
+    
+    // check type name duplicate
+    NSArray *types = [linesOfFile[_indexOfFirstClassType] componentsSeparatedByString:@"#"];
+    for (int i = 0; i < types.count; i += 2) {
+        if ([types[i] isEqualToString:_typeName.text]) {
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"The second class type name has been used. Please enter a new type name" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [updateAlert show];
+            return;
+        }
+    }
+    
+    [self.navigationController popToViewController:_firstClassTypeView animated:YES];
+    
+    // save second class type;
     NSString *newType = [NSString stringWithFormat:@"%@#%@", _typeName.text, _imageName];
     
     NSString *newline = [NSString stringWithFormat:@"%@#%@", linesOfFile[_indexOfFirstClassType], newType];

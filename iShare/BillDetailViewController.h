@@ -35,7 +35,7 @@
 
 @property (strong, nonatomic) NSMutableArray *memberArray;
 @property (strong, nonatomic) NSDate *mydate;
-@property (strong, nonatomic) NSString *billId;
+
 
 @property (strong, nonatomic) UIImage *image;
 
@@ -43,4 +43,5 @@
 
 @property (strong, nonatomic) CYkeyboard *keyboard;
 
+@property (strong, nonatomic) NSString *billId;
 @end

@@ -10,6 +10,8 @@
 #include <TSMessage.h>
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import "ViewController.h"
+#import "UIViewController+Utils.h"
 
 @interface AppDelegate ()
 
@@ -38,10 +40,36 @@
 //注册成功，返回deviceToken
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"DeviceTaken" message:[NSString stringWithFormat:@"%@", deviceToken] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    
-    [updateAlert show];
+//    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"DeviceTaken" message:[NSString stringWithFormat:@"%@", deviceToken] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//    
+//    [updateAlert show];
     NSLog(@"%@", deviceToken);
+    NSString *tokenStringOriginal = [NSString stringWithFormat:@"%@", deviceToken];
+    NSString *tokenString = @"";
+    for (int i = 0; i != tokenStringOriginal.length; i++) {
+        if ([tokenStringOriginal characterAtIndex:i] == '<' || [tokenStringOriginal characterAtIndex:i] == '>' || [tokenStringOriginal characterAtIndex:i] == ' ') {
+            continue;
+        }
+        //NSString *tmp = [tokenStringOriginal characterAtIndex:i];
+        tokenString = [NSString stringWithFormat:@"%@%c", tokenString, [tokenStringOriginal characterAtIndex:i]];
+    }
+    
+//    UIWindow *window=[UIApplication sharedApplication].keyWindow;
+//    UIViewController *root = [window rootViewController];
+//    
+//    UIStoryboard *storyboard = root.storyboard;
+    
+    //UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    //UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    ViewController *mainUI = (ViewController *)[UIViewController currentViewController];
+
+
+    
+    
+    mainUI.deviceToken = tokenString;
+    mainUI.deviceTokenBool = true;
+    [mainUI sendToken];
+
 }
 
 //注册失败
@@ -62,6 +90,8 @@
     NSLog(@"%@", userInfo);
 }
 ///////////////////
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

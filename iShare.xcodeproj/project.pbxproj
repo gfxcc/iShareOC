@@ -206,6 +206,10 @@
 		DBA988D91BA295F800836FE7 /* SecondTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA988D81BA295F800836FE7 /* SecondTypeViewController.m */; };
 		DBD1CCF31BA5311600571B5B /* AddSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */; };
 		DBD1CCF91BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */; };
+		DBDA46C61BADF10100E28B07 /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = DBDA46C51BADF10100E28B07 /* UIViewController+Utils.m */; settings = {ASSET_TAGS = (); }; };
+		DBDA48A61BAE098500E28B07 /* icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DBDA48A41BAE098500E28B07 /* icon@3x.png */; settings = {ASSET_TAGS = (); }; };
+		DBDA48A71BAE098500E28B07 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DBDA48A51BAE098500E28B07 /* icon@2x.png */; settings = {ASSET_TAGS = (); }; };
+		DBDA48A91BAF09DF00E28B07 /* icon 2.png in Resources */ = {isa = PBXBuildFile; fileRef = DBDA48A81BAF09DF00E28B07 /* icon 2.png */; settings = {ASSET_TAGS = (); }; };
 		DBE5C5151BA769A50050A5B1 /* todayBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C5141BA769A50050A5B1 /* todayBillsViewController.m */; };
 		DBE5C5181BA769B00050A5B1 /* thisWeekBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C5171BA769B00050A5B1 /* thisWeekBillsViewController.m */; };
 		DBE5C51B1BA769C00050A5B1 /* thisMonthBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C51A1BA769C00050A5B1 /* thisMonthBillsViewController.m */; };
@@ -483,6 +487,11 @@
 		DBD1CCF21BA5311600571B5B /* AddSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSecondClassTypeViewController.m; sourceTree = "<group>"; };
 		DBD1CCF71BA5DA5900571B5B /* AddNewSecondClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewSecondClassTypeViewController.h; sourceTree = "<group>"; };
 		DBD1CCF81BA5DA5900571B5B /* AddNewSecondClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewSecondClassTypeViewController.m; sourceTree = "<group>"; };
+		DBDA46C41BADF10100E28B07 /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
+		DBDA46C51BADF10100E28B07 /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
+		DBDA48A41BAE098500E28B07 /* icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@3x.png"; path = "iShare/Source/icon@3x.png"; sourceTree = "<group>"; };
+		DBDA48A51BAE098500E28B07 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "iShare/Source/icon@2x.png"; sourceTree = "<group>"; };
+		DBDA48A81BAF09DF00E28B07 /* icon 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon 2.png"; path = "iShare/Source/icon 2.png"; sourceTree = "<group>"; };
 		DBE5C5131BA769A50050A5B1 /* todayBillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = todayBillsViewController.h; sourceTree = "<group>"; };
 		DBE5C5141BA769A50050A5B1 /* todayBillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = todayBillsViewController.m; sourceTree = "<group>"; };
 		DBE5C5161BA769B00050A5B1 /* thisWeekBillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thisWeekBillsViewController.h; sourceTree = "<group>"; };
@@ -566,6 +575,8 @@
 			children = (
 				DBE5C5121BA768930050A5B1 /* briefReportOfBills */,
 				DBE5C5111BA768680050A5B1 /* typeEditerClass */,
+				DBDA46C41BADF10100E28B07 /* UIViewController+Utils.h */,
+				DBDA46C51BADF10100E28B07 /* UIViewController+Utils.m */,
 				DB952E9B1B6799D400482B00 /* BillDetailViewController.h */,
 				DB952E9C1B6799D400482B00 /* BillDetailViewController.m */,
 				DB952EA11B6A72B800482B00 /* BillListWithFriendViewController.h */,
@@ -779,6 +790,7 @@
 		DB94B3D71B611817007AEE7F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				DBDA46C81BAE096500E28B07 /* icon */,
 				DBA988771BA26F8D00836FE7 /* typeIcom */,
 				DB914D2B1B9E709B00267BC9 /* redX.png */,
 				DB914D241B9D485E00267BC9 /* x.png */,
@@ -950,6 +962,16 @@
 			name = typeIcom;
 			sourceTree = "<group>";
 		};
+		DBDA46C81BAE096500E28B07 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				DBDA48A81BAF09DF00E28B07 /* icon 2.png */,
+				DBDA48A41BAE098500E28B07 /* icon@3x.png */,
+				DBDA48A51BAE098500E28B07 /* icon@2x.png */,
+			);
+			name = icon;
+			sourceTree = "<group>";
+		};
 		DBE5C5111BA768680050A5B1 /* typeEditerClass */ = {
 			isa = PBXGroup;
 			children = (
@@ -1026,7 +1048,7 @@
 		DB94B25E1B60FE7C007AEE7F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = caoyong;
 				TargetAttributes = {
 					DB94B2651B60FE7C007AEE7F = {
@@ -1035,6 +1057,7 @@
 					};
 					DB94B27E1B60FE7C007AEE7F = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = QRVGNC7P3Q;
 						TestTargetID = DB94B2651B60FE7C007AEE7F;
 					};
 				};
@@ -1065,6 +1088,7 @@
 			files = (
 				DBA988A81BA26FA200836FE7 /* barbell.png in Resources */,
 				DBA988CE1BA26FA200836FE7 /* Car and Bus.png in Resources */,
+				DBDA48A61BAE098500E28B07 /* icon@3x.png in Resources */,
 				DB0E85101B6C653300A1C74D /* payment.png in Resources */,
 				DB94B3D01B6117AE007AEE7F /* KeyboardNumericEntryKeyBackspaceGlyphTextured@2x.png in Resources */,
 				DB94B37D1B6117AD007AEE7F /* TableIcon3@2x.png in Resources */,
@@ -1106,6 +1130,7 @@
 				DB94B3AC1B6117AE007AEE7F /* visa@2x.png in Resources */,
 				DB94B3921B6117AE007AEE7F /* camera_disabled@2x.png in Resources */,
 				DB94B37E1B6117AD007AEE7F /* TableIcon4@2x.png in Resources */,
+				DBDA48A91BAF09DF00E28B07 /* icon 2.png in Resources */,
 				DB94B3CE1B6117AE007AEE7F /* GenericSeparator@2x.png in Resources */,
 				DB94B3981B6117AE007AEE7F /* globe_disabled@2x.png in Resources */,
 				DB94B3A01B6117AE007AEE7F /* tab_brightness_enabled@2x.png in Resources */,
@@ -1121,6 +1146,7 @@
 				DBA988C71BA26FA200836FE7 /* pizza.png in Resources */,
 				DBA988BF1BA26FA200836FE7 /* hamburger.png in Resources */,
 				DB94B3A41B6117AE007AEE7F /* tab_filters_enabled@2x.png in Resources */,
+				DBDA48A71BAE098500E28B07 /* icon@2x.png in Resources */,
 				DB94B3CA1B6117AE007AEE7F /* BackgroundTexture@2x.png in Resources */,
 				DB94B37A1B6117AD007AEE7F /* TableIcon0@2x.png in Resources */,
 				DBA988C91BA26FA200836FE7 /* sent.png in Resources */,
@@ -1284,6 +1310,7 @@
 				DB94B3881B6117AE007AEE7F /* YUDIVView.m in Sources */,
 				DB94B3771B6117AD007AEE7F /* RKTabItem.m in Sources */,
 				DB94B3841B6117AD007AEE7F /* SlideNavigationController.m in Sources */,
+				DBDA46C61BADF10100E28B07 /* UIViewController+Utils.m in Sources */,
 				DB94B3681B6117AD007AEE7F /* BillsTableViewCell.m in Sources */,
 				DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */,
 				DB914D281B9E54D900267BC9 /* RequestView.m in Sources */,
@@ -1373,10 +1400,13 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1392,10 +1422,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				PROVISIONING_PROFILE = "1451000e-f3aa-425f-9e8d-0c1c33ab3db4";
+				SDKROOT = iphoneos9.0;
 			};
 			name = Debug;
 		};
@@ -1416,9 +1447,11 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1429,9 +1462,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				PROVISIONING_PROFILE = "1451000e-f3aa-425f-9e8d-0c1c33ab3db4";
+				SDKROOT = iphoneos9.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1446,6 +1480,7 @@
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -1461,6 +1496,7 @@
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -1470,6 +1506,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1480,7 +1518,9 @@
 				);
 				INFOPLIST_FILE = iShareTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iShare.app/iShare";
 			};
 			name = Debug;
@@ -1489,13 +1529,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = iShareTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iShare.app/iShare";
 			};
 			name = Release;

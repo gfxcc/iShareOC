@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
@@ -49,7 +50,7 @@
     line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
     line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
     line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_creater.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
     line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
     
     
@@ -152,6 +153,8 @@
         _fullSizeView = [[FullSizeView alloc] initWithBounds:self.view.bounds SuperView:self.view ImageView:_takePicture Image:_image];
         [self.view addSubview:_fullSizeView];
     }
+    
+    
     
 }
 

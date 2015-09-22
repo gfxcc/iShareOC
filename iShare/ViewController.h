@@ -31,6 +31,7 @@
 @property(strong, nonatomic) NSMutableArray *bills;
 @property(strong, nonatomic) LeftMenuViewController *leftMenu;
 @property(strong, nonatomic) NSMutableArray *request;
+@property(strong, nonatomic) NSString *deviceToken;
 
 @property(strong, nonatomic) RKTabItem *billList;
 @property(strong, nonatomic) RKTabItem *analyze;
@@ -38,6 +39,7 @@
 @property(atomic) BOOL requestProcessing;
 @property(atomic) BOOL billProcessing;
 @property(atomic) BOOL updateAllBillsProcessing;
+@property(nonatomic) BOOL deviceTokenBool;
 
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
@@ -46,5 +48,6 @@
 - (void)changeShadow;
 - (void)obtain_bills;
 - (void)updateAllBills;
+- (void)sendToken; // send deviceToken to service
 @end
 

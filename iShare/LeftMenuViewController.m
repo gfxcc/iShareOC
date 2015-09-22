@@ -37,14 +37,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    
     self.tableView.separatorColor = [UIColor lightGrayColor];
     
     self.view.backgroundColor = RGB(61, 64, 71);
     
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *fileName = [NSString stringWithFormat:@"%@/friends",
                           documentsDirectory];
     NSString *content = [[NSString alloc] initWithContentsOfFile:fileName

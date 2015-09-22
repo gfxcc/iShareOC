@@ -66,7 +66,7 @@
     
     _yTitles = absoluteTitles;
     
-    int sum = absoluteTitles.count;
+    int sum = (int)absoluteTitles.count;
     
     float buttonWidth = SCREEN_WIDTH - PADDING_LEFT * 2 ;
     
@@ -118,7 +118,7 @@
     
     UIButton * thisBtn = (UIButton *)sender;
     
-    int thisRow = thisBtn.tag - Btn_BASE_TAG;
+    int thisRow = (int)thisBtn.tag - Btn_BASE_TAG;
     
     
     if([_deldge respondsToSelector:@selector(whenSelectViewTouchUpInside:) ]){

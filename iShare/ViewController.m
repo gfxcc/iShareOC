@@ -50,6 +50,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    // clear notification number
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
     //[self.navigationController.navigationBar setBackgroundColor:RGB(78, 107, 165)];
     self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
@@ -66,8 +69,7 @@
     [_addNewButtion addTarget:self action:@selector(buttonHighlight) forControlEvents:UIControlEventTouchDown];
     [_addNewButtion addTarget:self action:@selector(buttonNormal) forControlEvents:UIControlEventTouchUpInside];
     
-    _leftMenu = (LeftMenuViewController*)[mainStoryboard
-                                                                 instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+    _leftMenu = (LeftMenuViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
     
     _leftMenu.mainUINavgation = self.navigationController;
     _leftMenu.mainUIView = self;
@@ -113,11 +115,12 @@
     
 
     [self obtain_bills];
-    //[self keepSyn];
+    [self keepSyn];
     [self create_folder];
     
-    
-    
+    if (![_leftMenu.idText.text isEqualToString:@""] && _deviceTokenBool) {
+        [self sendToken];
+    }
 }
 
 - (void)buttonHighlight {
@@ -141,6 +144,34 @@
 //        NSLog(@"Present Modal View");
 //    }];
 //    
+}
+
+
+- (void)sendToken {
+    if (!_deviceTokenBool) {
+        NSLog(@"deviceToken does not exist!");
+        return;
+    }
+    
+    NSString *const kRemoteHost = ServerHost;
+    Repeated_string *request = [Repeated_string message];
+    NSString *t = _leftMenu.idText.text;
+    [request.contentArray addObject:t];
+    [request.contentArray addObject:_deviceToken];
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service send_DeviceTokenWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            NSLog(@"%@", response.information);
+            
+        } else if(error){
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"send_DeviceTokenWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
 }
 
 //start syn
@@ -320,6 +351,7 @@
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
     request.username = _leftMenu.idText.text;
+    NSLog(@"%@", request.username);
     request.start = @"0";
     request.amount = @"4";
     
@@ -574,6 +606,7 @@
     switch (indexPath.row) {
         case 0:
             [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
+            //[self performSegueWithIdentifier:@"test" sender:self];
             break;
         case 1:
             [self performSegueWithIdentifier:@"todayBills" sender:self];
