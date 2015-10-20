@@ -20,6 +20,8 @@
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     
+    _typeName.delegate = self;
+    
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveType)];
     self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:saveItem, nil];
     //[_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
@@ -33,6 +35,19 @@
 }
 
 - (void)saveType {
+    
+    // check typename valide
+    for (int i = 0; i != _typeName.text.length; i++) {
+        if ([_typeName.text characterAtIndex:i] == '#' || [_typeName.text characterAtIndex:i] == '\n') {
+            // invalid character
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"The second class type name cannot contain '*' and '\n'." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [updateAlert show];
+            return;
+            
+        }
+    }
+    
     
     [self.navigationController popToViewController:_typeEditerView animated:YES];
     // save first class type;
@@ -235,6 +250,12 @@
             break;
     }
     return imageName;
+}
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

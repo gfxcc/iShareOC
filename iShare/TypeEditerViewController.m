@@ -251,6 +251,7 @@
                   atomically:NO
                     encoding:NSUTF8StringEncoding
                        error:nil];
+        // delete from view
         [_typeArray removeObjectAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];

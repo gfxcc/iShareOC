@@ -68,16 +68,6 @@
 }
 
 - (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
-    _selectedIndex = indexPath.row;
-    _requestView = [[RequestView alloc] initWithTitle:[NSString stringWithFormat:@"I am %@", _LeftMenuView.idText.text] subtitle:@"t"];
-    _requestView.delegate = self;
-    [self.view addSubview:_requestView];
-    [_requestView show];
-
-}
-
-#pragma mark - RequestViewDelegate -
-- (void)sendRequest {
     
     // check already be friend.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -99,6 +89,19 @@
             return;
         }
     }
+    
+    _selectedIndex = indexPath.row;
+    _requestView = [[RequestView alloc] initWithTitle:[NSString stringWithFormat:@"I am %@", _LeftMenuView.idText.text] subtitle:@"t"];
+    _requestView.delegate = self;
+    [self.view addSubview:_requestView];
+    [_requestView show];
+
+}
+
+#pragma mark - RequestViewDelegate -
+- (void)sendRequest {
+    
+    
 
     // start grpc
     NSString * const kRemoteHost = ServerHost;

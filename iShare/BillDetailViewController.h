@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CYkeyboard.h"
-#import <gRPC_pod/IShare.pbrpc.h>
-#import <gRPC_pod/IShare.pbobjc.h>
+
 #import "FullSizeView.h"
 
 @interface BillDetailViewController : UIViewController
@@ -38,10 +37,9 @@
 
 
 @property (strong, nonatomic) UIImage *image;
-
 @property (strong, nonatomic) FullSizeView *fullSizeView;
-
 @property (strong, nonatomic) CYkeyboard *keyboard;
-
 @property (strong, nonatomic) NSString *billId;
+@property (strong, nonatomic) UIViewController *mainUIView;
+
 @end

@@ -23,7 +23,7 @@
 
 }
 
-- (void)initWithID:(NSString *)bill_id amount:(NSString *)amount type:(NSString *)type date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater paidBy:(NSString *)paidBy note:(NSString *)note image:(NSString *)image paidStatus:(NSString *)paidStatus {
+- (void)initWithID:(NSString *)bill_id amount:(NSString *)amount type:(NSString *)type date:(NSString *)date members:(NSMutableArray *)members creater:(NSString *)creater paidBy:(NSString *)paidBy note:(NSString *)note image:(NSString *)image paidStatus:(NSString *)paidStatus typeIcon:(NSString *)typeIcon {
     _bill_id = bill_id;
     _amount = amount;
     _type = type;
@@ -34,6 +34,7 @@
     _note = note;
     _image = image;
     _paidStatus = paidStatus;
+    _typeIcon = typeIcon;
 }
 
 - (void)initWithBill:(Bill *)bill {

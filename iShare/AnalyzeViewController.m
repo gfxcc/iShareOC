@@ -10,6 +10,7 @@
 #import "FriendWithBillTableViewCell.h"
 #import "BillListWithFriendViewController.h"
 #import "Bill.h"
+#import "ODRefreshControl.h"
 
 @interface AnalyzeViewController ()
 
@@ -29,6 +30,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    ODRefreshControl *refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    [refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     
@@ -73,7 +77,7 @@
             [members addObject:bill_content[j + 8]];
         }
         Bill *bill = [[Bill alloc] init];
-        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18]];
+        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         //
         // get login username
         fileName = [NSString stringWithFormat:@"%@/friends",
@@ -168,6 +172,10 @@
 }
 
 
+- (void)refresh {
+
+}
+
 #pragma mark -
 #pragma mark TableView delegate
 
@@ -218,6 +226,7 @@
         billList.navigationItem.title = _friendsArray[[_tableView indexPathForSelectedRow].row];
         billList.sum = [_result objectAtIndex:[_tableView indexPathForSelectedRow].row];
         billList.idText = _idText;
+        billList.mainUIView = _mainUIView;
     }
 }
 

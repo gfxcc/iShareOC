@@ -127,7 +127,7 @@
         
     }
     
-    if(_whenSelectViewTouchUpInside){
+    if(_whenSelectViewTouchUpInside && thisRow < _yTitles.count - 1){
     
         _whenSelectViewTouchUpInside(thisRow);
         

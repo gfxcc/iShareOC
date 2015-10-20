@@ -16,5 +16,6 @@
 @property(strong, nonatomic) NSMutableArray *billsWithFriend;
 @property(strong, nonatomic) NSMutableArray *result;
 @property(strong, nonatomic) NSString *idText;
+@property (strong, nonatomic) UIViewController *mainUIView;
 
 @end

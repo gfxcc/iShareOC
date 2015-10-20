@@ -17,20 +17,23 @@
 #import "DateTranslate.h"
 #import "BillDetailViewController.h"
 #import "BillListViewController.h"
+#import "AnalyzeViewController.h"
 #import "Request.h"
 #import "MessageCenterViewController.h"
 #import "AddNewShareViewController.h"
+#import "AppDelegate.h"
+#import "ABCIntroView.h"
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
-@interface ViewController ()
+@interface ViewController () <ABCIntroViewDelegate>
 
 @property (strong, nonatomic) BillsTableViewCell *lastCell;
 @property (strong, nonatomic) BillsTableViewCell *todayCell;
 @property (strong, nonatomic) BillsTableViewCell *thisWeekCell;
 @property (strong, nonatomic) BillsTableViewCell *thisMonthCell;
-
+@property ABCIntroView *introView;
 @end
 
 @implementation ViewController
@@ -48,6 +51,33 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    NSUserDefaults *theDefaults;
+    int  launchCount;
+    //Set up the properties for the integer and default.
+    theDefaults = [NSUserDefaults standardUserDefaults];
+    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
+    [theDefaults setInteger:launchCount forKey:@"hasRun"];
+    [theDefaults synchronize];
+    
+    //Log the amount of times the application has been run
+    NSLog(@"This application has been run %d amount of times", launchCount);
+    
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.021"]) {
+        // Set the value to YES
+        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.021"];
+        self.navigationController.navigationBar.hidden = YES;
+        //Run your first launch code (Bring user to info/setup screen, etc.)
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if (![defaults objectForKey:@"intro_screen_viewed"]) {
+            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
+            self.introView.delegate = self;
+            self.introView.backgroundColor = [UIColor greenColor];
+            [self.view addSubview:self.introView];
+        }
+    }
+    
     // Do any additional setup after loading the view, typically from a nib.
     
     // clear notification number
@@ -76,6 +106,7 @@
     
     [SlideNavigationController sharedInstance].leftMenu = _leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
+    [SlideNavigationController sharedInstance].enableShadow = NO;
     [_leftMenu viewDidLoad];
     
     _tableView.dataSource = self;
@@ -146,6 +177,23 @@
 //    
 }
 
+#pragma mark - ABCIntroViewDelegate Methods
+
+-(void)onDoneButtonPressed{
+    
+    //    Uncomment so that the IntroView does not show after the user clicks "DONE"
+    //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //    [defaults setObject:@"YES"forKey:@"intro_screen_viewed"];
+    //    [defaults synchronize];
+    self.navigationController.navigationBar.hidden = NO;
+    [UIView animateWithDuration:1.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.introView.alpha = 0;
+        
+    } completion:^(BOOL finished) {
+        [self.introView removeFromSuperview];
+        
+    }];
+}
 
 - (void)sendToken {
     if (!_deviceTokenBool) {
@@ -173,6 +221,22 @@
         }
     }];
 }
+
+
+
+- (void)checkFlag {
+    //AppDelegate appdelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    //AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    [TSMessage showNotificationInViewController:self
+//                                          title:@"checked flag"
+//                                       subtitle:[NSString stringWithFormat:@"%ld", (long)appDelegate.synchronismFlag]
+//                                           type:TSMessageNotificationTypeError
+//                                       duration:TSMessageNotificationDurationEndless];
+//    [TSMessage showNotificationWithTitle:@"GRPC ERROR"
+//                                subtitle:@"obtain_request"
+//                                    type:TSMessageNotificationTypeError];
+}
+
 
 //start syn
 - (void)keepSyn {
@@ -359,13 +423,17 @@
     [service obtain_billsWithRequest:request handler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
             Bill *bill = [[Bill alloc] init];
-            [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus];
+            [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
 
             [_bill_latest addObject:bill];
             NSLog(@"%@", response.data_p);
 
         } else if (error) {
-            
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"obtain_billsWithRequest part"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         } else {
             [_tableView reloadData];
             
@@ -389,7 +457,7 @@
                         
                         for (NSInteger j = i - 1; j >= 0; j--) {
                             bill = [_bill_latest objectAtIndex:j];
-                            NSString *bill_string = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", bill.bill_id, bill.amount, bill.type, bill.date, bill.creater, bill.paidBy, bill.note, bill.image, bill.members[0], bill.members[1], bill.members[2], bill.members[3], bill.members[4], bill.members[5], bill.members[6], bill.members[7], bill.members[8], bill.members[9], bill.paidStatus];
+                            NSString *bill_string = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", bill.bill_id, bill.amount, bill.type, bill.date, bill.creater, bill.paidBy, bill.note, bill.image, bill.members[0], bill.members[1], bill.members[2], bill.members[3], bill.members[4], bill.members[5], bill.members[6], bill.members[7], bill.members[8], bill.members[9], bill.paidStatus, bill.typeIcon];
                             [self addBillToFile:bill_string];
                         }
                         [TSMessage showNotificationWithTitle:@"New Bill"
@@ -416,19 +484,34 @@
     request.amount = @"all";
     
     [_bills removeAllObjects];
+    NSMutableArray *bills = [[NSMutableArray alloc] init]; // content for last bill
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_billsWithRequest:request handler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
-            
-            NSString *bill = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", response.billId, response.amount, response.type, response.data_p, response.creater, response.paidBy, response.note, response.image, response.membersArray[0], response.membersArray[1], response.membersArray[2], response.membersArray[3], response.membersArray[4], response.membersArray[5], response.membersArray[6], response.membersArray[7], response.membersArray[8], response.membersArray[9], response.paidStatus];
-            [_bills addObject:bill];
+            Bill *bill = [[Bill alloc] init];
+            [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
+            if (bills.count < 4) {
+                [bills addObject:bill];
+            }
+            NSString *billString = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", response.billId, response.amount, response.type, response.data_p, response.creater, response.paidBy, response.note, response.image, response.membersArray[0], response.membersArray[1], response.membersArray[2], response.membersArray[3], response.membersArray[4], response.membersArray[5], response.membersArray[6], response.membersArray[7], response.membersArray[8], response.membersArray[9], response.paidStatus, response.typeIcon];
+            [_bills addObject:billString];
         } else if (error) {
-            
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"obtain_billsWithRequest All"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         } else {
             [self deleteAllBills];
             for (NSInteger i = _bills.count - 1; i >= 0; i--) {
                 [self addBillToFile:_bills[i]];
             }
+            
+            [_bill_latest removeAllObjects];
+            for (int i = 0;i != bills.count; i++) {
+                [_bill_latest addObject:bills[i]];
+            }
+            
             [_tableView reloadData];
             [self finishUpdate];
         }
@@ -446,7 +529,11 @@
         
         
         } else if (error) {
-            NSLog(@"reset error");
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"reset_StatusWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         }
     }];
     
@@ -480,7 +567,7 @@
         default:
             break;
     }
-    
+
 }
 
 - (void)tabView:(RKTabView *)tabView tabBecameDisabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
@@ -556,7 +643,7 @@
     
     switch (indexPath.row) {
         case 0:
-            [_lastCell initWithTypeIcon:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", bill.type]]
+            [_lastCell initWithTypeIcon:[UIImage imageNamed:bill.typeIcon]
                              noteOrType:[bill.note isEqualToString:@""] ? bill.type : bill.note
                                    date:date[0]
                                  amount:bill.amount
@@ -628,10 +715,12 @@
     if ([segue.identifier isEqualToString:@"lastBillDetail"]) {
         BillDetailViewController *billDetail = (BillDetailViewController *)[segue destinationViewController];
         billDetail.billId = [[self getLatestBill] componentsSeparatedByString:@"*"][0];
+        billDetail.mainUIView = self;
 
     } else if ([segue.identifier isEqualToString:@"billList"]) {
         BillListViewController *billList = (BillListViewController *)[segue destinationViewController];
         billList.idText = _leftMenu.idText.text;
+        billList.mainUIView = self;
     } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
         MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
         messageCenter.idText = _leftMenu.idText.text;
@@ -640,6 +729,9 @@
         //
         AddNewShareViewController *addNewBill = (AddNewShareViewController *)([navgation viewControllers][0]);
         addNewBill.mainUIView = self;
+    } else if ([segue.identifier isEqualToString:@"analyze"]) {
+        AnalyzeViewController *analyzeView = (AnalyzeViewController *)[segue destinationViewController];
+        analyzeView.mainUIView = self;
     }
 }
 

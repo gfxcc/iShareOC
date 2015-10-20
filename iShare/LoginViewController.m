@@ -77,8 +77,36 @@
     
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if ([textField isEqual:_UserNameTextField]) {
+        [self usernameCheck];
+    }
+}
 
-#pragma mark 移开手动画
+- (void)usernameCheck {
+    NSString *username = _UserNameTextField.text;
+    if ([username isEqualToString:@""]) {
+        return;
+    }
+    // start check username. first, remove blank
+    for (; [username characterAtIndex:username.length - 1] == ' '; ) {
+        username = [username substringToIndex:username.length - 1];
+    }
+    // check invalid character
+    for (int i = 0; i != username.length; i++) {
+        if ([username characterAtIndex:i] == '*') {
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"* is invalid character. Please change username." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [updateAlert show];
+            [_UserNameTextField setText:@""];
+            return;
+        }
+    }
+    
+    [_UserNameTextField setText:username];
+}
+
+#pragma mark
 -(void)AnimationPasswordToUser{
     
     [UIView animateWithDuration:0.5f animations:^{
@@ -95,7 +123,7 @@
     
 }
 
-#pragma mark 捂眼
+#pragma mark
 -(void)AnimationUserToPassword{
     [UIView animateWithDuration:0.5f animations:^{
         
@@ -120,7 +148,7 @@
 
 
 - (IBAction)logIn:(id)sender {
-    
+    [self usernameCheck];
     if ([_UserNameTextField.text isEqualToString:@""] || [_PasswordTextField.text isEqualToString:@""]) {
         UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Warming" message: @"Invalid Email or Password." delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
         [updateAlert show];

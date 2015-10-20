@@ -84,6 +84,9 @@
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     for (NSInteger i = 0; i != bills.count; i++) {
+        if ([bills[i] isEqualToString:@""]) {
+            continue;
+        }
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
         NSMutableArray *members = [[NSMutableArray alloc] init];
         for (int j = 0; j != 10; j++) {
@@ -93,7 +96,7 @@
             [members addObject:bill_content[j + 8]];
         }
         Bill *bill = [[Bill alloc] init];
-        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18]];
+        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         
         
         
@@ -200,7 +203,7 @@
     [cell setUserInteractionEnabled:YES];
     [cell addGestureRecognizer:myLabelGesture2];
     
-    UIImageView *lineImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 59, 320, 1)];
+    UIImageView *lineImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 59, [UIScreen mainScreen].bounds.size.width, 1)];
     lineImage.image = [UIImage imageNamed:@"line.png"];
     [cell addSubview:lineImage];
     
@@ -221,8 +224,8 @@
     Bill *bill = [[_billsWithMonth objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSArray *date = [bill.date componentsSeparatedByString:@"-"];
     NSString *day = [date[2] componentsSeparatedByString:@" "][0];
-    [cell initWithType:bill.type amount:[NSString stringWithFormat:@"%.1f", (bill.amount.doubleValue / bill.members.count)]  memberCount:[NSString stringWithFormat:@"%ld", bill.members.count] day:day dayHiden:NO];
- 
+    [cell initWithType:bill.type TypeIcon:bill.typeIcon amount:[NSString stringWithFormat:@"%.1f", (bill.amount.doubleValue / bill.members.count)]  memberCount:[NSString stringWithFormat:@"%ld", bill.members.count] day:day dayHiden:NO];
+     
     // day hiden or not
     if (indexPath.row != 0) {
         Bill *preBill = [[_billsWithMonth objectAtIndex:indexPath.section] objectAtIndex:(indexPath.row - 1)];
@@ -269,7 +272,7 @@
         BillDetailViewController *billDetail = (BillDetailViewController *)[segue destinationViewController];
         Bill *bill = [[_billsWithMonth objectAtIndex:[_tableView indexPathForSelectedRow].section] objectAtIndex:[_tableView indexPathForSelectedRow].row];
         billDetail.billId = bill.bill_id;
-        
+        billDetail.mainUIView = _mainUIView;
     }
 }
 

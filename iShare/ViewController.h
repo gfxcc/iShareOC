@@ -49,5 +49,6 @@
 - (void)obtain_bills;
 - (void)updateAllBills;
 - (void)sendToken; // send deviceToken to service
+- (void)checkFlag;
 @end
 

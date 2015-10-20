@@ -279,7 +279,7 @@
             [members addObject:bill_content[j + 8]];
         }
         Bill *bill = [[Bill alloc] init];
-        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18]];
+        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         
         BOOL isMember = NO;
         if ([req.sender isEqualToString:bill.paidBy]) {

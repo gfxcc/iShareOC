@@ -15,12 +15,15 @@
 
 @interface AppDelegate ()
 
+@property(strong, nonatomic) ViewController *mainUI;
+
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     // Override point for customization after application launch.
     UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
@@ -62,10 +65,8 @@
     //UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     //UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     ViewController *mainUI = (ViewController *)[UIViewController currentViewController];
+    _mainUI = mainUI;
 
-
-    
-    
     mainUI.deviceToken = tokenString;
     mainUI.deviceTokenBool = true;
     [mainUI sendToken];
@@ -84,9 +85,14 @@
 //接收到推送消息
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Get Remote Notification" message:[NSString stringWithFormat:@"%@", userInfo] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    
-    [updateAlert show];
+//    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Get Remote Notification" message:[NSString stringWithFormat:@"%@", userInfo] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//    
+//    [updateAlert show];
+//    [TSMessage showNotificationInViewController:_mainUI
+//                                          title:@"didReceiveRemoteNotification"
+//                                       subtitle:[NSString stringWithFormat:@"%@", userInfo]
+//                                           type:TSMessageNotificationTypeError
+//                                       duration:TSMessageNotificationDurationEndless];
     NSLog(@"%@", userInfo);
 }
 ///////////////////

@@ -19,6 +19,6 @@
 @property (nonatomic) NSInteger countOfBillsNeedPaid;
 @property (strong, nonatomic) NSMutableArray *billsWithMonth;
 @property (strong, nonatomic) NSString *sum;
-
+@property (strong, nonatomic) UIViewController *mainUIView;
 
 @end

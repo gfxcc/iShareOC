@@ -7,6 +7,10 @@
 //
 
 #import "BillDetailViewController.h"
+#import "ViewController.h"
+#import <gRPC_pod/IShare.pbrpc.h>
+#import <gRPC_pod/IShare.pbobjc.h>
+#import <TSMessageView.h>
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -24,7 +28,7 @@
     self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
     //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteConfirm)];
     
     //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
     //set date label
@@ -125,6 +129,12 @@
                 } else {
                     [self downloadPicture:imageName];
                 }
+            } else if (![billContent[19] isEqualToString:@""]) {
+                
+                [_takePicture setImage:[UIImage imageNamed:billContent[19]]];
+                _takePicture.backgroundColor = [UIColor whiteColor];
+                //_image = [UIImage imageNamed:billContent[19]];
+                
             }
             
             for (int j = 8; j != 18; j++) {
@@ -158,6 +168,61 @@
     
 }
 
+- (void)deleteConfirm {
+    // check permission
+    ViewController *mainUI = (ViewController *)_mainUIView;
+    if (![_paidBy.text isEqualToString:mainUI.leftMenu.idText.text]) {
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"Only user who paid this bill can delete it." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        
+        [updateAlert show];
+        return;
+    }
+    
+    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"I want to delete this bill." delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+    
+    [updateAlert show];
+    return;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+    {
+        [self deleteBill];
+    }
+}
+
+- (void)deleteBill {
+    
+    
+    NSString * const kRemoteHost = ServerHost;
+    Share_inf *request = [Share_inf message];
+    request.billId = _billId;
+    for (int i = 0; i != 10; i++) {
+        if (i < _memberArray.count) {
+            [request.membersArray addObject:_memberArray[i]];
+        } else {
+            [request.membersArray addObject:@""];
+        }
+    }
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service delete_billWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            [self.navigationController popToViewController:_mainUIView animated:YES];
+            [TSMessage showNotificationWithTitle:@"Delete Success"
+                                        subtitle:@""
+                                            type:TSMessageNotificationTypeSuccess];
+        } else if (error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"delete_billWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+    
+    
+}
 
 - (void)downloadPicture:(NSString*)image {
     

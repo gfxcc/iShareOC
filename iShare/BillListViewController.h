@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) NSMutableArray *billsWithMonth;
 @property (strong, nonatomic) NSString *idText;
+@property (strong, nonatomic) UIViewController *mainUIView;
 
 - (UIImage *)imageWithColor:(UIColor *)color;
 

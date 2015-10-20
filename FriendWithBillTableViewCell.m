@@ -22,6 +22,9 @@
 - (void)initWithIcon:(UIImage *)icon username:(NSString *)username amount:(NSString *)amount {
     //self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
+//    _icon.layer.cornerRadius = 3;
+//    _icon.clipsToBounds = YES;
+//    _icon.layer.shouldRasterize = YES;
     _icon.image = icon;
     _username.text = username;
     _amount.text = amount;

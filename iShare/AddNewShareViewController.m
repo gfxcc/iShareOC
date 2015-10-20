@@ -64,7 +64,7 @@
     line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
     line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
     line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_creater.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
     line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
     
     
@@ -250,6 +250,7 @@
     }
     request.note = _comment.text;
     
+    // set image name
     request.image = NULL;
     if (_customPic) {
         NSDate *now = [NSDate date];
@@ -260,6 +261,7 @@
         [self send_imgae:_takePicture.imageView.image name:request.image path:@"billsImage"];
     }
     
+    // set member
     for (int i = 0; i != _keyboard.selectedItems.count; i++) {
         NSInteger index = [_keyboard.selectedItems[i] integerValue];
         [request.membersArray addObject:[_keyboard.memberArray objectAtIndex:index]];
@@ -269,6 +271,10 @@
         [request.membersArray addObject:@""];
     }
     
+    // set type icon name
+    NSMutableArray *type = _keyboard.typeArray[[_keyboard.typePicker selectedRowInComponent:0]];
+    request.typeIcon = [NSString stringWithFormat:@"%@.png", type[([_keyboard.typePicker selectedRowInComponent:1] + 1)*2 + 1]];
+    NSLog(@"%@", request.typeIcon);
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service create_shareWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {

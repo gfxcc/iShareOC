@@ -21,6 +21,8 @@
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     
+    _typeName.delegate = self;
+    
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextToSecondClassType)];
     self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:saveItem, nil];
     //[_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
@@ -34,6 +36,19 @@
 }
 
 - (void)nextToSecondClassType {
+    
+    // check typename valide
+    for (int i = 0; i != _typeName.text.length; i++) {
+        if ([_typeName.text characterAtIndex:i] == '#' || [_typeName.text characterAtIndex:i] == '\n') {
+            // invalid character
+            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"The second class type name cannot contain '*' and '\n'." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [updateAlert show];
+            return;
+            
+        }
+    }
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"%@/billType",
@@ -262,6 +277,13 @@
     }
     return imageName;
 }
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddSecondClassTypeViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface AddSecondClassTypeViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UITextField *typeName;
