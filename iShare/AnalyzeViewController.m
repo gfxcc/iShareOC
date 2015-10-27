@@ -11,8 +11,11 @@
 #import "BillListWithFriendViewController.h"
 #import "Bill.h"
 #import "ODRefreshControl.h"
+#import "ViewController.h"
 
 @interface AnalyzeViewController ()
+
+@property (nonatomic, strong) ODRefreshControl *refreshControl;
 
 @end
 
@@ -30,8 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    ODRefreshControl *refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-    [refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
@@ -173,7 +176,13 @@
 
 
 - (void)refresh {
-
+    
+    ViewController *mainUI = (ViewController*)_mainUIView;
+    [mainUI updateAllBills];
+    
+    [UIView animateWithDuration:2.0 animations:^{
+            [_refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark -

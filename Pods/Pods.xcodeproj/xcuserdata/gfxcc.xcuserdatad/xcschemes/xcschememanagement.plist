@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JDStatusBarNotification.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-iShare.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>3C83ACAE435B61B925B274FAB40ED9C9</key>
+		<key>3D0F4913480F1F220EEDDF2069E34D02</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>66DE95DD422B9E08C6C18164705988D9</key>
+		<key>418F69572DC6690C2BDC1B67BA50F9EC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A767292837255FBC6047CB88C8CF776</key>
+		<key>45632C74FB46F52DAFD4E9CB5115F546</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>965012B54775778B351D009AFFBEC05D</key>
+		<key>54CC727B0D8849D8F9B4FF9F238D3BA7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ABB9F0B36D530F7A334EF50F6829C4FC</key>
+		<key>76859BC596C290157131C388EDFE2400</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C4BF013BF45B847AEE9689D76C6C75F8</key>
+		<key>7E67D6D6AA3FF9378DDA58F469C3FB33</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CD2DE08E63BE3CF363C9687E0511F257</key>
+		<key>E9EF397B95762DDB254C71DDCB4B1381</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FF5CFD6F2B044B2583AE363E38A9D0EF</key>
 		<dict>
 			<key>primary</key>
 			<true/>

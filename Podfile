@@ -5,5 +5,6 @@ target 'iShare' do
 
 pod 'gRPC_pod', :path => './Server'
 pod "TSMessages"
+pod "JDStatusBarNotification"
 
 end

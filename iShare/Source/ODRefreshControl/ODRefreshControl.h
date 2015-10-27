@@ -11,19 +11,22 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface ODRefreshControl : UIControl {
-    CAShapeLayer *_shapeLayer;
-    CAShapeLayer *_arrowLayer;
-    CAShapeLayer *_highlightLayer;
-    UIView *_activity;
-    BOOL _refreshing;
-    BOOL _canRefresh;
-    BOOL _ignoreInset;
-    BOOL _ignoreOffset;
-    BOOL _didSetInset;
-    BOOL _hasSectionHeaders;
-    CGFloat _lastOffset;
-}
+@protocol ODRefreshControlContentView <NSObject>
+
+@property (nonatomic,getter=isEnabled) BOOL enabled;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, assign) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
+@property (nonatomic, strong) UIColor *activityIndicatorViewColor;
+
+- (CGFloat)triggerHeight;
+- (CGFloat)openHeight;
+
+- (void)beginRefreshing:(BOOL)animated;
+- (void)endRefreshing;
+
+@end
+
+@interface ODRefreshControl : UIControl
 
 @property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
 

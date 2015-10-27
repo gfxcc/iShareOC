@@ -75,12 +75,11 @@ typedef struct {
   grpc_mdstr *status_key;
 } channel_data;
 
-static void bubble_up_error(grpc_call_element *elem, const char *error_msg) {
+static void bubble_up_error(grpc_call_element *elem, grpc_status_code status,
+                            const char *error_msg) {
   call_data *calld = elem->call_data;
-  channel_data *chand = elem->channel_data;
-  grpc_transport_stream_op_add_cancellation(
-      &calld->op, GRPC_STATUS_UNAUTHENTICATED,
-      grpc_mdstr_from_string(chand->md_ctx, error_msg));
+  gpr_log(GPR_ERROR, "Client side authentication failure: %s", error_msg);
+  grpc_transport_stream_op_add_cancellation(&calld->op, status);
   grpc_call_next_op(elem, &calld->op);
 }
 
@@ -95,7 +94,8 @@ static void on_credentials_metadata(void *user_data,
   grpc_metadata_batch *mdb;
   size_t i;
   if (status != GRPC_CREDENTIALS_OK) {
-    bubble_up_error(elem, "Credentials failed to get metadata.");
+    bubble_up_error(elem, GRPC_STATUS_UNAUTHENTICATED,
+                    "Credentials failed to get metadata.");
     return;
   }
   GPR_ASSERT(num_md <= MAX_CREDENTIALS_METADATA_COUNT);
@@ -153,9 +153,10 @@ static void send_security_metadata(grpc_call_element *elem,
   }
 
   if (channel_creds_has_md && call_creds_has_md) {
-    calld->creds = grpc_composite_credentials_create(channel_creds, ctx->creds);
+    calld->creds =
+        grpc_composite_credentials_create(channel_creds, ctx->creds, NULL);
     if (calld->creds == NULL) {
-      bubble_up_error(elem,
+      bubble_up_error(elem, GRPC_STATUS_INVALID_ARGUMENT,
                       "Incompatible credentials set on channel and call.");
       return;
     }
@@ -183,7 +184,7 @@ static void on_host_checked(void *user_data, grpc_security_status status) {
     char *error_msg;
     gpr_asprintf(&error_msg, "Invalid host %s set in :authority metadata.",
                  grpc_mdstr_as_c_string(calld->host));
-    bubble_up_error(elem, error_msg);
+    bubble_up_error(elem, GRPC_STATUS_INVALID_ARGUMENT, error_msg);
     gpr_free(error_msg);
   }
 }
@@ -200,9 +201,10 @@ static void auth_start_transport_op(grpc_call_element *elem,
   channel_data *chand = elem->channel_data;
   grpc_linked_mdelem *l;
   size_t i;
-  grpc_client_security_context* sec_ctx = NULL;
+  grpc_client_security_context *sec_ctx = NULL;
 
-  if (calld->security_context_set == 0) {
+  if (calld->security_context_set == 0 &&
+      op->cancel_with_status == GRPC_STATUS_OK) {
     calld->security_context_set = 1;
     GPR_ASSERT(op->context);
     if (op->context[GRPC_CONTEXT_SECURITY].value == NULL) {
@@ -217,11 +219,11 @@ static void auth_start_transport_op(grpc_call_element *elem,
         chand->security_connector->base.auth_context, "client_auth_filter");
   }
 
-  if (op->bind_pollset) {
+  if (op->bind_pollset != NULL) {
     calld->pollset = op->bind_pollset;
   }
 
-  if (op->send_ops && !calld->sent_initial_metadata) {
+  if (op->send_ops != NULL && !calld->sent_initial_metadata) {
     size_t nops = op->send_ops->nops;
     grpc_stream_op *ops = op->send_ops->ops;
     for (i = 0; i < nops; i++) {
@@ -253,7 +255,7 @@ static void auth_start_transport_op(grpc_call_element *elem,
             gpr_asprintf(&error_msg,
                          "Invalid host %s set in :authority metadata.",
                          call_host);
-            bubble_up_error(elem, error_msg);
+            bubble_up_error(elem, GRPC_STATUS_INVALID_ARGUMENT, error_msg);
             gpr_free(error_msg);
           }
           return; /* early exit */
@@ -316,10 +318,12 @@ static void init_channel_elem(grpc_channel_element *elem, grpc_channel *master,
       (grpc_channel_security_connector *)GRPC_SECURITY_CONNECTOR_REF(
           sc, "client_auth_filter");
   chand->md_ctx = metadata_context;
-  chand->authority_string = grpc_mdstr_from_string(chand->md_ctx, ":authority");
-  chand->path_string = grpc_mdstr_from_string(chand->md_ctx, ":path");
-  chand->error_msg_key = grpc_mdstr_from_string(chand->md_ctx, "grpc-message");
-  chand->status_key = grpc_mdstr_from_string(chand->md_ctx, "grpc-status");
+  chand->authority_string =
+      grpc_mdstr_from_string(chand->md_ctx, ":authority", 0);
+  chand->path_string = grpc_mdstr_from_string(chand->md_ctx, ":path", 0);
+  chand->error_msg_key =
+      grpc_mdstr_from_string(chand->md_ctx, "grpc-message", 0);
+  chand->status_key = grpc_mdstr_from_string(chand->md_ctx, "grpc-status", 0);
 }
 
 /* Destructor for channel data */
@@ -344,6 +348,8 @@ static void destroy_channel_elem(grpc_channel_element *elem) {
 }
 
 const grpc_channel_filter grpc_client_auth_filter = {
-    auth_start_transport_op, grpc_channel_next_op, sizeof(call_data),
-    init_call_elem,          destroy_call_elem,    sizeof(channel_data),
-    init_channel_elem,       destroy_channel_elem, "client-auth"};
+    auth_start_transport_op, grpc_channel_next_op,
+    sizeof(call_data),       init_call_elem,
+    destroy_call_elem,       sizeof(channel_data),
+    init_channel_elem,       destroy_channel_elem,
+    grpc_call_next_get_peer, "client-auth"};

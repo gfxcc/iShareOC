@@ -222,8 +222,8 @@
 		DBE5C51B1BA769C00050A5B1 /* thisMonthBillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE5C51A1BA769C00050A5B1 /* thisMonthBillsViewController.m */; };
 		DBE695121BA34F6000B3CD62 /* CustomIconCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */; };
 		DBE695181BA3E40300B3CD62 /* AddFirstClassTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */; };
-		DBFAD4C61BD1AC7200E25C1E /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = DBFAD4C51BD1AC7200E25C1E /* ODRefreshControl.m */; settings = {ASSET_TAGS = (); }; };
 		DBFAD4C81BD1ACCB00E25C1E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBFAD4C71BD1ACCB00E25C1E /* QuartzCore.framework */; };
+		DBFAD4CB1BD7D2AE00E25C1E /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = DBFAD4CA1BD7D2AE00E25C1E /* ODRefreshControl.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -519,9 +519,9 @@
 		DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomIconCollectionViewCell.m; path = iShare/CustomIconCollectionViewCell.m; sourceTree = "<group>"; };
 		DBE695161BA3E40300B3CD62 /* AddFirstClassTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFirstClassTypeViewController.h; sourceTree = "<group>"; };
 		DBE695171BA3E40300B3CD62 /* AddFirstClassTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFirstClassTypeViewController.m; sourceTree = "<group>"; };
-		DBFAD4C41BD1AC7200E25C1E /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODRefreshControl.h; sourceTree = "<group>"; };
-		DBFAD4C51BD1AC7200E25C1E /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODRefreshControl.m; sourceTree = "<group>"; };
 		DBFAD4C71BD1ACCB00E25C1E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DBFAD4C91BD7D2AE00E25C1E /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODRefreshControl.h; sourceTree = "<group>"; };
+		DBFAD4CA1BD7D2AE00E25C1E /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODRefreshControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1052,8 +1052,8 @@
 		DBFAD4C31BD1AC7200E25C1E /* ODRefreshControl */ = {
 			isa = PBXGroup;
 			children = (
-				DBFAD4C41BD1AC7200E25C1E /* ODRefreshControl.h */,
-				DBFAD4C51BD1AC7200E25C1E /* ODRefreshControl.m */,
+				DBFAD4C91BD7D2AE00E25C1E /* ODRefreshControl.h */,
+				DBFAD4CA1BD7D2AE00E25C1E /* ODRefreshControl.m */,
 			);
 			name = ODRefreshControl;
 			path = iShare/Source/ODRefreshControl;
@@ -1071,6 +1071,7 @@
 				DB94B2631B60FE7C007AEE7F /* Frameworks */,
 				DB94B2641B60FE7C007AEE7F /* Resources */,
 				26A0BEEFCB7627C48D757EA7 /* Copy Pods Resources */,
+				FC6554B83F3DDFF0366C6CE1 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1338,6 +1339,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		FC6554B83F3DDFF0366C6CE1 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iShare/Pods-iShare-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1387,7 +1403,7 @@
 				DB94B3C11B6117AE007AEE7F /* SlideNavigationContorllerAnimatorSlide.m in Sources */,
 				DB94B3EB1B6119F4007AEE7F /* LeftMenuViewController.m in Sources */,
 				DB94B38E1B6117AE007AEE7F /* YUBottomPopSelctView.m in Sources */,
-				DBFAD4C61BD1AC7200E25C1E /* ODRefreshControl.m in Sources */,
+				DBFAD4CB1BD7D2AE00E25C1E /* ODRefreshControl.m in Sources */,
 				DB94B3781B6117AD007AEE7F /* RKTabView.m in Sources */,
 				DB94B36B1B6117AD007AEE7F /* CYkeyboard.m in Sources */,
 				DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */,
