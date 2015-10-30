@@ -196,6 +196,7 @@
     
     
     NSString * const kRemoteHost = ServerHost;
+
     Share_inf *request = [Share_inf message];
     request.billId = _billId;
     for (int i = 0; i != 10; i++) {
@@ -250,7 +251,7 @@
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service receive_ImgWithRequest:request handler:^(BOOL done, Image *response, NSError *error) {
+    [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
         if (!done) {
             if (response.data_p.length == 0) {
                 return;

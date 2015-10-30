@@ -141,6 +141,7 @@
 
 - (void)obtain_friends {
     NSString * const kRemoteHost = ServerHost;
+
     Inf *request = [[Inf alloc] init];
     request.information = _idText.text;
     //NSString *t = _idText.text;
@@ -169,6 +170,7 @@
 
 - (void)delete_friend:(NSInteger)index {
     NSString * const kRemoteHost = ServerHost;
+    
     Repeated_string *request = [[Repeated_string alloc] init];
     [request.contentArray addObject:_idText.text];
     [request.contentArray addObject:_friendsArray[index]];
@@ -286,7 +288,7 @@
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service receive_ImgWithRequest:request handler:^(BOOL done, Image *response, NSError *error) {
+    [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
         if (!done) {
             if (response.data_p.length == 0) {
                 return;

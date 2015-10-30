@@ -18,9 +18,9 @@ PODS:
     - gRPC_pod/Messages (= 0.0.1)
     - gRPC_pod/Services (= 0.0.1)
   - gRPC_pod/Messages (0.0.1):
-    - Protobuf (~> 3.0.0-alpha-3)
+    - Protobuf (~> 3.0.0-alpha-4)
   - gRPC_pod/Services (0.0.1):
-    - gRPC (~> 0.5)
+    - gRPC (~> 0.11)
     - gRPC_pod/Messages
   - HexColors (2.2.1)
   - JDStatusBarNotification (1.5.2)
@@ -40,7 +40,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   gRPC: 25d5c4bc94988c483c4b429b7f341b776e7dd330
-  gRPC_pod: 4832ce1411a8e5523cfeb88bc335e72014e342f9
+  gRPC_pod: b917c2b340a6fe24877d4c74cf8637f0dfc85b59
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
   OpenSSL: 7f853fcada78e5162c2183b4d90ebbd0aa02f5ac

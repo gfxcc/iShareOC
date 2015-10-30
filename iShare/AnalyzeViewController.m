@@ -15,7 +15,9 @@
 
 @interface AnalyzeViewController ()
 
-@property (nonatomic, strong) ODRefreshControl *refreshControl;
+//@property (nonatomic, strong) ODRefreshControl *refreshControl;
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -33,8 +35,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+//    _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+//    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    
+    _refreshControl = [[UIRefreshControl alloc] init];
+    //_refreshControl.backgroundColor = [UIColor purpleColor];
+    //_refreshControl.tintColor = [UIColor whiteColor];
+    [_refreshControl addTarget:self
+                            action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [_tableView addSubview:_refreshControl];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
@@ -181,7 +191,7 @@
     [mainUI updateAllBills];
     
     [UIView animateWithDuration:2.0 animations:^{
-            [_refreshControl endRefreshing];
+        [_refreshControl endRefreshing];
     }];
 }
 

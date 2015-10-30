@@ -148,6 +148,7 @@
 
 
 - (IBAction)logIn:(id)sender {
+    NSLog(@"testsetets");
     [self usernameCheck];
     if ([_UserNameTextField.text isEqualToString:@""] || [_PasswordTextField.text isEqualToString:@""]) {
         UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Warming" message: @"Invalid Email or Password." delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
@@ -166,6 +167,7 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service loginWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
+            NSLog(@"inininin");
             if ([response.information isEqualToString:@"OK"]) {
                 
                 
@@ -200,7 +202,7 @@
             }
             
         } else if (error) {
-            //NSLog(@"Finished with error: %@", error);
+            NSLog(@"Finished with error: %@", error);
         }
     }];
 

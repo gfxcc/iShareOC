@@ -406,6 +406,7 @@
 
 - (void)makePayment {
     NSString * const kRemoteHost = ServerHost;
+
     
     NSMutableArray *paybills = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i != _countOfBillsNeedPaid; i++) {
@@ -444,6 +445,7 @@
 
 - (void)createRequestLog {
     NSString * const kRemoteHost = ServerHost;
+    
     
     Request *request = [Request message];
     request.sender = _idText;

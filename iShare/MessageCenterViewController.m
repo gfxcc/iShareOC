@@ -77,7 +77,7 @@
     request.information = _idText;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service obtain_requestWithRequest:request handler:^(BOOL done, Request *response, NSError *error){
+    [service obtain_requestWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
         if (!done) {
             Request_ *req = [[Request_ alloc] init];
             [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:nil request_date:response.requestDate response_date:nil];
@@ -103,7 +103,7 @@
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
 
-    [service obtain_requestLogHistoryWithRequest:request handler:^(BOOL done, Request *response, NSError *error){
+    [service obtain_requestLogHistoryWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
         if (!done) {
             Request_ *req = [[Request_ alloc] init];
             [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:response.response request_date:response.requestDate response_date:response.responseDate];
@@ -440,7 +440,7 @@
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service receive_ImgWithRequest:request handler:^(BOOL done, Image *response, NSError *error) {
+    [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
         if (!done) {
             if (response.data_p.length == 0) {
                 return;

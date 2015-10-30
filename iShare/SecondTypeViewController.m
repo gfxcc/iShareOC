@@ -85,7 +85,7 @@
         AddNewSecondClassTypeViewController *addSecondTypeView = (AddNewSecondClassTypeViewController *)[segue destinationViewController];
         //addSecondTypeView.typeEditerView = _typeEditerView;
         addSecondTypeView.navigationItem.title = @"Create second class type";
-        addSecondTypeView.indexOfFirstClassType = [_tableView indexPathForSelectedRow].row;
+        addSecondTypeView.indexOfFirstClassType = _indexOfType;
         addSecondTypeView.firstClassTypeView = self;
     }
     

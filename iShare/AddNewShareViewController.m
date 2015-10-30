@@ -39,6 +39,16 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add)];
     
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                          usedEncoding:nil
+                                                 error:nil];
+    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    NSArray *firstType = [linesOfFile[0] componentsSeparatedByString:@"#"];
+    _type.text = firstType.count == 0 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
     
     //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
     //set date label
@@ -108,6 +118,8 @@
     [_keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
     _keyboard.mainUI = self;
     [self.view addSubview:_keyboard];
+    [self label1Clicked];
+    [_keyboard amountMode];
     
     // test
 //    UITapGestureRecognizer* fadeOutTest = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fadeoutTouch)];
@@ -232,6 +244,7 @@
     }
     
     NSString * const kRemoteHost = ServerHost;
+    
     Share_inf *request = [Share_inf message];
     request.creater = _keyboard.memberArray[0];
     //NSLog(@"%@",request.creater);

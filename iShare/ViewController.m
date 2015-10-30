@@ -10,6 +10,7 @@
 #import <TSMessageView.h>
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import <GRPCClient/GRPCCall+Tests.h>
 #import <QuartzCore/QuartzCore.h>
 #import "Bill.h"
 #import "BillsTableViewCell.h"
@@ -51,7 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [GRPCCall useInsecureConnectionsForHost:ServerHost];
     
     NSUserDefaults *theDefaults;
     int  launchCount;
@@ -202,6 +203,7 @@
     }
     
     NSString *const kRemoteHost = ServerHost;
+    
     Repeated_string *request = [Repeated_string message];
     NSString *t = _leftMenu.idText.text;
     [request.contentArray addObject:t];
@@ -241,6 +243,7 @@
 //start syn
 - (void)keepSyn {
     NSString * const kRemoteHost = ServerHost;
+
     //[self deleteAllRequests];
     // Example gRPC call using a generated proto client library:
 
@@ -255,7 +258,7 @@
     //[_requestsWriter startWithWriteable:writable];
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     
-    [service synWithRequestsWriter:_requestsWriter handler:^(BOOL done, Syn_data *response, NSError *error) {
+    [service synWithRequestsWriter:_requestsWriter eventHandler:^(BOOL done, Syn_data *response, NSError *error) {
         if (!done) {
             NSLog(@"receive message:%@ %@ %@ %@", response.friend_p, response.bill, response.delete_p, response.request);
             
@@ -309,7 +312,7 @@
     request.information = _leftMenu.idText.text;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service obtain_requestLogWithRequest:request handler:^(BOOL done, Request *response, NSError *error){
+    [service obtain_requestLogWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
         if (!done) {
             Request_ *req = [[Request_ alloc] init];
             [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:response.response request_date:response.requestDate response_date:response.responseDate];
@@ -372,7 +375,7 @@
     request.information = _leftMenu.idText.text;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service obtain_requestWithRequest:request handler:^(BOOL done, Request *response, NSError *error){
+    [service obtain_requestWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
         if (!done) {
             Request_ *req = [[Request_ alloc] init];
             [req initWithRequest_id:response.requestId sender:response.sender receiver:response.receiver type:response.type content:response.content response:nil request_date:response.requestDate response_date:nil];
@@ -420,7 +423,7 @@
     request.amount = @"4";
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service obtain_billsWithRequest:request handler:^(BOOL done, Share_inf *response, NSError *error){
+    [service obtain_billsWithRequest:request eventHandler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
@@ -486,7 +489,7 @@
     [_bills removeAllObjects];
     NSMutableArray *bills = [[NSMutableArray alloc] init]; // content for last bill
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service obtain_billsWithRequest:request handler:^(BOOL done, Share_inf *response, NSError *error){
+    [service obtain_billsWithRequest:request eventHandler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
@@ -837,6 +840,27 @@
     [TSMessage showNotificationWithTitle:@"Your Title"
                                 subtitle:@"A description"
                                     type:TSMessageNotificationTypeSuccess];
+    
+    NSString *const kRemoteHost = ServerHost;
+    
+
+    HelloRequest *request = [HelloRequest message];
+    request.name = @"objective-c";
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service sayHelloWithRequest:request handler:^(HelloReply *response, NSError *error) {
+        if (response) {
+            NSLog(@"%@", response.message);
+            
+        } else if(error){
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"send_DeviceTokenWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+
 
 }
 
