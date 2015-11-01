@@ -58,26 +58,21 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.1019607843" green="0.60949432400000003" blue="0.70588235290000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cXF-kJ-FXb">
-                                                    <rect key="frame" x="206" y="6" width="22" height="22"/>
+                                                    <rect key="frame" x="201" y="8" width="40" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="EGk-4q-BPy">
-                                                    <rect key="frame" x="231" y="6" width="22" height="22"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2td-El-92M">
+                                                    <rect key="frame" x="212" y="8" width="40" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="CPo-FJ-5gF">
-                                                    <rect key="frame" x="206" y="29" width="22" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="BTM-TE-SAt">
-                                                    <rect key="frame" x="231" y="29" width="22" height="22"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="x5g-4n-hlz">
+                                                    <rect key="frame" x="242" y="8" width="40" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                 </imageView>
@@ -89,6 +84,11 @@
                                                     <color key="textColor" red="0.35686274509999999" green="0.40784313729999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="SNy-CD-i20">
+                                                    <rect key="frame" x="223" y="8" width="40" height="40"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                </imageView>
                                             </subviews>
                                             <animations/>
                                         </tableViewCellContentView>
@@ -98,9 +98,9 @@
                                             <outlet property="date" destination="hIq-RQ-6pb" id="YgA-Sn-lKw"/>
                                             <outlet property="noteOrType" destination="rYc-Kf-Z5d" id="4U0-S3-7gb"/>
                                             <outlet property="shareWith_0" destination="cXF-kJ-FXb" id="tf5-0P-0wb"/>
-                                            <outlet property="shareWith_1" destination="EGk-4q-BPy" id="a0h-tN-4cx"/>
-                                            <outlet property="shareWith_2" destination="CPo-FJ-5gF" id="my8-5K-vuf"/>
-                                            <outlet property="shareWith_3" destination="BTM-TE-SAt" id="ud2-Yu-Z9m"/>
+                                            <outlet property="shareWith_1" destination="2td-El-92M" id="chE-BE-jo5"/>
+                                            <outlet property="shareWith_2" destination="SNy-CD-i20" id="iGh-R2-GSJ"/>
+                                            <outlet property="shareWith_3" destination="x5g-4n-hlz" id="JsS-VA-rQC"/>
                                             <outlet property="type_icon" destination="fbb-mk-s2Q" id="vyn-Jh-9G5"/>
                                         </connections>
                                     </tableViewCell>
@@ -895,7 +895,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="FRB-4v-R4e">
-                                                    <rect key="frame" x="8" y="3" width="44" height="42"/>
+                                                    <rect key="frame" x="8" y="3" width="44" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <animations/>
                                                     <userDefinedRuntimeAttributes>
@@ -1008,6 +1008,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="03F-ZO-Xhk"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPj-Py-FTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1082,7 +1083,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bdf-yy-J9v">
-                                                <rect key="frame" x="28" y="149" width="112" height="30"/>
+                                                <rect key="frame" x="28" y="149" width="129" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
@@ -1162,6 +1163,19 @@
                                     <action selector="back_mainUI:" destination="YHW-gk-wbn" eventType="touchUpInside" id="BR2-Iw-ZZ5"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HLD-M3-94K">
+                                <rect key="frame" x="96" y="528" width="129" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <state key="normal" title="Sign Up">
+                                    <color key="titleColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="signUp:" destination="YHW-gk-wbn" eventType="touchUpInside" id="mrh-19-acA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
@@ -1179,6 +1193,7 @@
                         <outlet property="loginView" destination="t9K-dv-vXf" id="rNC-jG-340"/>
                         <outlet property="right_hidden" destination="xgD-mv-Xon" id="S0S-pC-HFG"/>
                         <outlet property="right_look" destination="Wvi-vK-muu" id="PBe-rl-9fs"/>
+                        <segue destination="lt0-6r-PmB" kind="push" identifier="transformToSignUp" id="4YE-y5-eok"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EUC-2W-UXE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1188,7 +1203,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="288" y="898"/>
+            <point key="canvasLocation" x="435" y="898"/>
         </scene>
         <!--Slide Navigation Controller-->
         <scene sceneID="jfG-qy-wgu">
@@ -1405,7 +1420,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="billcell" rowHeight="50" id="dlI-RM-VOa" customClass="BillTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="50"/>
+                                        <rect key="frame" x="0.0" y="86" width="320" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dlI-RM-VOa" id="mhM-w3-MbH">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
@@ -1470,7 +1485,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="monthcell" rowHeight="60" id="M3h-fK-dS2" customClass="MonthTableViewCell">
-                                        <rect key="frame" x="0.0" y="72" width="320" height="60"/>
+                                        <rect key="frame" x="0.0" y="136" width="320" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M3h-fK-dS2" id="zKy-qa-9Zc">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
@@ -1528,7 +1543,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="norecordcell" rowHeight="60" id="fds-ed-BlY">
-                                        <rect key="frame" x="0.0" y="132" width="320" height="60"/>
+                                        <rect key="frame" x="0.0" y="196" width="320" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fds-ed-BlY" id="1sD-C2-Bo9">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>

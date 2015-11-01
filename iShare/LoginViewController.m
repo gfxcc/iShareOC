@@ -10,6 +10,7 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
+#import "SignUpViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -167,7 +168,6 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service loginWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
-            NSLog(@"inininin");
             if ([response.information isEqualToString:@"OK"]) {
                 
                 
@@ -196,7 +196,7 @@
                     NSLog(@"Present Modal View");
                 }];
             } else {
-                UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Message" message: @"Wrong username or password" delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
+                UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Message" message:response.information delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
                 
                 [updateAlert show];
             }
@@ -209,11 +209,30 @@
 }
 
 
+- (IBAction)signUp:(id)sender {
+    
+    [self performSegueWithIdentifier:@"transformToSignUp" sender:self];
+    
+}
+
+
+
 - (IBAction)back_mainUI:(id)sender {
     
     [self dismissViewControllerAnimated:true completion:^{
         NSLog(@"Present Modal View");
     }];
+}
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:@"transformToSignUp"]) {
+        SignUpViewController *signUpView = (SignUpViewController *)[segue destinationViewController];
+        signUpView.LeftMenuView = _LeftMenuView;
+        signUpView.navigationItem.title = @"Sign up";
+    }
+    
 }
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField{

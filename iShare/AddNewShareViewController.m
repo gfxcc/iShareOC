@@ -48,7 +48,7 @@
                                                  error:nil];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     NSArray *firstType = [linesOfFile[0] componentsSeparatedByString:@"#"];
-    _type.text = firstType.count == 0 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
+    _type.text = firstType.count < 2 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
     
     //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
     //set date label

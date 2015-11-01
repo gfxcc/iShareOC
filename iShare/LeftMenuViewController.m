@@ -62,7 +62,7 @@
     [_idText setTextColor:RGB(255, 255, 255)];
     _idText.text = members.count == 0 ? @"" : members[0];
     if ([_idText.text isEqualToString:@""]) {
-        [_log_button setTitle:@"Log In" forState:UIControlStateNormal];
+        [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
     }
     
     _tableView.delegate = self;
@@ -230,7 +230,7 @@
     UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SignUpViewController *signUpPage = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpView"];
     
-    signUpPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    //signUpPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     signUpPage.LeftMenuView = self;
     [_mainUINavgation presentViewController:signUpPage animated:YES completion:^{
         NSLog(@"Present Modal View");
@@ -335,7 +335,7 @@
         mainUI.helloWorld.text = @"Sign In OR Log In";
         [self clean];
         
-        [_log_button setTitle:@"Log In" forState:UIControlStateNormal];
+        [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
         [_add_sign_button setTitle:@"Sign Up" forState:UIControlStateNormal];
         
         _idText.text = @"";

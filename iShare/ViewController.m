@@ -30,7 +30,7 @@
 
 @interface ViewController () <ABCIntroViewDelegate>
 
-@property (strong, nonatomic) BillsTableViewCell *lastCell;
+//@property (strong, nonatomic) BillsTableViewCell *lastCell;
 @property (strong, nonatomic) BillsTableViewCell *todayCell;
 @property (strong, nonatomic) BillsTableViewCell *thisWeekCell;
 @property (strong, nonatomic) BillsTableViewCell *thisMonthCell;
@@ -116,7 +116,7 @@
     // modify tableViewCells
     static NSString *CellIdentifier = @"BillListCell";
     
-    _lastCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    //_lastCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     _todayCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     _thisWeekCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     _thisMonthCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -600,6 +600,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"BillListCell";
+    BillsTableViewCell *_lastCell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
@@ -644,10 +646,10 @@
         week_tail = [[dateTranslate.dayOfMonth objectForKey:monthWithInt] integerValue];
     }
     
-    switch (indexPath.row) {
+    switch (0) {
         case 0:
             [_lastCell initWithTypeIcon:[UIImage imageNamed:bill.typeIcon]
-                             noteOrType:[bill.note isEqualToString:@""] ? bill.type : bill.note
+                             noteOrType:bill.type
                                    date:date[0]
                                  amount:bill.amount
                             shareWith_0:([bill.members[0] isEqualToString:@""] ? nil : (fileExist_0 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[0]]] : [UIImage imageNamed:@"icon-user-default.png"]))
@@ -699,13 +701,13 @@
             //[self performSegueWithIdentifier:@"test" sender:self];
             break;
         case 1:
-            [self performSegueWithIdentifier:@"todayBills" sender:self];
+            [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
             break;
         case 2:
-            [self performSegueWithIdentifier:@"thisWeekBills" sender:self];
+            [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
             break;
         case 3:
-            [self performSegueWithIdentifier:@"thisMonthBills" sender:self];
+            [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
             break;
         default:
             break;
@@ -717,7 +719,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"lastBillDetail"]) {
         BillDetailViewController *billDetail = (BillDetailViewController *)[segue destinationViewController];
-        billDetail.billId = [[self getLatestBill] componentsSeparatedByString:@"*"][0];
+        //NSInteger t = [_tableView indexPathForSelectedRow].row;
+        Bill *bill = _bill_latest[[_tableView indexPathForSelectedRow].row];
+        billDetail.billId = bill.bill_id;
         billDetail.mainUIView = self;
 
     } else if ([segue.identifier isEqualToString:@"billList"]) {
