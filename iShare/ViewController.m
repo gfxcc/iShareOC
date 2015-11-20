@@ -24,6 +24,8 @@
 #import "AddNewShareViewController.h"
 #import "AppDelegate.h"
 #import "ABCIntroView.h"
+#import "popMenu.h"
+#import <JDStatusBarNotification/JDStatusBarNotification.h>
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -35,6 +37,9 @@
 @property (strong, nonatomic) BillsTableViewCell *thisWeekCell;
 @property (strong, nonatomic) BillsTableViewCell *thisMonthCell;
 @property ABCIntroView *introView;
+@property (nonatomic, strong) PopMenu *myPopMenu;
+@property (nonatomic, strong) NSString *quickType;
+
 @end
 
 @implementation ViewController
@@ -166,16 +171,54 @@
 }
 
 - (IBAction)addNewShare:(id)sender {
+    NSArray *menuItems = @[
+                           [MenuItem itemWithTitle:@"food" iconName:@"ifood" index:0],
+                           [MenuItem itemWithTitle:@"drink" iconName:@"idrink" index:1],
+                           [MenuItem itemWithTitle:@"shopping" iconName:@"ishopping" index:2],
+                           [MenuItem itemWithTitle:@"transportation" iconName:@"ibus" index:3],
+                           [MenuItem itemWithTitle:@"home" iconName:@"ihome" index:4],
+                           [MenuItem itemWithTitle:@"trip" iconName:@"itrip" index:5],
+                           ];
+    if (!_myPopMenu) {
+        _myPopMenu = [[PopMenu alloc] initWithFrame:[UIScreen mainScreen].bounds items:menuItems];
+        _myPopMenu.perRowItemCount = 3;
+        _myPopMenu.menuAnimationType = kPopMenuAnimationTypeSina;
+    }
     
-//    UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//    AddNewShareViewController *addpage = [mainStoryboard instantiateViewControllerWithIdentifier:@"LogInView"];
-//    
-//    addpage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//    addpage.idText = _leftMenu.idText.text;
-//    [self presentViewController:addpage animated:YES completion:^{
-//        NSLog(@"Present Modal View");
-//    }];
-//    
+    _myPopMenu.didSelectedItemCompletion = ^(MenuItem *selectedItem){
+
+        
+        switch (selectedItem.index) {
+            case 0:
+                _quickType = @"Food";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            case 1:
+                _quickType = @"Drink";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            case 2:
+                _quickType = @"Shopping";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            case 3:
+                _quickType = @"Transportation";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            case 4:
+                _quickType = @"Home";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            case 5:
+                _quickType = @"Trip";
+                [self performSegueWithIdentifier:@"createShareView" sender:self];
+                break;
+            default:
+                NSLog(@"%@",selectedItem.title);
+                break;
+        }
+    };
+    [_myPopMenu showMenuAtView:[UIApplication sharedApplication].keyWindow startPoint:CGPointMake(0, -100) endPoint:CGPointMake(0, -100)];
 }
 
 #pragma mark - ABCIntroViewDelegate Methods
@@ -408,7 +451,6 @@
 }
 
 - (void)obtain_bills {
-
     [_bill_latest removeAllObjects];
     
     if ([_leftMenu.idText.text isEqualToString:@""]) {
@@ -455,6 +497,7 @@
                     Bill *bill = [_bill_latest objectAtIndex:i];
                     if ([bill.bill_id isEqualToString:lastID]) {
                         if (i == 0) {
+                            [JDStatusBarNotification showWithStatus:@"update successfully" dismissAfter:2.0];
                             break;
                         }
                         
@@ -731,10 +774,11 @@
     } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
         MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
         messageCenter.idText = _leftMenu.idText.text;
-    } else if ([segue.identifier isEqualToString:@"createNewBill"]) {
+    } else if ([segue.identifier isEqualToString:@"createShareView"]) {
         UINavigationController *navgation = (UINavigationController *)[segue destinationViewController];
         //
         AddNewShareViewController *addNewBill = (AddNewShareViewController *)([navgation viewControllers][0]);
+        addNewBill.quickType = _quickType;
         addNewBill.mainUIView = self;
     } else if ([segue.identifier isEqualToString:@"analyze"]) {
         AnalyzeViewController *analyzeView = (AnalyzeViewController *)[segue destinationViewController];

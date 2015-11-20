@@ -19,6 +19,7 @@
 #import "UIWindow+YUBottomPoper.h"
 #import "ViewController.h"
 #import "UserListTableViewCell.h"
+#import "BaseNavigationController.h"
 #import <TSMessageView.h>
 
 
@@ -219,18 +220,19 @@
     UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginViewController *loginPage = [mainStoryboard instantiateViewControllerWithIdentifier:@"LogInView"];
     
-    loginPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    //loginPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     loginPage.LeftMenuView = self;
-    [_mainUINavgation presentViewController:loginPage animated:YES completion:^{
-        NSLog(@"Present Modal View");
-    }];
+    
+    UINavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:loginPage];
+    //[_mainUINavgation presentViewController:loginPage animated:YES completion:nil];
+    [_mainUIView presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)signUpView {
     UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SignUpViewController *signUpPage = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpView"];
     
-    //signUpPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    signUpPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     signUpPage.LeftMenuView = self;
     [_mainUINavgation presentViewController:signUpPage animated:YES completion:^{
         NSLog(@"Present Modal View");

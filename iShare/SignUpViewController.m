@@ -23,6 +23,11 @@
 
 @implementation SignUpViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -71,7 +76,7 @@
     
     
     // add image
-    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 113) / 2, 40, 130, 130)];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 113) / 2, 60, 130, 130)];
     imageHolder.image = [UIImage imageNamed:@"money_icon.png"];
     UIButton *login_button = [UIButton buttonWithType:UIButtonTypeSystem];
     [login_button setFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 300) / 2, 320, 300, 40)];
@@ -101,12 +106,12 @@
             if ([response.information isEqualToString:@"OK"]) {
                 
                 LeftMenuViewController *leftView = (LeftMenuViewController *)_LeftMenuView;
-                [leftView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
+                //[leftView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
                 [leftView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
                 [leftView.idText setText:_userTextField.text];
                 [leftView obtain_friends];
                 
-                ViewController *mainUI = (ViewController *)leftView;
+                ViewController *mainUI = (ViewController*)leftView.mainUIView;
                 [mainUI obtain_bills];
                 
                 [self dismissViewControllerAnimated:true completion:^{

@@ -41,6 +41,7 @@
 @property (weak, nonatomic) UIViewController *mainUIView;
 @property(nonatomic) BOOL customPic;
 @property (strong, nonatomic) CYkeyboard *keyboard;
+@property (strong, nonatomic) NSString *quickType;
 - (void)unlight;
 - (void)resetAllBackground;
 @end

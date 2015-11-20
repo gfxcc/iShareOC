@@ -12,6 +12,7 @@
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
 #import "UIViewController+Utils.h"
+#import "EaseStartView.h"
 
 @interface AppDelegate ()
 
@@ -37,6 +38,11 @@
         //注册远程通知
         [application registerForRemoteNotifications];
     }
+    
+//    EaseStartView *startView = [EaseStartView startView];
+//    [startView startAnimationWithCompletionBlock:^(EaseStartView *easeStartView) {
+//    }];
+    
     return YES;
 }
 

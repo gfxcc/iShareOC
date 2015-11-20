@@ -64,13 +64,13 @@
 - (IBAction)editButtonClick:(id)sender {
     
     if ([_editButton.titleLabel.text isEqualToString:@"Edit"]) {
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             _editButton.frame = CGRectMake(_editButton.frame.origin.x, _editButton.frame.origin.y, [UIScreen mainScreen].bounds.size.width, _editButton.frame.size.height);
         }];
         [_tableView setEditing: YES animated: YES];
         [_editButton setTitle:@"done" forState:UIControlStateNormal];
     } else if ([_editButton.titleLabel.text isEqualToString:@"done"]) {
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             _editButton.frame = CGRectMake(_editButton.frame.origin.x, _editButton.frame.origin.y, [UIScreen mainScreen].bounds.size.width / 2, _editButton.frame.size.height);
         }];
         [_tableView setEditing: NO animated: YES];

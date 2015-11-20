@@ -1,0 +1,5 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/PPiAwesomeButton" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/FontAwesome+iOS" "${PODS_ROOT}/Headers/Public/HexColors" "${PODS_ROOT}/Headers/Public/JDStatusBarNotification" "${PODS_ROOT}/Headers/Public/OpenSSL" "${PODS_ROOT}/Headers/Public/PPiAwesomeButton" "${PODS_ROOT}/Headers/Public/PopMenu" "${PODS_ROOT}/Headers/Public/Protobuf" "${PODS_ROOT}/Headers/Public/TSMessages" "${PODS_ROOT}/Headers/Public/XHRealTimeBlur" "${PODS_ROOT}/Headers/Public/gRPC" "${PODS_ROOT}/Headers/Public/gRPC_pod" "${PODS_ROOT}/Headers/Public/pop"
+OTHER_LDFLAGS = -framework "QuartzCore"
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

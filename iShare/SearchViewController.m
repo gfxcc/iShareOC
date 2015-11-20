@@ -11,6 +11,9 @@
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
 #import <TSMessageView.h>
+#import "UIButton+PPiAwesome.h"
+#import "UIAwesomeButton.h"
+
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -51,24 +54,43 @@
     return [_search_result count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"CellIdentifier";
     
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    }
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 40, 40)];
+    icon.image = [UIImage imageNamed:@"icon.png"];
+    [cell addSubview:icon];
     
     // Configure the cell.
-    cell.textLabel.text = _search_result[indexPath.row];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 100, 40)];
+    label.text = _search_result[indexPath.row];
+    [cell addSubview:label];
+    
+//    UIButton *twitter1=[UIButton buttonWithType:UIButtonTypeCustom text:@"add" icon:nil textAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:[UIColor whiteColor]} andIconPosition:IconPositionLeft];
+//    [twitter1 setBackgroundColor:[UIColor colorWithRed:27.0f/255 green:178.0f/255 blue:233.0f/255 alpha:1.0] forUIControlState:UIControlStateNormal];
+//    [twitter1 setBackgroundColor:[UIColor colorWithRed:60.0f/255 green:89.0f/255 blue:157.0f/255 alpha:1.0] forUIControlState:UIControlStateHighlighted];
+//    twitter1.frame=CGRectMake(300, 10, 50, 30);
+//    [twitter1 setRadius:5.0];
+//    [cell addSubview:twitter1];
+    
+    //cell.textLabel.text = _search_result[indexPath.row];
     return cell;
 }
 
 - (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
-    
+    _selectedIndex = indexPath.row;
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     // check already be friend.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -90,7 +112,7 @@
         }
     }
     
-    _selectedIndex = indexPath.row;
+    
     _requestView = [[RequestView alloc] initWithTitle:[NSString stringWithFormat:@"I am %@", _LeftMenuView.idText.text] subtitle:@"t"];
     _requestView.delegate = self;
     [self.view addSubview:_requestView];
@@ -99,10 +121,45 @@
 }
 
 #pragma mark - RequestViewDelegate -
-- (void)sendRequest {
+- (void)download_friends_icon {
+    NSString * const kRemoteHost = ServerHost;
     
+    Repeated_string *request = [Repeated_string message];
     
+    // better?
+    
+    request.contentArray = [NSMutableArray arrayWithArray:_search_result];
+    [request.contentArray insertObject:@"icon" atIndex:0];
 
+    
+    for (int i = 0; i != request.contentArray.count; i++) {
+        NSLog(@"%@", request.contentArray[i]);
+    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
+        if (!done) {
+            if (response.data_p.length == 0) {
+                return;
+            }
+            NSLog(@"%lu", (unsigned long)response.data_p.length);
+            [response.data_p writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, response.name] atomically:YES];
+            
+        } else if (error) {
+            
+        } else { // done
+
+            //[_searchBar ];
+        }
+    }];
+    
+}
+
+- (void)sendRequest {
     // start grpc
     NSString * const kRemoteHost = ServerHost;
     Request *request = [Request message];

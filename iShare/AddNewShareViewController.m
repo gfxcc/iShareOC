@@ -16,6 +16,8 @@
 
 @interface AddNewShareViewController ()
 
+
+
 @end
 
 @implementation AddNewShareViewController
@@ -48,9 +50,9 @@
                                                  error:nil];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     NSArray *firstType = [linesOfFile[0] componentsSeparatedByString:@"#"];
-    _type.text = firstType.count < 2 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
+//    _type.text = firstType.count < 2 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
     
-    //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
+    
     //set date label
     UIDatePicker *_datepicker = [[UIDatePicker alloc] init];
     _datepicker.datePickerMode = UIDatePickerModeDateAndTime;
@@ -62,6 +64,23 @@
     NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
     _data.text = prettyVersion;
     NSLog(@"%@", prettyVersion);
+    
+    _type.text = _quickType;
+    // judge food type
+    if ([_quickType isEqualToString:@"Food"]) {
+        [dateFormat setDateFormat:@"HH"];
+        NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
+        int hour = [prettyVersion intValue];
+        if (hour <= 10) {
+            _type.text = @"Breakfast";
+        } else if (hour <= 15) {
+            _type.text = @"Lunch";
+        } else if (hour <= 21) {
+            _type.text = @"Dinner";
+        } else {
+            _type.text = @"Night Food";
+        }
+    }
     
     CALayer *line1 = [CALayer layer];
     CALayer *line2 = [CALayer layer];
@@ -287,6 +306,20 @@
     // set type icon name
     NSMutableArray *type = _keyboard.typeArray[[_keyboard.typePicker selectedRowInComponent:0]];
     request.typeIcon = [NSString stringWithFormat:@"%@.png", type[([_keyboard.typePicker selectedRowInComponent:1] + 1)*2 + 1]];
+    if ([_type.text isEqualToString:@"Breakfast"] || [_type.text isEqualToString:@"Lunch"] || [_type.text isEqualToString:@"Dinner"] || [_type.text isEqualToString:@"Night Food"])
+        request.typeIcon = @"ifood.png";
+    else if ([_type.text isEqualToString:@"Drink"])
+        request.typeIcon = @"idrink.png";
+    else if ([_type.text isEqualToString:@"Shopping"])
+        request.typeIcon = @"ishopping.png";
+    else if ([_type.text isEqualToString:@"Transportation"])
+        request.typeIcon = @"ibus.png";
+    else if ([_type.text isEqualToString:@"Home"])
+        request.typeIcon = @"ihome.png";
+    else if ([_type.text isEqualToString:@"Trip"])
+        request.typeIcon = @"itrip.png";
+    
+    
     NSLog(@"%@", request.typeIcon);
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service create_shareWithRequest:request handler:^(Inf *response, NSError *error) {
@@ -345,7 +378,7 @@
 //    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
 //    
 //    [self presentViewController:picker animated:YES completion:NULL];
-    
+    [_keyboard fadeMeOut];
     [self.view.window  showPopWithButtonTitles:@[@"Take a picture", @"Choose from Library"] styles:@[YUDefaultStyle,YUDefaultStyle] whenButtonTouchUpInSideCallBack:^(int index  ) {
         NSLog(@"%d", index);
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];

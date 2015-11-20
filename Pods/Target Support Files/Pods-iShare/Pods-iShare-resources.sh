@@ -58,6 +58,7 @@ install_resource()
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "FontAwesome+iOS/Resources/FontAwesome.ttf"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundError.png"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundError@2x.png"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundErrorIcon.png"
@@ -78,6 +79,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${BUILT_PRODUCTS_DIR}/gRPCCertificates.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "FontAwesome+iOS/Resources/FontAwesome.ttf"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundError.png"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundError@2x.png"
   install_resource "TSMessages/Pod/Assets/NotificationBackgroundErrorIcon.png"

@@ -10,6 +10,7 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
+#import "BaseNavigationController.h"
 #import "SignUpViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -30,6 +31,11 @@
 @end
 
 @implementation LoginViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -212,7 +218,6 @@
 - (IBAction)signUp:(id)sender {
     
     [self performSegueWithIdentifier:@"transformToSignUp" sender:self];
-    
 }
 
 
