@@ -1,5 +1,5 @@
 PODS:
-  - FontAwesome+iOS (0.0.1)
+  - FontAwesome+iOS (0.1.4)
   - gRPC (0.11.1):
     - gRPC/C-Core (= 0.11.1)
     - gRPC/GRPCClient (= 0.11.1)
@@ -38,7 +38,6 @@ PODS:
   - XHRealTimeBlur (1.7)
 
 DEPENDENCIES:
-  - FontAwesome+iOS (from `git@github.com:alexdrone/ios-fontawesome.git`)
   - gRPC_pod (from `./Server`)
   - JDStatusBarNotification
   - PopMenu
@@ -46,18 +45,11 @@ DEPENDENCIES:
   - TSMessages
 
 EXTERNAL SOURCES:
-  FontAwesome+iOS:
-    :git: git@github.com:alexdrone/ios-fontawesome.git
   gRPC_pod:
     :path: ./Server
 
-CHECKOUT OPTIONS:
-  FontAwesome+iOS:
-    :commit: 3ef4db504ffde636c1f8a5320f1e5b6183f6102c
-    :git: git@github.com:alexdrone/ios-fontawesome.git
-
 SPEC CHECKSUMS:
-  FontAwesome+iOS: c6d3bbd2856b9633028d316d56133d45fb6a6cb0
+  FontAwesome+iOS: 9070b682a9255ca0fdc34bcfb129ad0ba2b73b87
   gRPC: 25d5c4bc94988c483c4b429b7f341b776e7dd330
   gRPC_pod: b917c2b340a6fe24877d4c74cf8637f0dfc85b59
   HexColors: abfd172e329dab59888614ccba6f216cec59289d

@@ -337,6 +337,7 @@
     [_datepicker removeFromSuperview];
     [_typePicker removeFromSuperview];
     [_memberPicker removeFromSuperview];
+    [_paidByPicker removeFromSuperview];
     
     _textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, self.bounds.origin.y - 300, 0, 0)];
     _textfield.hidden = YES;
@@ -359,7 +360,7 @@
          forControlEvents:UIControlEventEditingChanged];
     [self addSubview:_textfield];
     [_textfield becomeFirstResponder];
-    
+    _shown = true;
     // custom button
     
 }
@@ -505,7 +506,7 @@
     if (!_shown) {
         return;
     }
-    
+    [_textfield resignFirstResponder];
     [self performSelectorOnMainThread:@selector(fadeOutNotification:) withObject:self waitUntilDone:NO];
 }
 

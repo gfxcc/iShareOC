@@ -378,6 +378,7 @@
 //    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
 //    
 //    [self presentViewController:picker animated:YES completion:NULL];
+    [self resetAllBackground];
     [_keyboard fadeMeOut];
     [self.view.window  showPopWithButtonTitles:@[@"Take a picture", @"Choose from Library"] styles:@[YUDefaultStyle,YUDefaultStyle] whenButtonTouchUpInSideCallBack:^(int index  ) {
         NSLog(@"%d", index);

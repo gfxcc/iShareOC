@@ -3,10 +3,8 @@
 #import <ProtoRPC/ProtoService.h>
 #import <RxLibrary/GRXWriteable.h>
 #import <RxLibrary/GRXWriter.h>
-#import <GRPCClient/GRPCCall+Tests.h>
 
 #define ServerHost @"54.201.29.228:50051"
-//#define ServerHost @"0.0.0.0:50051"
 
 @protocol Greeter <NSObject>
 
