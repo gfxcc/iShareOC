@@ -25,7 +25,7 @@ PODS:
     - gRPC_pod/Messages
   - HexColors (2.2.1)
   - JDStatusBarNotification (1.5.2)
-  - OpenSSL (1.0.204.1)
+  - OpenSSL (1.0.205)
   - pop (1.0.8)
   - PopMenu (2.4):
     - pop
@@ -54,7 +54,7 @@ SPEC CHECKSUMS:
   gRPC_pod: b917c2b340a6fe24877d4c74cf8637f0dfc85b59
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
-  OpenSSL: 7f853fcada78e5162c2183b4d90ebbd0aa02f5ac
+  OpenSSL: 162687d7e96a3edeb4cf443ca6ce7cdb2912df7b
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
   PopMenu: 26b97baeaf250070f4f61b93727ca86d127d7bc5
   PPiAwesomeButton: 16f7279582fd36f65186b24b83ef876217363eb5

@@ -476,7 +476,6 @@ static inline CGFloat lerp(CGFloat a, CGFloat b, CGFloat p)
     CGFloat offset = [[change objectForKey:@"new"] CGPointValue].y + self.originalContentInset.top;
     CGFloat height = -MIN(0.0f, offset);
     self.frame = CGRectMake(0, -height - self.originalContentInset.top + [self navigationBarInset], self.scrollView.frame.size.width, height);
-    
     if (_refreshing) {
         _lastOffset = offset;
         if (offset != 0) {
@@ -548,7 +547,6 @@ static inline CGFloat lerp(CGFloat a, CGFloat b, CGFloat p)
     }
     
     _lastOffset = offset;
-    
     if (_canRefresh && height >= [_contentView triggerHeight]) {
         [_contentView beginRefreshing:YES];
         self.refreshing = YES;

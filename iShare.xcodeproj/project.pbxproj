@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D2D751E1C30913D00B19DCA /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751C1C30913D00B19DCA /* arrowDown.png */; };
+		4D2D751F1C30913D00B19DCA /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751D1C30913D00B19DCA /* arrowUp.png */; };
+		4D4C50961C307C6400A8AABA /* PullAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4C50951C307C6400A8AABA /* PullAction.m */; };
 		A1DD7E02892C52FD6E626C66 /* libPods-iShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */; };
 		DB0E85101B6C653300A1C74D /* payment.png in Resources */ = {isa = PBXBuildFile; fileRef = DB0E850F1B6C653300A1C74D /* payment.png */; };
 		DB0E85131B6D164100A1C74D /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = DB0E85121B6D164100A1C74D /* Request.m */; };
@@ -204,7 +207,6 @@
 		DBA988CD1BA26FA200836FE7 /* students.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA9889F1BA26FA200836FE7 /* students.png */; };
 		DBA988CE1BA26FA200836FE7 /* Car and Bus.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A01BA26FA200836FE7 /* Car and Bus.png */; };
 		DBA988CF1BA26FA200836FE7 /* traffic_light.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A11BA26FA200836FE7 /* traffic_light.png */; };
-		DBA988D01BA26FA200836FE7 /* truck.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A21BA26FA200836FE7 /* truck.png */; };
 		DBA988D11BA26FA200836FE7 /* Entertament.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A31BA26FA200836FE7 /* Entertament.png */; };
 		DBA988D31BA26FA200836FE7 /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = DBA988A51BA26FA200836FE7 /* network.png */; };
 		DBA988D61BA28ED700836FE7 /* BillTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA988D51BA28ED700836FE7 /* BillTypeTableViewCell.m */; };
@@ -224,7 +226,6 @@
 		DBF9FA691BE3CE7A0070676C /* conference_call.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA641BE3CE7A0070676C /* conference_call.png */; };
 		DBF9FA6B1BE3CE7A0070676C /* purchase_order.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA661BE3CE7A0070676C /* purchase_order.png */; };
 		DBF9FA6C1BE3CE7A0070676C /* google_alerts.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA671BE3CE7A0070676C /* google_alerts.png */; };
-		DBF9FA6D1BE3CE7A0070676C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA681BE3CE7A0070676C /* settings.png */; };
 		DBF9FA6F1BE3F3910070676C /* github.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA6E1BE3F3910070676C /* github.png */; };
 		DBF9FA721BE6B7C00070676C /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF9FA711BE6B7C00070676C /* BaseNavigationController.m */; };
 		DBF9FA7A1BE6E0980070676C /* itrip.png in Resources */ = {isa = PBXBuildFile; fileRef = DBF9FA741BE6E0980070676C /* itrip.png */; };
@@ -462,6 +463,10 @@
 
 /* Begin PBXFileReference section */
 		0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D2D751C1C30913D00B19DCA /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = iShare/Source/arrowDown.png; sourceTree = "<group>"; };
+		4D2D751D1C30913D00B19DCA /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = iShare/Source/arrowUp.png; sourceTree = "<group>"; };
+		4D4C50941C307C6400A8AABA /* PullAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullAction.h; path = iShare/PullAction.h; sourceTree = "<group>"; };
+		4D4C50951C307C6400A8AABA /* PullAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PullAction.m; path = iShare/PullAction.m; sourceTree = "<group>"; };
 		7040511EE234A04E8090E0C0 /* Pods-iShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-iShare/Pods-iShare.release.xcconfig"; sourceTree = "<group>"; };
 		95C88CC437DE70749E3BF4C1 /* Pods-iShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iShare/Pods-iShare.debug.xcconfig"; sourceTree = "<group>"; };
 		DB0E850F1B6C653300A1C74D /* payment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = payment.png; path = iShare/Source/payment.png; sourceTree = "<group>"; };
@@ -716,7 +721,6 @@
 		DBA9889F1BA26FA200836FE7 /* students.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = students.png; path = iShare/Source/typeIcon/students.png; sourceTree = "<group>"; };
 		DBA988A01BA26FA200836FE7 /* Car and Bus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Car and Bus.png"; path = "iShare/Source/typeIcon/Car and Bus.png"; sourceTree = "<group>"; };
 		DBA988A11BA26FA200836FE7 /* traffic_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = traffic_light.png; path = iShare/Source/typeIcon/traffic_light.png; sourceTree = "<group>"; };
-		DBA988A21BA26FA200836FE7 /* truck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = truck.png; path = iShare/Source/typeIcon/truck.png; sourceTree = "<group>"; };
 		DBA988A31BA26FA200836FE7 /* Entertament.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Entertament.png; path = iShare/Source/typeIcon/Entertament.png; sourceTree = "<group>"; };
 		DBA988A51BA26FA200836FE7 /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = network.png; path = iShare/Source/typeIcon/network.png; sourceTree = "<group>"; };
 		DBA988D41BA28ED700836FE7 /* BillTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BillTypeTableViewCell.h; path = iShare/BillTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -746,7 +750,6 @@
 		DBF9FA641BE3CE7A0070676C /* conference_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = conference_call.png; path = iShare/Source/TableBar/conference_call.png; sourceTree = "<group>"; };
 		DBF9FA661BE3CE7A0070676C /* purchase_order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = purchase_order.png; path = iShare/Source/TableBar/purchase_order.png; sourceTree = "<group>"; };
 		DBF9FA671BE3CE7A0070676C /* google_alerts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = google_alerts.png; path = iShare/Source/TableBar/google_alerts.png; sourceTree = "<group>"; };
-		DBF9FA681BE3CE7A0070676C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings.png; path = iShare/Source/TableBar/settings.png; sourceTree = "<group>"; };
 		DBF9FA6E1BE3F3910070676C /* github.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = github.png; path = iShare/Source/github.png; sourceTree = "<group>"; };
 		DBF9FA701BE6B7C00070676C /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
 		DBF9FA711BE6B7C00070676C /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
@@ -1003,6 +1006,58 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		4D4C50901C307A0800A8AABA /* customCell */ = {
+			isa = PBXGroup;
+			children = (
+				DB94B2E71B6117AD007AEE7F /* BillsTableViewCell.h */,
+				DB94B2D01B6117AD007AEE7F /* BillsTableViewCell.m */,
+				DB94B2D21B6117AD007AEE7F /* BillTableViewCell.h */,
+				DB94B2D11B6117AD007AEE7F /* BillTableViewCell.m */,
+				DB94B2DB1B6117AD007AEE7F /* MonthTableViewCell.h */,
+				DB94B2DA1B6117AD007AEE7F /* MonthTableViewCell.m */,
+				DB94B2EA1B6117AD007AEE7F /* UserListTableViewCell.h */,
+				DB94B2E91B6117AD007AEE7F /* UserListTableViewCell.m */,
+				DB952E9E1B689DE100482B00 /* FriendWithBillTableViewCell.h */,
+				DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */,
+				DB4EFC1B1B793E9A003F917D /* RequestTableViewCell.h */,
+				DB4EFC1C1B793E9A003F917D /* RequestTableViewCell.m */,
+				DBA988D41BA28ED700836FE7 /* BillTypeTableViewCell.h */,
+				DBA988D51BA28ED700836FE7 /* BillTypeTableViewCell.m */,
+				DBE695101BA34F6000B3CD62 /* CustomIconCollectionViewCell.h */,
+				DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */,
+			);
+			name = customCell;
+			sourceTree = "<group>";
+		};
+		4D4C50911C307A4700A8AABA /* toolClass */ = {
+			isa = PBXGroup;
+			children = (
+				DB952E951B6349F700482B00 /* DateTranslate.h */,
+				DB952E961B6349F700482B00 /* DateTranslate.m */,
+			);
+			name = toolClass;
+			sourceTree = "<group>";
+		};
+		4D4C50921C307A6C00A8AABA /* type */ = {
+			isa = PBXGroup;
+			children = (
+				DB94B2D31B6117AD007AEE7F /* Bill.h */,
+				DB94B2D41B6117AD007AEE7F /* Bill.m */,
+				DB0E85111B6D164100A1C74D /* Request.h */,
+				DB0E85121B6D164100A1C74D /* Request.m */,
+			);
+			name = type;
+			sourceTree = "<group>";
+		};
+		4D4C50931C307AA400A8AABA /* pullAction */ = {
+			isa = PBXGroup;
+			children = (
+				4D4C50941C307C6400A8AABA /* PullAction.h */,
+				4D4C50951C307C6400A8AABA /* PullAction.m */,
+			);
+			name = pullAction;
+			sourceTree = "<group>";
+		};
 		D7634614138BC6B65ECCEBA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1119,6 +1174,7 @@
 		DB94B28F1B611485007AEE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DBC486741C33407700D4574F /* SlideNavigation */,
 				DBFAD4C31BD1AC7200E25C1E /* ODRefreshControl */,
 				DB952E8D1B63357400482B00 /* MY SQL command */,
 				DB94B2F81B6117AD007AEE7F /* YUScreentPoper */,
@@ -1128,8 +1184,6 @@
 				DB94B2E21B6117AD007AEE7F /* RKTabView */,
 				DB94B3471B6117AD007AEE7F /* Animations */,
 				DB94B3531B6117AD007AEE7F /* Assets */,
-				DB94B2F71B6117AD007AEE7F /* SlideNavigationController.h */,
-				DB94B2F61B6117AD007AEE7F /* SlideNavigationController.m */,
 				DB914CD41B92A73000267BC9 /* FullSizeImage */,
 				DB7A1BEC1BB35C3A00357E41 /* ABCIntroduce */,
 				DB94B3D81B611850007AEE7F /* myClass */,
@@ -1273,6 +1327,8 @@
 		DB94B3D71B611817007AEE7F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				4D2D751C1C30913D00B19DCA /* arrowDown.png */,
+				4D2D751D1C30913D00B19DCA /* arrowUp.png */,
 				DB47DD4E1BE83B15006AB66C /* introduce.png */,
 				DBF9FC2B1BE7AE8C0070676C /* old image */,
 				DBF9FA801BE7AE220070676C /* neyIcon */,
@@ -1287,32 +1343,14 @@
 		DB94B3D81B611850007AEE7F /* myClass */ = {
 			isa = PBXGroup;
 			children = (
-				DB94B2E71B6117AD007AEE7F /* BillsTableViewCell.h */,
-				DB94B2D01B6117AD007AEE7F /* BillsTableViewCell.m */,
-				DB94B2D21B6117AD007AEE7F /* BillTableViewCell.h */,
-				DB94B2D11B6117AD007AEE7F /* BillTableViewCell.m */,
-				DB94B2D31B6117AD007AEE7F /* Bill.h */,
-				DB94B2D41B6117AD007AEE7F /* Bill.m */,
-				DB94B2DB1B6117AD007AEE7F /* MonthTableViewCell.h */,
-				DB94B2DA1B6117AD007AEE7F /* MonthTableViewCell.m */,
-				DB94B2EA1B6117AD007AEE7F /* UserListTableViewCell.h */,
-				DB94B2E91B6117AD007AEE7F /* UserListTableViewCell.m */,
-				DB952E951B6349F700482B00 /* DateTranslate.h */,
-				DB952E961B6349F700482B00 /* DateTranslate.m */,
-				DB952E9E1B689DE100482B00 /* FriendWithBillTableViewCell.h */,
-				DB952E9F1B689DE100482B00 /* FriendWithBillTableViewCell.m */,
-				DB0E85111B6D164100A1C74D /* Request.h */,
-				DB0E85121B6D164100A1C74D /* Request.m */,
-				DB4EFC1B1B793E9A003F917D /* RequestTableViewCell.h */,
-				DB4EFC1C1B793E9A003F917D /* RequestTableViewCell.m */,
+				4D4C50931C307AA400A8AABA /* pullAction */,
+				4D4C50921C307A6C00A8AABA /* type */,
+				4D4C50911C307A4700A8AABA /* toolClass */,
+				4D4C50901C307A0800A8AABA /* customCell */,
 				DB914D261B9E54D900267BC9 /* RequestView.h */,
 				DB914D271B9E54D900267BC9 /* RequestView.m */,
 				DB94B2E81B6117AD007AEE7F /* CYkeyboard.h */,
 				DB94B2D51B6117AD007AEE7F /* CYkeyboard.m */,
-				DBA988D41BA28ED700836FE7 /* BillTypeTableViewCell.h */,
-				DBA988D51BA28ED700836FE7 /* BillTypeTableViewCell.m */,
-				DBE695101BA34F6000B3CD62 /* CustomIconCollectionViewCell.h */,
-				DBE695111BA34F6000B3CD62 /* CustomIconCollectionViewCell.m */,
 				DBF9FA701BE6B7C00070676C /* BaseNavigationController.h */,
 				DBF9FA711BE6B7C00070676C /* BaseNavigationController.m */,
 				DB47DD4B1BE83093006AB66C /* EaseStartView.h */,
@@ -1379,11 +1417,19 @@
 				DBA9889F1BA26FA200836FE7 /* students.png */,
 				DBA988A01BA26FA200836FE7 /* Car and Bus.png */,
 				DBA988A11BA26FA200836FE7 /* traffic_light.png */,
-				DBA988A21BA26FA200836FE7 /* truck.png */,
 				DBA988A31BA26FA200836FE7 /* Entertament.png */,
 				DBA988A51BA26FA200836FE7 /* network.png */,
 			);
 			name = typeIcom;
+			sourceTree = "<group>";
+		};
+		DBC486741C33407700D4574F /* SlideNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				DB94B2F71B6117AD007AEE7F /* SlideNavigationController.h */,
+				DB94B2F61B6117AD007AEE7F /* SlideNavigationController.m */,
+			);
+			name = SlideNavigation;
 			sourceTree = "<group>";
 		};
 		DBDA46C81BAE096500E28B07 /* icon */ = {
@@ -1667,7 +1713,6 @@
 				DBF9FA641BE3CE7A0070676C /* conference_call.png */,
 				DBF9FA661BE3CE7A0070676C /* purchase_order.png */,
 				DBF9FA671BE3CE7A0070676C /* google_alerts.png */,
-				DBF9FA681BE3CE7A0070676C /* settings.png */,
 				DB914CD21B91148E00267BC9 /* icon.png */,
 				DB4EFC221B795176003F917D /* Btn1@2x.png */,
 				DB4EFC201B794BFB003F917D /* Btn0@2x.png */,
@@ -1967,10 +2012,10 @@
 				DB94B37E1B6117AD007AEE7F /* TableIcon4@2x.png in Resources */,
 				DBDA48A91BAF09DF00E28B07 /* icon 2.png in Resources */,
 				DB94B3CE1B6117AE007AEE7F /* GenericSeparator@2x.png in Resources */,
-				DBF9FA6D1BE3CE7A0070676C /* settings.png in Resources */,
 				DB94B3981B6117AE007AEE7F /* globe_disabled@2x.png in Resources */,
 				DBF9FB9F1BE7AE3E0070676C /* circlecompass.png in Resources */,
 				DB94B3A01B6117AE007AEE7F /* tab_brightness_enabled@2x.png in Resources */,
+				4D2D751E1C30913D00B19DCA /* arrowDown.png in Resources */,
 				DBF9FB661BE7AE3E0070676C /* Bus-icon.png in Resources */,
 				DBF9FB741BE7AE3E0070676C /* volume.png in Resources */,
 				DB94B39A1B6117AE007AEE7F /* googleplus@2x.png in Resources */,
@@ -2144,6 +2189,7 @@
 				DBF9FBB41BE7AE3E0070676C /* parachute.png in Resources */,
 				DBF9FC0A1BE7AE3F0070676C /* location.png in Resources */,
 				DBF9FB761BE7AE3E0070676C /* clapboard.png in Resources */,
+				4D2D751F1C30913D00B19DCA /* arrowUp.png in Resources */,
 				DBA988B51BA26FA200836FE7 /* game.png in Resources */,
 				DBF9FB9A1BE7AE3E0070676C /* rulertriangle.png in Resources */,
 				DBF9FB831BE7AE3E0070676C /* rgb.png in Resources */,
@@ -2181,7 +2227,6 @@
 				DBF9FBF31BE7AE3E0070676C /* shop.png in Resources */,
 				DBF9FBCC1BE7AE3E0070676C /* pin2.png in Resources */,
 				DBF9FBAA1BE7AE3E0070676C /* racingflags.png in Resources */,
-				DBA988D01BA26FA200836FE7 /* truck.png in Resources */,
 				DB94B3A31B6117AE007AEE7F /* tab_filters_disabled@2x.png in Resources */,
 				DBF9FC271BE7AE3F0070676C /* trophy.png in Resources */,
 				DBA988B21BA26FA200836FE7 /* cloakroom.png in Resources */,
@@ -2313,6 +2358,7 @@
 				DB94B3881B6117AE007AEE7F /* YUDIVView.m in Sources */,
 				DB94B3771B6117AD007AEE7F /* RKTabItem.m in Sources */,
 				DB94B3841B6117AD007AEE7F /* SlideNavigationController.m in Sources */,
+				4D4C50961C307C6400A8AABA /* PullAction.m in Sources */,
 				DBDA46C61BADF10100E28B07 /* UIViewController+Utils.m in Sources */,
 				DB94B3681B6117AD007AEE7F /* BillsTableViewCell.m in Sources */,
 				DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */,
@@ -2497,8 +2543,8 @@
 			baseConfigurationReference = 7040511EE234A04E8090E0C0 /* Pods-iShare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

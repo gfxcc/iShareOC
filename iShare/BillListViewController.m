@@ -14,6 +14,8 @@
 #import "Bill.h"
 #import "DateTranslate.h"
 #import "BillDetailViewController.h"
+#import "PullAction.h"
+#import "ODRefreshControl.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -21,6 +23,8 @@
 
 @property (nonatomic) NSInteger selectedhead;
 @property (strong, nonatomic) NSMutableDictionary *dayOfMonth;
+
+@property (nonatomic, strong) PullAction *pullAction;
 
 @end
 
@@ -67,7 +71,8 @@
     _selectedhead = 0;
     
     _billsWithMonth = [[NSMutableArray alloc] init];
-    for (int i = 0; i != month.intValue; i++) {
+    /* change here month.intValue*/
+    for (int i = 0; i != 12; i++) {
         NSMutableArray *bill = [[NSMutableArray alloc] init];
         [_billsWithMonth addObject:bill];
     }
@@ -82,6 +87,7 @@
                                                   usedEncoding:nil
                                                          error:nil];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
+    
     
     for (NSInteger i = 0; i != bills.count; i++) {
         if ([bills[i] isEqualToString:@""]) {
@@ -132,9 +138,26 @@
         // start analyze date
         NSArray *date = [bill_content[3] componentsSeparatedByString:@"-"];
         NSString *month = date[1];
-        [[_billsWithMonth objectAtIndex:(_billsWithMonth.count - [month intValue])] addObject:bill];
+        int index = (int)_billsWithMonth.count - [month intValue];
+        if (index >= 0 && index < _billsWithMonth.count) {
+            [[_billsWithMonth objectAtIndex:(_billsWithMonth.count - [month intValue])] addObject:bill];
+        }
         //[_bills addObject:bill];
     }
+    
+    _pullAction = [[PullAction alloc] initInScrollView:self.tableView];
+    [_pullAction addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
+    //ODRefreshControl* _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    //[_refreshControl addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)changeYear {
+    NSLog(@"invoked\n");
+    //[self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
+}
+
+- (void)finishRefresh {
+    [_pullAction endRefreshing];
 }
 
 - (void)obtainBillsAtIndex {

@@ -71,7 +71,6 @@
 
         CGRect convert = [[_shareWith_0 superview] convertRect:_shareWith_0.frame toView:self];
         _shareWith_1.frame = CGRectMake(convert.origin.x + _shareWith_0.bounds.size.width - move, convert.origin.y, _shareWith_0.bounds.size.width, _shareWith_0.bounds.size.height);
-        CGRect t = [[_shareWith_0 superview] convertRect:_shareWith_1.frame toView:self];
         _shareWith_1.image = shareWith_1;
 
     

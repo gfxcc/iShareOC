@@ -107,8 +107,8 @@ extern "C" {
 
 #if !(defined(VMS) || defined(__VMS)) /* VMS uses logical names instead */
 #if defined(HEADER_CRYPTLIB_H) && !defined(OPENSSLDIR)
-#define ENGINESDIR "/tmp/openssl/bin/iPhoneOS9.0-arm64.sdk/lib/engines"
-#define OPENSSLDIR "/tmp/openssl/bin/iPhoneOS9.0-arm64.sdk"
+#define ENGINESDIR "/tmp/openssl/bin/iPhoneOS9.2-arm64.sdk/lib/engines"
+#define OPENSSLDIR "/tmp/openssl/bin/iPhoneOS9.2-arm64.sdk"
 #endif
 #endif
 
@@ -222,7 +222,7 @@ extern "C" {
    optimization options.  Older Sparc's work better with only UNROLL, but
    there's no way to tell at compile time what it is you're running on */
  
-#if defined( sun )		/* Newer Sparc's */
+#if defined( __sun ) || defined ( sun )		/* Newer Sparc's */
 #  define DES_PTR
 #  define DES_RISC1
 #  define DES_UNROLL

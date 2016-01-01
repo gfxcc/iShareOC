@@ -17,7 +17,7 @@
 
 //@property (nonatomic, strong) ODRefreshControl *refreshControl;
 
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) ODRefreshControl *refreshControl;
 
 @end
 
@@ -34,6 +34,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    /* setup refresh
     // Do any additional setup after loading the view.
 //    _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
 //    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
@@ -44,7 +46,10 @@
     [_refreshControl addTarget:self
                             action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
-    [_tableView addSubview:_refreshControl];
+    [_tableView addSubview:_refreshControl];*/
+    
+    _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
@@ -182,6 +187,7 @@
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    
 }
 
 
@@ -190,9 +196,15 @@
     ViewController *mainUI = (ViewController*)_mainUIView;
     [mainUI updateAllBills];
     
+    /*
     [UIView animateWithDuration:2.0 animations:^{
         [_refreshControl endRefreshing];
-    }];
+    }];*/
+    [self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
+}
+
+- (void)finishRefresh {
+    [_refreshControl endRefreshing];
 }
 
 #pragma mark -

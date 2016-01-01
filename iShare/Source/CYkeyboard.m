@@ -537,7 +537,7 @@
 }
 
 - (void)shareModePage {
-    AddNewShareViewController *mainUI_ = (AddNewShareViewController *)_mainUI;
+    //AddNewShareViewController *mainUI_ = (AddNewShareViewController *)_mainUI;
     //[mainUI_ performSegueWithIdentifier:@"shareMode" sender:mainUI_];
 }
 
