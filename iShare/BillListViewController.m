@@ -23,6 +23,9 @@
 
 @property (nonatomic) NSInteger selectedhead;
 @property (strong, nonatomic) NSMutableDictionary *dayOfMonth;
+@property (strong, nonatomic) NSString *currentYear;
+@property (strong, nonatomic) NSString *realYear;
+@property (strong, nonatomic) UILabel *currentLabel;
 
 @property (nonatomic, strong) PullAction *pullAction;
 
@@ -33,7 +36,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
-    
+
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -64,15 +67,65 @@
 //    [_dayOfMonth setObject:@"11.01-11.30" forKey:@"11"];
 //    [_dayOfMonth setObject:@"12.01-12.31" forKey:@"12"];
     
+    // get year
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy";
+    NSString *year = [formatter stringFromDate:[NSDate date]];
+    _currentYear = year;
+    _realYear = year;
+    
+    // set back button's text to year
+    
+    //self.navigationController.navigationItem.leftBarButtonItem.
+    CGSize labelSize = [[NSString stringWithFormat:@"%@ list", year] sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:17]}];
+    //UIFont *font = [UIFont boldSystemFontOfSize:17];
+    UIView *yearView = [[UIView alloc] initWithFrame:CGRectMake(0, -labelSize.height, labelSize.width, labelSize.height)];
+    yearView.clipsToBounds = YES;
+    UILabel *label = [[UILabel alloc] initWithFrame:yearView.frame];
+    _currentLabel = label;
+    //[label setFont:font];
+    label.text = [NSString stringWithFormat:@"%@ list", year];
+    
+    [yearView addSubview:label];
+    self.navigationItem.titleView = yearView;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        label.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
+    }];
+    
+
+    
+    [self loadBills];
+    
+    _pullAction = [[PullAction alloc] initInScrollView:self.tableView];
+    [_pullAction addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
+    //ODRefreshControl* _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+    //[_refreshControl addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
+}
+
+/* load bills by _currentYear */
+- (void)loadBills {
+    // clear date
+    [_billsWithMonth removeAllObjects];
+    
     // analyze this month
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"MM";
     NSString *month = [formatter stringFromDate:[NSDate date]];
     _selectedhead = 0;
     
     _billsWithMonth = [[NSMutableArray alloc] init];
-    /* change here month.intValue*/
-    for (int i = 0; i != 12; i++) {
+    /* create month label */
+    int monthNum;
+    if ([_currentYear isEqualToString:_realYear]) {
+        monthNum = month.intValue;
+    } else if (_currentYear.intValue < _realYear.intValue) {
+        monthNum = 12;
+    } else {
+        monthNum = 1;
+    }
+    for (int i = 0; i != monthNum; i++) {
         NSMutableArray *bill = [[NSMutableArray alloc] init];
         [_billsWithMonth addObject:bill];
     }
@@ -104,8 +157,13 @@
         Bill *bill = [[Bill alloc] init];
         [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         
-        
-        
+        // start analyze date
+        NSArray *date = [bill_content[3] componentsSeparatedByString:@"-"];
+        NSString *month = date[1];
+        NSString *year = date[0];
+        if (![year isEqualToString:_currentYear]) {
+            continue;
+        }
         
         if ([bill.paidBy isEqualToString:_idText]) {
             // LEND mode
@@ -135,29 +193,79 @@
             }
         }
         
-        // start analyze date
-        NSArray *date = [bill_content[3] componentsSeparatedByString:@"-"];
-        NSString *month = date[1];
+        
         int index = (int)_billsWithMonth.count - [month intValue];
         if (index >= 0 && index < _billsWithMonth.count) {
             [[_billsWithMonth objectAtIndex:(_billsWithMonth.count - [month intValue])] addObject:bill];
         }
         //[_bills addObject:bill];
     }
-    
-    _pullAction = [[PullAction alloc] initInScrollView:self.tableView];
-    [_pullAction addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
-    //ODRefreshControl* _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-    //[_refreshControl addTarget:self action:@selector(changeYear) forControlEvents:UIControlEventValueChanged];
+    [_tableView reloadData];
 }
 
 - (void)changeYear {
-    NSLog(@"invoked\n");
-    //[self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
+    //NSLog(@"invoked\n");
+    //NSLog(@"invoked %i\n", _pullAction.functionNum);
+
+    switch (_pullAction.functionNum) {
+        case 0:
+            /* invoke top */
+            [self changeToNextYear];
+            break;
+        case 1:
+            /* invoke bot */
+            [self changeToLastYear];
+            break;
+        default:
+            break;
+    }
+    
+    [self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
 }
+
+- (void)changeToNextYear {
+    UIView *yearView = self.navigationItem.titleView;
+    NSString *nextYear = [NSString stringWithFormat:@"%i", _currentYear.intValue + 1];
+    _currentYear = nextYear;
+    UILabel *newLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, -_currentLabel.frame.size.height, _currentLabel.frame.size.width, _currentLabel.frame.size.height)];
+    newLabel.text = [NSString stringWithFormat:@"%@ list", nextYear];
+    
+    [yearView addSubview:newLabel];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _currentLabel.frame = CGRectMake(0, _currentLabel.frame.size.height, _currentLabel.frame.size.width, _currentLabel.frame.size.height);
+        newLabel.frame = CGRectMake(0, 0, _currentLabel.frame.size.width, _currentLabel.frame.size.height);
+    } completion:^(BOOL finished)
+     {
+         [_currentLabel removeFromSuperview];
+         _currentLabel = newLabel;
+     }];
+    
+}
+
+- (void)changeToLastYear {
+    UIView *yearView = self.navigationItem.titleView;
+    NSString *nextYear = [NSString stringWithFormat:@"%i", _currentYear.intValue - 1];
+    _currentYear = nextYear;
+    UILabel *newLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, _currentLabel.frame.size.height, _currentLabel.frame.size.width, _currentLabel.frame.size.height)];
+    newLabel.text = [NSString stringWithFormat:@"%@ list", nextYear];
+    
+    [yearView addSubview:newLabel];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        _currentLabel.frame = CGRectMake(0, -_currentLabel.frame.size.height, _currentLabel.frame.size.width, _currentLabel.frame.size.height);
+        newLabel.frame = CGRectMake(0, 0, _currentLabel.frame.size.width, _currentLabel.frame.size.height);
+    } completion:^(BOOL finished)
+     {
+         [_currentLabel removeFromSuperview];
+         _currentLabel = newLabel;
+     }];
+}
+
 
 - (void)finishRefresh {
     [_pullAction endRefreshing];
+    [self loadBills];
 }
 
 - (void)obtainBillsAtIndex {

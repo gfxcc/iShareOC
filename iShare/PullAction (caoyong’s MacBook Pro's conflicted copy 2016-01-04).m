@@ -19,6 +19,17 @@ const CGFloat pDistanceToTop        = 15.0f;
 
 #define AnimationDuration 0.0
 
+@interface PullActionDefaultContentView : UIView <PullActionContentView>
+
+- (id)initWithFrame:(CGRect)frame;
+
+@property (nonatomic,getter=isEnabled) BOOL enabled;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic,getter=isEnabled) BOOL atBot;
+
+
+@end
+
 @interface PullActionDefaultContentView ()
 {
     UIView *_activity;
@@ -28,15 +39,10 @@ const CGFloat pDistanceToTop        = 15.0f;
     CGSize _contentSize;
     BOOL _changed;
     BOOL _processingAnimation;
-    
+
 }
 
-- (void)beginRefreshing:(BOOL)animated;
-- (void)endRefreshing;
-
 @end
-
-
 
 @implementation PullActionDefaultContentView
 
@@ -213,7 +219,7 @@ const CGFloat pDistanceToTop        = 15.0f;
 
 @interface PullAction ()
 {
-    PullActionDefaultContentView *_contentView;
+    UIView<PullActionContentView> *_contentView;
     
     BOOL _canRefresh;
     BOOL _ignoreInset;
@@ -227,7 +233,6 @@ const CGFloat pDistanceToTop        = 15.0f;
 @property (nonatomic, readwrite) BOOL refreshing;
 @property (nonatomic, assign) UIScrollView *scrollView;
 @property (nonatomic, assign) UIEdgeInsets originalContentInset;
-@property (nonatomic, assign) CGPoint originalContentOffset;
 
 @end
 
@@ -308,7 +313,6 @@ const CGFloat pDistanceToTop        = 15.0f;
             self.originalContentInset = originalContentInset;
             self.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0);
             _lastOffset = self.scrollView.contentOffset.y + self.originalContentInset.top;
-            _originalContentOffset = _scrollView.contentOffset;
         }
         return;
     }
@@ -317,102 +321,84 @@ const CGFloat pDistanceToTop        = 15.0f;
         return;
     }
     
-    
     CGFloat offset = self.originalContentInset.top != 0 ? [[change objectForKey:@"new"] CGPointValue].y + self.originalContentInset.top : 0;
-    CGFloat height = 0;
-    
-    
+    CGFloat height;
     CGFloat t = [[change objectForKey:@"new"] CGPointValue].y;
     CGFloat ttttt = self.originalContentInset.top;
     CGFloat tt = _scrollView.contentSize.height;
-    CGFloat ttt = _scrollView.bounds.size.height;/*
-    //NSLog(@"%f, %f, %f, %f\n", t, ttttt, tt, ttt);
-    //NSLog(@"%f %f\n", _scrollView.contentOffset.y, _scrollView.contentInset.top);
-    */
-    /* assign self.frame and height
-     * judge at bot or not. Need consider about!!! _scrollView.contentSize.height < _scrollView.bounds.size.height
-     * _scrollView.contentSize.height < _scrollView.bounds.size.height AS A1
-     * [[change objectForKey:@"new"] CGPointValue].y - (_scrollView.contentSize.height - _scrollView.bounds.size.height) > 0 AS A2
-     * (NOT A1) && (A2)
-     * _scrollView.contentSize.height > 0 means _scrollView has built
-     */
-    if ((
-         (_scrollView.contentSize.height >= _scrollView.bounds.size.height &&
-         [[change objectForKey:@"new"] CGPointValue].y - (_scrollView.contentSize.height - _scrollView.bounds.size.height) > 0)
-         )
-         && _scrollView.contentSize.height > 0) {
-        /* view at bot and contentSize.height > bounds.size.height*/
+    CGFloat ttt = _scrollView.bounds.size.height;
+    
+    if ([[change objectForKey:@"new"] CGPointValue].y - (_scrollView.contentSize.height - _scrollView.bounds.size.height) > 0 && _scrollView.contentSize.height > 0) {
+        //NSLog(@"detected!!!\n");
         height = [[change objectForKey:@"new"] CGPointValue].y - (_scrollView.contentSize.height - _scrollView.bounds.size.height);
-        if (height > 10) {
-            _contentView.atBot = YES;
-        } else {
-            _contentView.atBot = NO;
-        }
-        
+        _contentView.atBot = YES;
         self.frame = CGRectMake(0, _scrollView.contentSize.height,
                                 self.scrollView.frame.size.width, [[change objectForKey:@"new"] CGPointValue].y - (_scrollView.contentSize.height - _scrollView.bounds.size.height));
-        
-    } else if (-[[change objectForKey:@"new"] CGPointValue].y >= self.originalContentInset.top && !_contentView.atBot) {
-        /* view at top */
+    } else {
         _contentView.atBot = NO;
         height = -MIN(0.0f, offset);
         self.frame = CGRectMake(0, -height - self.originalContentInset.top + [self navigationBarInset], self.scrollView.frame.size.width, height);
-    } else if (_scrollView.contentSize.height < _scrollView.bounds.size.height && _scrollView.contentSize.height > 0 && [[change objectForKey:@"new"] CGPointValue].y != 0) {
-        /* view at bot and contentSize.height < bounds.size.height */
-        //_contentView.atBot = YES;
-        height = [[change objectForKey:@"new"] CGPointValue].y + self.originalContentInset.top;
-        if (height > 10) {
-            _contentView.atBot = YES;
-        } else {
-            _contentView.atBot = NO;
-        }
-        self.frame = CGRectMake(0, _scrollView.bounds.size.height - self.originalContentInset.top
-                                , self.scrollView.frame.size.width, height);
-
     }
-    
     if (_refreshing) {
         _lastOffset = offset;
         if (offset != 0) {
             _ignoreInset = YES;
             _ignoreOffset = YES;
-            BOOL flag = _contentView.atBot;
-            if (height <= pMaxDistance + 1) {
-                if (!flag) {
-                    // Set the inset depending on the situation
-                    
-                    _currentTopInset = pMaxDistance;
-                    [self.scrollView setContentInset:UIEdgeInsetsMake(_currentTopInset + self.originalContentInset.top, self.originalContentInset.left, self.originalContentInset.bottom, self.originalContentInset.right)];
-                    
-                } else {
-                    CGFloat offSetY;
-                    if (_scrollView.contentSize.height >= _scrollView.bounds.size.height) {
-                        offSetY = _scrollView.contentSize.height - _scrollView.bounds.size.height + pMaxDistance;
-                    } else {
-                        offSetY = -self.originalContentInset.top + pMaxDistance;
+            
+            if (offset < 0) {
+                // Set the inset depending on the situation
+                if (offset >= -pMaxDistance) {
+                    if (!self.scrollView.dragging) {
+                        if (!_didSetInset) {
+                            _didSetInset = YES;
+                            _hasSectionHeaders = NO;
+                            if([self.scrollView isKindOfClass:[UITableView class]]){
+                                for (int i = 0; i < [(UITableView *)self.scrollView numberOfSections]; ++i) {
+                                    if ([(UITableView *)self.scrollView rectForHeaderInSection:i].size.height) {
+                                        _hasSectionHeaders = YES;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (_hasSectionHeaders) {
+                            _currentTopInset = MIN(-offset, pMaxDistance);
+                            [self.scrollView setContentInset:UIEdgeInsetsMake(_currentTopInset + self.originalContentInset.top, self.originalContentInset.left, self.originalContentInset.bottom, self.originalContentInset.right)];
+                        } else {
+                            _currentTopInset = pMaxDistance;
+                            [self.scrollView setContentInset:UIEdgeInsetsMake(_currentTopInset + self.originalContentInset.top, self.originalContentInset.left, self.originalContentInset.bottom, self.originalContentInset.right)];
+                        }
+                    } else if (_didSetInset && _hasSectionHeaders) {
+                        _currentTopInset = -offset;
+                        [self.scrollView setContentInset:UIEdgeInsetsMake(_currentTopInset + self.originalContentInset.top, self.originalContentInset.left, self.originalContentInset.bottom, self.originalContentInset.right)];
                     }
-                    CGPoint newContentOffset = CGPointMake(0, offSetY);
-                    [self.scrollView setContentOffset:newContentOffset animated:NO];
-                    //[self.scrollView setContentInset:UIEdgeInsetsMake(offSetY, self.originalContentInset.left, self.originalContentInset.bottom, self.originalContentInset.right)];
                 }
+            } else if (_hasSectionHeaders) {
+                _currentTopInset = 0.0f;
+                [self.scrollView setContentInset:self.originalContentInset];
             }
             _ignoreInset = NO;
             _ignoreOffset = NO;
         }
         return;
     } else {
-        /*
+        
         // Check if we can trigger a new refresh and if we can draw the control
         BOOL dontDraw = NO;
         if (!_canRefresh) {
-            if (self.scrollView.isDragging && _lastOffset == 0) {
+            if (self.scrollView.isDragging && _lastOffset == 0 && offset <= 0) {
                 _canRefresh = YES;
                 _didSetInset = NO;
             } else {
                 dontDraw = YES;
             }
+        } else {
+            if (offset >= 0) {
+                // Don't draw if the control is not visible
+                dontDraw = YES;
+            }
         }
-        if (_lastOffset > offset && !self.scrollView.isTracking && 0) {
+        if (offset > 0 && _lastOffset > offset && !self.scrollView.isTracking) {
             // If we are scrolling too fast, don't draw, and don't trigger unless the scrollView bounced back
             _canRefresh = NO;
             dontDraw = YES;
@@ -422,18 +408,12 @@ const CGFloat pDistanceToTop        = 15.0f;
             _lastOffset = offset;
             return;
         }
-         */
     }
     
     _lastOffset = offset;
     
 
     if (_canRefresh && height > pMaxDistance && !self.scrollView.isDragging) {
-        if (_contentView.atBot) {
-            _functionNum = 1;
-        } else {
-            _functionNum = 0;
-        }
         [_contentView beginRefreshing:YES];
         self.refreshing = YES;
         _canRefresh = NO;
@@ -472,7 +452,6 @@ const CGFloat pDistanceToTop        = 15.0f;
             _ignoreInset = YES;
             _currentTopInset = 0.0f;
             [blockScrollView setContentInset:self.originalContentInset];
-            [blockScrollView setContentOffset:_originalContentOffset];
             _ignoreInset = NO;
         } completion:^(BOOL finished) {
             // We need to use the scrollView somehow in the end block,
@@ -480,7 +459,6 @@ const CGFloat pDistanceToTop        = 15.0f;
             _ignoreInset = YES;
             [blockScrollView setContentInset:self.originalContentInset];
             _ignoreInset = NO;
-            _contentView.atBot = NO;
         }];
         [_contentView endRefreshing];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

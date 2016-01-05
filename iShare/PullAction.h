@@ -8,19 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol PullActionContentView <NSObject>
+@interface PullActionDefaultContentView : UIView
 
-//@property (nonatomic, strong) NSString *message;
-@property (nonatomic, getter=isEnabled) BOOL atBot;
+- (id)initWithFrame:(CGRect)frame;
 
-- (void)beginRefreshing:(BOOL)animated;
-- (void)endRefreshing;
+@property (nonatomic) BOOL enabled;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic) BOOL atBot;
+
 
 @end
 
 
 @interface PullAction : UIControl
 
+@property (nonatomic) int functionNum;
 @property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, assign) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
 @property (nonatomic, strong) UIColor *activityIndicatorViewColor; // iOS5 or more

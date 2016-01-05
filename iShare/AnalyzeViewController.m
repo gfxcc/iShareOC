@@ -200,7 +200,7 @@
     [UIView animateWithDuration:2.0 animations:^{
         [_refreshControl endRefreshing];
     }];*/
-    [self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
+    //[self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
 }
 
 - (void)finishRefresh {
