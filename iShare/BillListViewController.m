@@ -52,6 +52,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _selectedhead = 12;
     
+    _billsWithMonth = [[NSMutableArray alloc] init];
     DateTranslate *dateTranslate = [[DateTranslate alloc] init];
     _dayOfMonth = dateTranslate.dayOfMonth;//[[NSMutableDictionary alloc] init];
 //    [_dayOfMonth setObject:@"01.01-01.31" forKey:@"1"];
@@ -115,7 +116,7 @@
     NSString *month = [formatter stringFromDate:[NSDate date]];
     _selectedhead = 0;
     
-    _billsWithMonth = [[NSMutableArray alloc] init];
+    
     /* create month label */
     int monthNum;
     if ([_currentYear isEqualToString:_realYear]) {
@@ -141,6 +142,9 @@
                                                          error:nil];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
+    if ([bills[0] isEqualToString:@""]) {
+        bills = [[NSArray alloc] init];
+    }
     
     for (NSInteger i = 0; i != bills.count; i++) {
         if ([bills[i] isEqualToString:@""]) {
