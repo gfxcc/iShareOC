@@ -151,7 +151,8 @@
     _statusView.layer.masksToBounds = YES;
     
 
-    [self obtain_bills];
+    //[self obtain_bills];
+    [self loadLastestBill];
     [self keepSyn];
     [self create_folder];
     
@@ -337,7 +338,9 @@
             
         } else if (error) {
             NSLog(@"Finished with error: %@", error);
-            
+//            [TSMessage showNotificationWithTitle:@"Warning"
+//                                        subtitle:@"Server is unavailable now!"
+//                                            type:TSMessageNotificationTypeWarning];
             [self performSelector:@selector(keepSyn) withObject:nil afterDelay:1.0f];
         } else {
             _requestsWriter.state = GRXWriterStateStarted;
@@ -859,7 +862,35 @@
     return [exist isEqualToString:@""] ? YES : NO;
 }
 
-
+- (void)loadLastestBill {
+    if ([self noBillRecord]) {
+        return;
+    }
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    //make a file name to write the data to using the documents directory:
+    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
+                          documentsDirectory];
+    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
+                                                  usedEncoding:nil
+                                                         error:nil];
+    NSArray *bills = [exist componentsSeparatedByString:@"\n"];
+    
+    for (int i = 0; i != 4 && i != bills.count; i++) {
+        NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
+        NSMutableArray *members = [[NSMutableArray alloc] init];
+        for (int j = 0; j != 10; j++) {
+//            if ([bill_content[j + 8] isEqualToString:@""]) {
+//                break;
+//            }
+            [members addObject:bill_content[j + 8]];
+        }
+        Bill *bill = [[Bill alloc] init];
+        [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
+        [_bill_latest addObject:bill];
+    }
+}
 
 - (void)openLeftMenu {
     [self performSelector:@selector(openhelp) withObject:nil afterDelay:0.1f];

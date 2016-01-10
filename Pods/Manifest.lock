@@ -32,7 +32,7 @@ PODS:
     - XHRealTimeBlur
   - PPiAwesomeButton (1.5.2):
     - FontAwesome+iOS
-  - Protobuf (3.0.0-alpha-4.1)
+  - Protobuf (3.0.0-beta-2)
   - TSMessages (0.9.12):
     - HexColors (~> 2.2.0)
   - XHRealTimeBlur (1.7)
@@ -58,7 +58,7 @@ SPEC CHECKSUMS:
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
   PopMenu: 26b97baeaf250070f4f61b93727ca86d127d7bc5
   PPiAwesomeButton: 16f7279582fd36f65186b24b83ef876217363eb5
-  Protobuf: a0f3b369ce888d47735a5ec1c40b1bc31cbad46b
+  Protobuf: f6e2be538e98cf00d9c00b276a32b7995b1f0328
   TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
   XHRealTimeBlur: 661fadd5691ba2d349758e8fd5fbdb499ac55f8c
 

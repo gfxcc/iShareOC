@@ -23,7 +23,7 @@
 //    // Configure the view for the selected state
 //}
 
--(void) setFrame:(CGRect) frame {
+- (void)setFrame:(CGRect) frame {
 
     frame.origin.x = 60.0;
     frame.size.width = [UIScreen mainScreen].bounds.size.width - 60.0;
@@ -39,6 +39,7 @@
 
 - (void)initWithType:(NSString *)type TypeIcon:(NSString *)typeIcon amount:(NSString *)amount memberCount:(NSString *)memberCount day:(NSString *)day dayHiden:(BOOL)dayHiden{
     // modify ui
+    
     self.backgroundColor = RGB(245, 245, 245);
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     UIImageView *lineImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 49, [UIScreen mainScreen].bounds.size.width, 1)];
@@ -63,7 +64,7 @@
     
     _monthLine = [[UIImageView alloc] initWithFrame:CGRectMake(-60, 49, 60, 1)];
     _monthLine.image = [UIImage imageNamed:@"line.png"];
-    [self addSubview:_monthLine];
+    //[self addSubview:_monthLine];
     
     ///////////////////
     

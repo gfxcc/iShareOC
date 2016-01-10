@@ -89,15 +89,31 @@
     
     _friendsArray = [[NSMutableArray alloc] init];
     
-    
     [self obtain_friends];
-    
-    
+    //[self loadFriends];
 }
 
 
 
 #pragma mark - custom functions
+
+- (void)loadFriends {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
+                          documentsDirectory];
+    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+                                                  usedEncoding:nil
+                                                         error:nil];
+    /* if no exist friends data */
+    if ([content isEqualToString:@""]) {
+        return;
+    }
+    NSArray *members = [content componentsSeparatedByString:@"\n"];
+    for (int i = 1; i < members.count; i++) {
+        [_friendsArray addObject:members[i]];
+    }
+}
 
 - (void)touch_icon {
     // do not login
@@ -444,7 +460,7 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return 1.0f;
+        return 0.0f;
     return 32.0f;
 }
 

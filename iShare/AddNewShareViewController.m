@@ -11,12 +11,11 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
+#import <TSMessageView.h>
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface AddNewShareViewController ()
-
-
 
 @end
 
@@ -330,7 +329,9 @@
             ViewController *mainUI = (ViewController *)_mainUIView;
             [mainUI obtain_bills];
         } else if (error) {
-            
+            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
+                                        subtitle:@"obtain_request"
+                                            type:TSMessageNotificationTypeError];
         }
     }];
     

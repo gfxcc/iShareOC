@@ -374,7 +374,7 @@
     if ((indexPath.row + 1) != [[_billsWithMonth objectAtIndex:indexPath.section] count]) {
         Bill *nextBill = [[_billsWithMonth objectAtIndex:indexPath.section] objectAtIndex:(indexPath.row + 1)];
         NSString *nextDay = [[nextBill.date componentsSeparatedByString:@"-"][2] componentsSeparatedByString:@" "][0];
-        if ([nextDay isEqualToString:day]) {
+        if ([nextDay isEqualToString:day] ) {
             [cell SetMonthLineHiden:YES];
         }
     }

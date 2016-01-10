@@ -11,6 +11,7 @@ pod "TSMessages"
 pod "JDStatusBarNotification"
 pod "PopMenu"
 pod 'PPiAwesomeButton'
+#pod 'Charts'
 #pod 'FontAwesome+iOS', :git => 'git@github.com:alexdrone/ios-fontawesome.git'
 
 end
