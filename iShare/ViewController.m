@@ -25,7 +25,9 @@
 #import "AppDelegate.h"
 #import "ABCIntroView.h"
 #import "popMenu.h"
+#import "BillStatistics.h"
 #import <JDStatusBarNotification/JDStatusBarNotification.h>
+#import <PNChart/PNChart.h>
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -39,6 +41,7 @@
 @property ABCIntroView *introView;
 @property (nonatomic, strong) PopMenu *myPopMenu;
 @property (nonatomic, strong) NSString *quickType;
+@property (nonatomic) PNPieChart *pieChart;
 
 @end
 
@@ -150,7 +153,7 @@
     _statusView.layer.cornerRadius = 5.0f;
     _statusView.layer.masksToBounds = YES;
     
-
+    [self loadCharts];
     //[self obtain_bills];
     [self loadLastestBill];
     [self keepSyn];
@@ -563,6 +566,7 @@
             
             [_tableView reloadData];
             [self finishUpdate];
+            [self loadCharts];
         }
     }];
 }
@@ -889,6 +893,49 @@
         Bill *bill = [[Bill alloc] init];
         [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         [_bill_latest addObject:bill];
+    }
+}
+
+- (void)loadCharts {
+    /*  */
+    BillStatistics *statistics = [[BillStatistics alloc] init];
+    [statistics initDate];
+    
+    /* pie charts layout */
+    NSArray *statisticsDate = [statistics compositionOfFirst:5];
+    
+    if (statisticsDate) {
+        NSArray *items = @[[PNPieChartDataItem dataItemWithValue:[statisticsDate[0][1] doubleValue] * 100 color:PNLightGreen description:statisticsDate[0][0]],
+                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[1][1] doubleValue] * 100 color:PNFreshGreen description:statisticsDate[1][0]],
+                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[2][1] doubleValue] * 100 color:PNDeepGreen description:statisticsDate[2][0]],
+                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[3][1] doubleValue] * 100 color:PNButtonGrey description:statisticsDate[3][0]],
+                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[4][1] doubleValue] * 100 color:PNBlue description:statisticsDate[4][0]],
+                           ];
+        
+        self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(5, 5, _statusView.frame.size.height - 10, _statusView.frame.size.height - 10) items:items];
+        self.pieChart.descriptionTextColor = [UIColor whiteColor];
+        self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:11.0];
+        self.pieChart.descriptionTextShadowColor = [UIColor clearColor];
+        self.pieChart.showAbsoluteValues = NO;
+        self.pieChart.showOnlyValues = NO;
+        self.pieChart.showOnlyValues = YES;
+        [self.pieChart strokeChart];
+        
+        
+        self.pieChart.legendStyle = PNLegendItemStyleStacked;
+        self.pieChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
+        
+        UIView *legend = [self.pieChart getLegendWithMaxWidth:200];
+        CGFloat originX;
+        if (legend.frame.size.width > (_statusView.frame.size.width - (10 + _pieChart.frame.size.width))) {
+            originX = _pieChart.frame.size.width + 10;
+        } else {
+            originX = (_statusView.frame.size.width - (10 + _pieChart.frame.size.width)) / 2 - legend.frame.size.width / 2 + (10 + _pieChart.frame.size.width);
+        }
+        [legend setFrame:CGRectMake(originX, self.statusView.frame.size.height / 2 - legend.frame.size.height / 2, legend.frame.size.width, legend.frame.size.height)];
+        [self.statusView addSubview:legend];
+        
+        [self.statusView addSubview:self.pieChart];
     }
 }
 

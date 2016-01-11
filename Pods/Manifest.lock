@@ -26,6 +26,8 @@ PODS:
   - HexColors (2.2.1)
   - JDStatusBarNotification (1.5.2)
   - OpenSSL (1.0.205)
+  - PNChart (0.8.7):
+    - UICountingLabel (~> 1.2.0)
   - pop (1.0.8)
   - PopMenu (2.4):
     - pop
@@ -35,11 +37,13 @@ PODS:
   - Protobuf (3.0.0-beta-2)
   - TSMessages (0.9.12):
     - HexColors (~> 2.2.0)
+  - UICountingLabel (1.2.0)
   - XHRealTimeBlur (1.7)
 
 DEPENDENCIES:
   - gRPC_pod (from `./Server`)
   - JDStatusBarNotification
+  - PNChart
   - PopMenu
   - PPiAwesomeButton
   - TSMessages
@@ -55,11 +59,13 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
   OpenSSL: 162687d7e96a3edeb4cf443ca6ce7cdb2912df7b
+  PNChart: c1755716bbd45386d2035b2bf2ce73e6d3f8cb22
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
   PopMenu: 26b97baeaf250070f4f61b93727ca86d127d7bc5
   PPiAwesomeButton: 16f7279582fd36f65186b24b83ef876217363eb5
   Protobuf: f6e2be538e98cf00d9c00b276a32b7995b1f0328
   TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
+  UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
   XHRealTimeBlur: 661fadd5691ba2d349758e8fd5fbdb499ac55f8c
 
 COCOAPODS: 0.39.0

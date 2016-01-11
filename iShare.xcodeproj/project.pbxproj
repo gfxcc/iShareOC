@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D131B2B1C429C7C00082105 /* BillStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D131B2A1C429C7C00082105 /* BillStatistics.m */; };
 		4D2D751E1C30913D00B19DCA /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751C1C30913D00B19DCA /* arrowDown.png */; };
 		4D2D751F1C30913D00B19DCA /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751D1C30913D00B19DCA /* arrowUp.png */; };
 		4D4C50961C307C6400A8AABA /* PullAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4C50951C307C6400A8AABA /* PullAction.m */; };
@@ -150,7 +151,6 @@
 		DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E41B6119F4007AEE7F /* LoginViewController.m */; };
 		DB952E841B6270D600482B00 /* leave.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E811B6270D600482B00 /* leave.png */; };
 		DB952E851B6270D600482B00 /* planner.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E821B6270D600482B00 /* planner.png */; };
-		DB952E861B6270D600482B00 /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E831B6270D600482B00 /* calendar.png */; };
 		DB952E8A1B62A81500482B00 /* calendar_month.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E871B62A81500482B00 /* calendar_month.png */; };
 		DB952E8B1B62A81500482B00 /* calendar_week.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E881B62A81500482B00 /* calendar_week.png */; };
 		DB952E8C1B62A81500482B00 /* calendar_day.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E891B62A81500482B00 /* calendar_day.png */; };
@@ -463,6 +463,8 @@
 
 /* Begin PBXFileReference section */
 		0238BDEAEFD5C3F593E795E4 /* libPods-iShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D131B291C429C7C00082105 /* BillStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BillStatistics.h; path = iShare/BillStatistics.h; sourceTree = "<group>"; };
+		4D131B2A1C429C7C00082105 /* BillStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BillStatistics.m; path = iShare/BillStatistics.m; sourceTree = "<group>"; };
 		4D2D751C1C30913D00B19DCA /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = iShare/Source/arrowDown.png; sourceTree = "<group>"; };
 		4D2D751D1C30913D00B19DCA /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = iShare/Source/arrowUp.png; sourceTree = "<group>"; };
 		4D4C50941C307C6400A8AABA /* PullAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullAction.h; path = iShare/PullAction.h; sourceTree = "<group>"; };
@@ -659,7 +661,6 @@
 		DB94B3E81B6119F4007AEE7F /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
 		DB952E811B6270D600482B00 /* leave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leave.png; path = iShare/Source/leave.png; sourceTree = "<group>"; };
 		DB952E821B6270D600482B00 /* planner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = planner.png; path = iShare/Source/planner.png; sourceTree = "<group>"; };
-		DB952E831B6270D600482B00 /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = iShare/Source/calendar.png; sourceTree = "<group>"; };
 		DB952E871B62A81500482B00 /* calendar_month.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_month.png; path = iShare/Source/calendar_month.png; sourceTree = "<group>"; };
 		DB952E881B62A81500482B00 /* calendar_week.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_week.png; path = iShare/Source/calendar_week.png; sourceTree = "<group>"; };
 		DB952E891B62A81500482B00 /* calendar_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_day.png; path = iShare/Source/calendar_day.png; sourceTree = "<group>"; };
@@ -1034,6 +1035,8 @@
 			children = (
 				DB952E951B6349F700482B00 /* DateTranslate.h */,
 				DB952E961B6349F700482B00 /* DateTranslate.m */,
+				4D131B291C429C7C00082105 /* BillStatistics.h */,
+				4D131B2A1C429C7C00082105 /* BillStatistics.m */,
 			);
 			name = toolClass;
 			sourceTree = "<group>";
@@ -1723,7 +1726,6 @@
 				DB952E891B62A81500482B00 /* calendar_day.png */,
 				DB952E811B6270D600482B00 /* leave.png */,
 				DB952E821B6270D600482B00 /* planner.png */,
-				DB952E831B6270D600482B00 /* calendar.png */,
 				DB94B2D61B6117AD007AEE7F /* Cash.png */,
 				DB94B2D71B6117AD007AEE7F /* Car.png */,
 				DB94B2D81B6117AD007AEE7F /* lunch && dinner.png */,
@@ -2161,7 +2163,6 @@
 				DB94B3BD1B6117AE007AEE7F /* headImage.jpg in Resources */,
 				DBF9FBC51BE7AE3E0070676C /* windsock.png in Resources */,
 				DB94B3D41B6117AE007AEE7F /* KeyboardTopShadow@2x.png in Resources */,
-				DB952E861B6270D600482B00 /* calendar.png in Resources */,
 				DBF9FB8E1BE7AE3E0070676C /* colorwheel.png in Resources */,
 				DBF9FB571BE7AE3E0070676C /* Wooden-Horse-icon.png in Resources */,
 				DBF9FBB31BE7AE3E0070676C /* motorcycle.png in Resources */,
@@ -2359,6 +2360,7 @@
 				DB94B3771B6117AD007AEE7F /* RKTabItem.m in Sources */,
 				DB94B3841B6117AD007AEE7F /* SlideNavigationController.m in Sources */,
 				4D4C50961C307C6400A8AABA /* PullAction.m in Sources */,
+				4D131B2B1C429C7C00082105 /* BillStatistics.m in Sources */,
 				DBDA46C61BADF10100E28B07 /* UIViewController+Utils.m in Sources */,
 				DB94B3681B6117AD007AEE7F /* BillsTableViewCell.m in Sources */,
 				DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */,

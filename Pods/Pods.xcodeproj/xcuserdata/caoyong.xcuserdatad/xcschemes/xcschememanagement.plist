@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>PNChart.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>PPiAwesomeButton.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -40,6 +45,11 @@
 			<false/>
 		</dict>
 		<key>TSMessages.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>UICountingLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,17 +82,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1B72B9C1C616C99B4BEBA683BF1249E0</key>
+		<key>11929A53A8AD141288485C2968E5803E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>199BAC7D3E698F4945F2B70C4BEC5F75</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>3D0F4913480F1F220EEDDF2069E34D02</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>40C62C93A06CC03877E246E20E6AD627</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,7 +107,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C3CB9D0F0E1C99C20ADEB29D9E6B232</key>
+		<key>5DB0A116CCE687CCCA559A7DD754D3D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7CEEB7F4CD0B847C8524FB6C3FD41570</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,17 +127,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A175D1743098E440035F21F5C37FABAE</key>
+		<key>924E68A8C4F891345FC9F5344BA0E8CA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A7FEE0F24EA817CFF95DCECF50E251F5</key>
+		<key>AEF89E7BE3106D578982C3EFF5506F2C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DA6724312928F98A7BD788B66009165A</key>
+		<key>CEC41F8BB8B2FB8EDB5649501EC7AF6F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E16AA91FF415D1723374580AE3456896</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -43,6 +43,7 @@
 
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
+- (void)loadCharts;
 - (void)openLeftMenu;
 - (void)hideMainUI;
 - (void)changeShadow;

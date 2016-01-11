@@ -109,7 +109,7 @@
                                             <action selector="grpc_t:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="w8f-5V-nDi"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Ishare" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ALZ-S1-pU2">
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Ishare" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ALZ-S1-pU2">
                                         <rect key="frame" x="40" y="35" width="221" height="68"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
@@ -1750,6 +1750,6 @@
         <image name="x.png" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fzL-BY-CSj"/>
+        <segue reference="Y9Q-BV-sYG"/>
     </inferredMetricsTieBreakers>
 </document>
