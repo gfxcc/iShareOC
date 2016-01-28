@@ -18,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     
@@ -106,9 +107,13 @@
     UICollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"collectionCell" forIndexPath:indexPath];
     //cell[cell initWithFrame:CGRectMake(0, 0, 50, 50)];
     
+    for (UIView *subview in [cell.contentView subviews]) {
+        [subview removeFromSuperview];
+    }
+    
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     imageView.image = [UIImage imageNamed:[self getImageNameWithTag:indexPath.row]];
-    [cell addSubview:imageView];
+    [cell.contentView addSubview:imageView];
     
     
     UITapGestureRecognizer* myLabelGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellClick:)];

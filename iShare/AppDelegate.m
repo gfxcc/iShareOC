@@ -82,9 +82,9 @@
 //注册失败
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    [TSMessage showNotificationWithTitle:@"RegisterFail"
-                                subtitle:[NSString stringWithFormat:@"%@", error]
-                                    type:TSMessageNotificationTypeError];
+//    [TSMessage showNotificationWithTitle:@"RegisterFail"
+//                                subtitle:[NSString stringWithFormat:@"%@", error]
+//                                    type:TSMessageNotificationTypeError];
     NSLog(@"%@", error);
 }
 

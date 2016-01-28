@@ -44,6 +44,7 @@
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
 - (void)loadCharts;
+- (void)removeCharts;
 - (void)openLeftMenu;
 - (void)hideMainUI;
 - (void)changeShadow;

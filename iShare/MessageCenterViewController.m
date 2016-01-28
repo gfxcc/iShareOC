@@ -47,7 +47,8 @@
     {
         [_tableView reloadData];
     } else if (segment.selectedSegmentIndex == 1) {
-        [segment setSelectedSegmentIndex:0];
+        //[segment setSelectedSegmentIndex:0];
+        [_tableView reloadData];
     }
     
     NSLog(@"%ld", segment.selectedSegmentIndex);
@@ -389,32 +390,60 @@
     static NSString *CellIdentifier = @"requestCell";
     
     RequestTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    Request_ *req = [_requestArray objectAtIndex:indexPath.row];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-    BOOL iconExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]];
-    
-    NSArray *req_content = [req.content componentsSeparatedByString:@"*"];
-    
-    if ([req.type isEqualToString:@"payment"]) {
-        [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"%@ has paid you %@ $", req.sender, req_content[3]]];
-        cell.confrimButton.tag = indexPath.row;
-        [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        cell.deleteButton.tag = indexPath.row;
-        [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    } else if ([req.type isEqualToString:@"friendInvite"]) {
-        if (!iconExist) {
-            [self downloadPicture:req.sender];
+    cell.confrimButton.hidden = NO;
+    cell.deleteButton.hidden = NO;
+    if (_segmentedControl.selectedSegmentIndex == 0) {
+        // Request View
+        Request_ *req = [_requestArray objectAtIndex:indexPath.row];
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+        BOOL iconExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]];
+        
+        NSArray *req_content = [req.content componentsSeparatedByString:@"*"];
+        
+        if ([req.type isEqualToString:@"payment"]) {
+            [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"%@ has paid you %@ $", req.sender, req_content[3]]];
+            cell.confrimButton.tag = indexPath.row;
+            [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            cell.deleteButton.tag = indexPath.row;
+            [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        } else if ([req.type isEqualToString:@"friendInvite"]) {
+            if (!iconExist) {
+                [self downloadPicture:req.sender];
+            }
+            
+            [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"Friend invite: %@", req.content]];
+            cell.confrimButton.tag = indexPath.row;
+            [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            cell.deleteButton.tag = indexPath.row;
+            [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            
+        }
+    } else {
+        // RequestLog View
+        Request_ *req = [_requestLogArray objectAtIndex:indexPath.row];
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+        BOOL iconExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]];
+        
+        NSArray *req_content = [req.content componentsSeparatedByString:@"*"];
+        
+        if ([req.type isEqualToString:@"payment"]) {
+            [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"%@ has paid you %@ $", req.sender, req_content[3]]];
+        } else if ([req.type isEqualToString:@"friendInvite"]) {
+            [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"Friend invite: %@", req.content]];
         }
         
-        [cell initWithIcon:(iconExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, req.sender]] : [UIImage imageNamed:@"question.png"]) label:[NSString stringWithFormat:@"Friend invite: %@", req.content]];
-        cell.confrimButton.tag = indexPath.row;
-        [cell.confrimButton addTarget:self action:@selector(confirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        cell.deleteButton.tag = indexPath.row;
-        [cell.deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
+        if ([req.response isEqualToString:@"OK"]) {
+            cell.deleteButton.hidden = YES;
+        } else {
+            cell.confrimButton.hidden = YES;
+        }
+        
     }
     
     return cell;

@@ -76,5 +76,6 @@ extern NSString  *const SlideNavigationControllerDidReveal;
 - (BOOL)isMenuOpen;
 - (void)leftMenuSelected:(id)sender;
 - (void)hideMainUI:(id)sender;
+- (void)setEnableShadow:(BOOL)enable;
 
 @end

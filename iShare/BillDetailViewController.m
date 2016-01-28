@@ -11,6 +11,7 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import <TSMessageView.h>
+#import "ViewController.h"
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -209,6 +210,8 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service delete_billWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
+            ViewController *mainUI = (ViewController *)_mainUIView;
+            [mainUI updateAllBills];
             [self.navigationController popToViewController:_mainUIView animated:YES];
             [TSMessage showNotificationWithTitle:@"Delete Success"
                                         subtitle:@""

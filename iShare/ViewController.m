@@ -41,7 +41,8 @@
 @property ABCIntroView *introView;
 @property (nonatomic, strong) PopMenu *myPopMenu;
 @property (nonatomic, strong) NSString *quickType;
-@property (nonatomic) PNPieChart *pieChart;
+@property (nonatomic, strong) PNPieChart *pieChart;
+@property (nonatomic, strong) UIView *legend;
 
 @end
 
@@ -73,9 +74,9 @@
     //Log the amount of times the application has been run
     NSLog(@"This application has been run %d amount of times", launchCount);
     
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.021"]) {
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.0541"]) {
         // Set the value to YES
-        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.021"];
+        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.0541"];
         self.navigationController.navigationBar.hidden = YES;
         //Run your first launch code (Bring user to info/setup screen, etc.)
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -158,7 +159,11 @@
     [self loadLastestBill];
     [self keepSyn];
     [self create_folder];
-    
+    //[self updateAllBills];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//        [self updateAllBills];
+//    });
+
     if (![_leftMenu.idText.text isEqualToString:@""] && _deviceTokenBool) {
         [self sendToken];
     }
@@ -457,6 +462,9 @@
 }
 
 - (void)obtain_bills {
+    
+    
+    
     [_bill_latest removeAllObjects];
     
     if ([_leftMenu.idText.text isEqualToString:@""]) {
@@ -529,11 +537,21 @@
 }
 
 - (void)updateAllBills {
+    
+    [JDStatusBarNotification showWithStatus:@"load data"];
+    [JDStatusBarNotification showActivityIndicator:YES
+                                    indicatorStyle:UIActivityIndicatorViewStyleGray];
+    
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
     request.username = _leftMenu.idText.text;
     request.start = @"0";
     request.amount = @"all";
+    
+    if ([request.username isEqualToString:@""]) {
+        [JDStatusBarNotification dismiss];
+        return;
+    }
     
     [_bills removeAllObjects];
     NSMutableArray *bills = [[NSMutableArray alloc] init]; // content for last bill
@@ -554,6 +572,8 @@
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
         } else {
+            [JDStatusBarNotification dismiss];
+            
             [self deleteAllBills];
             for (NSInteger i = _bills.count - 1; i >= 0; i--) {
                 [self addBillToFile:_bills[i]];
@@ -646,7 +666,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return _bill_latest.count == 0 ? 0 : 4;
+    return _bill_latest.count <= 4 ? _bill_latest.count : 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -695,6 +715,17 @@
     } else {
         week_tail = [[dateTranslate.dayOfMonth objectForKey:monthWithInt] integerValue];
     }
+    
+    // analyze type. just display second class type name
+    NSString *typeName = bill.type;
+    for (int i = 0; i != typeName.length; i++) {
+        if ([typeName characterAtIndex:i] == '>') {
+            typeName = [typeName substringFromIndex:++i];
+            bill.type = typeName;
+            break;
+        }
+    }
+    
     
     switch (0) {
         case 0:
@@ -867,6 +898,7 @@
 }
 
 - (void)loadLastestBill {
+    
     if ([self noBillRecord]) {
         return;
     }
@@ -898,6 +930,9 @@
 
 - (void)loadCharts {
     /*  */
+    [_legend removeFromSuperview];
+    [_pieChart removeFromSuperview];
+    
     BillStatistics *statistics = [[BillStatistics alloc] init];
     [statistics initDate];
     
@@ -905,13 +940,38 @@
     NSArray *statisticsDate = [statistics compositionOfFirst:5];
     
     if (statisticsDate) {
-        NSArray *items = @[[PNPieChartDataItem dataItemWithValue:[statisticsDate[0][1] doubleValue] * 100 color:PNLightGreen description:statisticsDate[0][0]],
-                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[1][1] doubleValue] * 100 color:PNFreshGreen description:statisticsDate[1][0]],
-                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[2][1] doubleValue] * 100 color:PNDeepGreen description:statisticsDate[2][0]],
-                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[3][1] doubleValue] * 100 color:PNButtonGrey description:statisticsDate[3][0]],
-                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[4][1] doubleValue] * 100 color:PNBlue description:statisticsDate[4][0]],
-                           ];
+//        NSArray *items = @[[PNPieChartDataItem dataItemWithValue:[statisticsDate[0][1] doubleValue] * 100 color:PNLightBlue description:statisticsDate[0][0]],
+//                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[1][1] doubleValue] * 100 color:PNFreshGreen description:statisticsDate[1][0]],
+//                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[2][1] doubleValue] * 100 color:PNDeepGreen description:statisticsDate[2][0]],
+//                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[3][1] doubleValue] * 100 color:PNButtonGrey description:statisticsDate[3][0]],
+//                           [PNPieChartDataItem dataItemWithValue:[statisticsDate[4][1] doubleValue] * 100 color:PNBlue description:statisticsDate[4][0]],
+//                           ];
         
+        NSMutableArray *items = [[NSMutableArray alloc] init];
+        for (int i = 0; i != statisticsDate.count; i++) {
+            UIColor *color;
+            switch (i) {
+                case 0:
+                    color = PNLightBlue;
+                    break;
+                case 1:
+                    color = PNFreshGreen;
+                    break;
+                case 2:
+                    color = PNDeepGreen;
+                    break;
+                case 3:
+                    color = PNButtonGrey;
+                    break;
+                case 4:
+                    color = PNBlue;
+                    break;
+                default:
+                    break;
+            }
+            PNPieChartDataItem *item = [PNPieChartDataItem dataItemWithValue:[statisticsDate[i][1] doubleValue] * 100 color:color description:statisticsDate[i][0]];
+            [items addObject:item];
+        }
         self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(5, 5, _statusView.frame.size.height - 10, _statusView.frame.size.height - 10) items:items];
         self.pieChart.descriptionTextColor = [UIColor whiteColor];
         self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:11.0];
@@ -925,18 +985,25 @@
         self.pieChart.legendStyle = PNLegendItemStyleStacked;
         self.pieChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
         
-        UIView *legend = [self.pieChart getLegendWithMaxWidth:200];
+        _legend = [self.pieChart getLegendWithMaxWidth:200];
         CGFloat originX;
-        if (legend.frame.size.width > (_statusView.frame.size.width - (10 + _pieChart.frame.size.width))) {
+        if (_legend.frame.size.width > (_statusView.frame.size.width - (10 + _pieChart.frame.size.width))) {
             originX = _pieChart.frame.size.width + 10;
         } else {
-            originX = (_statusView.frame.size.width - (10 + _pieChart.frame.size.width)) / 2 - legend.frame.size.width / 2 + (10 + _pieChart.frame.size.width);
+            originX = (_statusView.frame.size.width - (10 + _pieChart.frame.size.width)) / 2 - _legend.frame.size.width / 2 + (10 + _pieChart.frame.size.width);
         }
-        [legend setFrame:CGRectMake(originX, self.statusView.frame.size.height / 2 - legend.frame.size.height / 2, legend.frame.size.width, legend.frame.size.height)];
-        [self.statusView addSubview:legend];
+        [_legend setFrame:CGRectMake(originX, self.statusView.frame.size.height / 2 - _legend.frame.size.height / 2, _legend.frame.size.width, _legend.frame.size.height)];
         
-        [self.statusView addSubview:self.pieChart];
+        
+        
+        [self.statusView addSubview:_legend];
+        [self.statusView addSubview:_pieChart];
     }
+}
+
+- (void)removeCharts {
+    [_legend removeFromSuperview];
+    [_pieChart removeFromSuperview];
 }
 
 - (void)openLeftMenu {
@@ -949,7 +1016,12 @@
 // hide main UI. if it is hide, show main UI
 - (void)hideMainUI {
     [self performSelector:@selector(hidehelp) withObject:nil afterDelay:0.1f];
-    [SlideNavigationController sharedInstance].enableShadow = [SlideNavigationController sharedInstance].enableShadow ? NO : YES;
+    //[SlideNavigationController sharedInstance].enableShadow = [SlideNavigationController sharedInstance].enableShadow ? NO : YES;
+//    if ([SlideNavigationController sharedInstance].enableShadow) {
+//        [[SlideNavigationController sharedInstance] setEnableShadow:NO];
+//    } else {
+//        [[SlideNavigationController sharedInstance] setEnableShadow:YES];
+//    }
 }
 - (void)hidehelp {
     [[SlideNavigationController sharedInstance] hideMainUI:nil];
@@ -960,35 +1032,6 @@
     [SlideNavigationController sharedInstance].enableShadow = [SlideNavigationController sharedInstance].enableShadow ? NO : YES;
 }
 
-
-- (IBAction)grpc_t:(id)sender {
-
-    [TSMessage showNotificationWithTitle:@"Your Title"
-                                subtitle:@"A description"
-                                    type:TSMessageNotificationTypeSuccess];
-    
-    NSString *const kRemoteHost = ServerHost;
-    
-
-    HelloRequest *request = [HelloRequest message];
-    request.name = @"objective-c";
-    
-    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service sayHelloWithRequest:request handler:^(HelloReply *response, NSError *error) {
-        if (response) {
-            NSLog(@"%@", response.message);
-            
-        } else if(error){
-            [TSMessage showNotificationInViewController:self
-                                                  title:@"GRPC ERROR"
-                                               subtitle:@"send_DeviceTokenWithRequest"
-                                                   type:TSMessageNotificationTypeError
-                                               duration:TSMessageNotificationDurationEndless];
-        }
-    }];
-
-
-}
 
 - (void)create_folder {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

@@ -11,6 +11,7 @@
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
 #import "LeftMenuViewController.h"
+#import <TSMessageView.h>
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -67,11 +68,15 @@
     _userTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 205, [UIScreen mainScreen].bounds.size.width - 70, 40)];
     [_userTextField setKeyboardType:UIKeyboardTypeASCIICapable];
     _userTextField.delegate = self;
+    _userTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _userTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:_userTextField];
     
     _pwTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 255, [UIScreen mainScreen].bounds.size.width - 70, 40)];
     [_pwTextField setKeyboardType:UIKeyboardTypeASCIICapable];
     _pwTextField.delegate = self;
+    _pwTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _pwTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:_pwTextField];
     
     
@@ -124,6 +129,11 @@
             }
         } else if (error) {
             //NSLog(@"Finished with error: %@", error);
+            [TSMessage showNotificationInViewController:self
+                                                  title:response.information
+                                               subtitle:@"Your username might has been used. Please change your username."
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationAutomatic];
         }
     }];
     

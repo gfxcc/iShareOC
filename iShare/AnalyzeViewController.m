@@ -13,6 +13,8 @@
 #import "ODRefreshControl.h"
 #import "ViewController.h"
 
+#define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+
 @interface AnalyzeViewController ()
 
 //@property (nonatomic, strong) ODRefreshControl *refreshControl;
@@ -47,6 +49,9 @@
                             action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
     [_tableView addSubview:_refreshControl];*/
+    
+    //RGB(115, 117, 122)
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     
     _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
     [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
@@ -119,7 +124,7 @@
                     continue;
                 }
                 
-                NSInteger friendIndex = 0;
+                NSInteger friendIndex = -1;
                 for (NSInteger k = 0; k != _friendsArray.count; k++) {
                     if ([[_friendsArray objectAtIndex:k] isEqualToString:bill.members[j]]) {
                         friendIndex = k;
@@ -129,8 +134,8 @@
                         break;
                     }
                 }
-                if (friendIndex == 0) {
-                    NSLog(@"");
+                if (friendIndex == -1) {
+                    continue;
                 }
                 
             }
@@ -142,6 +147,7 @@
                     break;
                 }
             }
+            
             NSString *paidStatus = bill.paidStatus;
             if ([paidStatus characterAtIndex:index] == '0') {
                 bill.status = OWE;
@@ -150,15 +156,15 @@
             }
             
 
-            NSInteger friendIndex = 0;
+            NSInteger friendIndex = -1;
             for (NSInteger k = 0; k != _friendsArray.count; k++) {
                 if ([[_friendsArray objectAtIndex:k] isEqualToString:bill.paidBy]) {
                     friendIndex = k;
                     break;
                 }
             }
-            if (friendIndex == 0) {
-                NSLog(@"");
+            if (friendIndex == -1) {
+                continue;
             }
             [[_billsWithFriend objectAtIndex:friendIndex] addObject:bill];
         }
@@ -200,7 +206,7 @@
     [UIView animateWithDuration:2.0 animations:^{
         [_refreshControl endRefreshing];
     }];*/
-    //[self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
+    [self performSelector:@selector(finishRefresh) withObject:nil afterDelay:0.5f];
 }
 
 - (void)finishRefresh {

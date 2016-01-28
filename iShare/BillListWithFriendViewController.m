@@ -517,7 +517,11 @@
                                             subtitle:@"...."
                                                 type:TSMessageNotificationTypeWarning];
             } else if (_sum.doubleValue > 0) {
-                [self makePayment];
+                /* block this fun now */
+                //[self makePayment];
+                [TSMessage showNotificationWithTitle:@"wrong"
+                                            subtitle:[NSString stringWithFormat:@"only %@ can send request to you", _username]
+                                                type:TSMessageNotificationTypeWarning];
             } else {
                 [self sendPaymentRequest];
             }

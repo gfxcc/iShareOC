@@ -20,10 +20,16 @@
 #import "ViewController.h"
 #import "UserListTableViewCell.h"
 #import "BaseNavigationController.h"
+#import "SettingViewController.h"
 #import <TSMessageView.h>
 
-
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+
+@interface LeftMenuViewController ()
+
+@property(nonatomic, strong) NSIndexPath *deleteIndex;
+
+@end
 
 @implementation LeftMenuViewController
 
@@ -185,12 +191,11 @@
 }
 
 
-- (void)delete_friend:(NSInteger)index {
+- (void)delete_friend {
     NSString * const kRemoteHost = ServerHost;
-    
     Repeated_string *request = [[Repeated_string alloc] init];
     [request.contentArray addObject:_idText.text];
-    [request.contentArray addObject:_friendsArray[index]];
+    [request.contentArray addObject:_friendsArray[_deleteIndex.row]];
     
     // Example gRPC call using a generated proto client library:
     
@@ -201,11 +206,15 @@
             if ([response.information isEqualToString:@"OK"]) {
                 NSLog(@"Delete success!");
             }
-            
+            [_friendsArray removeObjectAtIndex:_deleteIndex.row];
+            [_tableView deleteRowsAtIndexPaths:@[_deleteIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
             
         } else if (error) {
-            NSLog(@"Finished with error: %@", error);
-            
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"GRPC ERROR"
+                                               subtitle:@"delete_friendWithRequest"
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
         }
     }];
 }
@@ -293,17 +302,30 @@
     
     // better?
     
-    request.contentArray = [NSMutableArray arrayWithArray:_friendsArray];
-    [request.contentArray insertObject:@"icon" atIndex:0];
-    [request.contentArray insertObject:_idText.text atIndex:1];
-    
-    for (int i = 0; i != request.contentArray.count; i++) {
-        NSLog(@"%@", request.contentArray[i]);
-    }
+//    request.contentArray = [NSMutableArray arrayWithArray:_friendsArray];
+//    [request.contentArray insertObject:@"icon" atIndex:0];
+//    [request.contentArray insertObject:_idText.text atIndex:1];
+    request.contentArray = [[NSMutableArray alloc] init];
+    [request.contentArray addObject:@"icon"];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _idText.text]]) {
+        [request.contentArray addObject:_idText.text];
+    }
+    
+    for (int i = 0; i != _friendsArray.count; i++) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsArray[i]]]) {
+            [request.contentArray addObject:_friendsArray[i]];
+        }
+    }
+    
+    
+    for (int i = 0; i != request.contentArray.count; i++) {
+        NSLog(@"%@", request.contentArray[i]);
+    }
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
@@ -339,25 +361,73 @@
 }
 
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"setting"]) {
+
+        
+        UINavigationController *navgation = (UINavigationController *)[segue destinationViewController];
+        //
+        SettingViewController *settingView = (SettingViewController *)([navgation viewControllers][0]);
+        settingView.mainUIView = _mainUIView;
+        settingView.username = _idText.text;
+        
+        
+        ViewController *mainUI = (ViewController *)_mainUIView;
+        [mainUI hideMainUI];
+    }
+}
+
+#pragma mark  - UIAlertView delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    ViewController *mainUI = (ViewController *)_mainUIView;
+    
+    if (alertView.tag == 0) {
+        switch (buttonIndex) {
+            case 0:
+                break;
+            case 1:// Sure!
+                [_friendsArray removeAllObjects];
+                [_tableView reloadData];
+                
+                [mainUI.bill_latest removeAllObjects];
+                [mainUI.tableView reloadData];
+                [mainUI removeCharts];
+                mainUI.helloWorld.text = @"Sign In OR Log In";
+                [self clean];
+                [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
+                [_add_sign_button setTitle:@"Sign Up" forState:UIControlStateNormal];
+                
+                _idText.text = @"";
+                _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
+                
+                break;
+            default:
+                break;
+        }
+    } else if (alertView.tag == 1) {
+        switch (buttonIndex) {
+            case 0:
+                break;
+            case 1:
+                [self delete_friend];
+                
+            default:
+                break;
+        }
+    }
+    
+}
+
 #pragma mark - reaction functions
 
 - (IBAction)log_out:(id)sender {
     
     //log out button
     if ([_log_button.titleLabel.text isEqualToString:@"Log out"]) {
-        [_friendsArray removeAllObjects];
-        [_tableView reloadData];
-        ViewController *mainUI = (ViewController *)_mainUIView;
-        [mainUI.bill_latest removeAllObjects];
-        [mainUI.tableView reloadData];
-        mainUI.helloWorld.text = @"Sign In OR Log In";
-        [self clean];
         
-        [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
-        [_add_sign_button setTitle:@"Sign Up" forState:UIControlStateNormal];
-        
-        _idText.text = @"";
-        _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Log out confirm" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Sure!", nil];
+        updateAlert.tag = 0;
+        [updateAlert show];
     } else {// log in button
         
         [self loginView];
@@ -406,6 +476,22 @@
                error:nil];
     
     fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/statisticsRecord",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/settingRecord",
                 documentsDirectory];
     
     [@"" writeToFile:fileName
@@ -594,32 +680,16 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //[self delete_friend:indexPath.row];
         //[self obtain_friends];
+        if (indexPath.section == 0) {
+            return;
+        }
         
-        NSString * const kRemoteHost = ServerHost;
-        Repeated_string *request = [[Repeated_string alloc] init];
-        [request.contentArray addObject:_idText.text];
-        [request.contentArray addObject:_friendsArray[indexPath.row]];
+        _deleteIndex = indexPath;
         
-        // Example gRPC call using a generated proto client library:
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:[NSString stringWithFormat:@"delete %@ from your friend list?", _friendsArray[indexPath.row]] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Sure!", nil];
+        updateAlert.tag = 1;
+        [updateAlert show];
         
-        Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-        [service delete_friendWithRequest:request handler:^(Inf *response, NSError *error) {
-            if (response) {
-                
-                if ([response.information isEqualToString:@"OK"]) {
-                    NSLog(@"Delete success!");
-                }
-                [_friendsArray removeObjectAtIndex:indexPath.row];
-                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-            } else if (error) {
-                [TSMessage showNotificationInViewController:self
-                                                      title:@"GRPC ERROR"
-                                                   subtitle:@"delete_friendWithRequest"
-                                                       type:TSMessageNotificationTypeError
-                                                   duration:TSMessageNotificationDurationEndless];
-            }
-        }];
     }
 }
 

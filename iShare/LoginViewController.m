@@ -51,6 +51,8 @@
     _UserNameTextField.layer.borderColor = boColor.CGColor;
     _UserNameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     _UserNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    _UserNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _UserNameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     UIImageView* imgUser = [[UIImageView alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
     imgUser.image = [UIImage imageNamed:@"iconfont-user"];
     [_UserNameTextField.leftView addSubview:imgUser];
@@ -58,6 +60,8 @@
     _PasswordTextField.layer.borderColor = boColor.CGColor;
     _PasswordTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     _PasswordTextField.leftViewMode = UITextFieldViewModeAlways;
+    _PasswordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _PasswordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     UIImageView* imgPwd = [[UIImageView alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
     imgPwd.image = [UIImage imageNamed:@"iconfont-password"];
     [_PasswordTextField.leftView addSubview:imgPwd];

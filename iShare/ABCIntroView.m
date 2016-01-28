@@ -17,6 +17,8 @@
 @property (strong, nonatomic) UIView *viewTwo;
 @property (strong, nonatomic) UIView *viewThree;
 @property (strong, nonatomic) UIView *viewFour;
+@property (strong, nonatomic) UIView *viewFive;
+@property (strong, nonatomic) UIView *viewSix;
 
 
 @end
@@ -38,6 +40,8 @@
         [self.scrollView addSubview:self.viewTwo];
         [self.scrollView addSubview:self.viewThree];
         [self.scrollView addSubview:self.viewFour];
+        [self.scrollView addSubview:self.viewFive];
+        [self.scrollView addSubview:self.viewSix];
         
         
         //Done Button
@@ -101,7 +105,7 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
         titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
-        titleLabel.text = [NSString stringWithFormat:@"Adjust Iphone6"];
+        titleLabel.text = [NSString stringWithFormat:@"Connect to friends"];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.textAlignment =  NSTextAlignmentCenter;
@@ -139,7 +143,7 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
         titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
-        titleLabel.text = [NSString stringWithFormat:@"New Type Editer"];
+        titleLabel.text = [NSString stringWithFormat:@"Quick type"];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.textAlignment =  NSTextAlignmentCenter;
@@ -148,21 +152,9 @@
         
         UIImageView *imageview = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width*.2, self.frame.size.height*.15, self.frame.size.width*.6, self.frame.size.height*.6)];
         imageview.contentMode = UIViewContentModeScaleAspectFit;
-        imageview.image = [UIImage imageNamed:@"introduce4.jpg"];
+        imageview.image = [UIImage imageNamed:@"introduce3.jpg"];
         [_viewThree addSubview:imageview];
-        
-        
-//        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width*.1, self.frame.size.height*.7, self.frame.size.width*.8, 60)];
-//        descriptionLabel.text = [NSString stringWithFormat:@"Description for Third Screen."];
-//        descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0];
-//        descriptionLabel.textColor = [UIColor whiteColor];
-//        descriptionLabel.textAlignment =  NSTextAlignmentCenter;
-//        descriptionLabel.numberOfLines = 0;
-//        [descriptionLabel sizeToFit];
-//        [_viewThree addSubview:descriptionLabel];
-//        
-//        CGPoint labelCenter = CGPointMake(self.center.x, self.frame.size.height*.7);
-//        descriptionLabel.center = labelCenter;
+    
     }
     return _viewThree;
     
@@ -178,7 +170,7 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
         titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
-        titleLabel.text = [NSString stringWithFormat:@"Create New Type"];
+        titleLabel.text = [NSString stringWithFormat:@"Bill detail"];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.textAlignment =  NSTextAlignmentCenter;
@@ -187,23 +179,62 @@
         
         UIImageView *imageview = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width*.2, self.frame.size.height*.15, self.frame.size.width*.6, self.frame.size.height*.6)];
         imageview.contentMode = UIViewContentModeScaleAspectFit;
-        imageview.image = [UIImage imageNamed:@"introduce3.jpg"];
+        imageview.image = [UIImage imageNamed:@"introduce4.jpg"];
         [_viewFour addSubview:imageview];
-        
-//        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width*.1, self.frame.size.height*.7, self.frame.size.width*.8, 60)];
-//        descriptionLabel.text = [NSString stringWithFormat:@"Description for Fourth Screen."];
-//        descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0];
-//        descriptionLabel.textColor = [UIColor whiteColor];
-//        descriptionLabel.textAlignment =  NSTextAlignmentCenter;
-//        descriptionLabel.numberOfLines = 0;
-//        [descriptionLabel sizeToFit];
-//        [_viewFour addSubview:descriptionLabel];
-//        
-//        CGPoint labelCenter = CGPointMake(self.center.x, self.frame.size.height*.7);
-//        descriptionLabel.center = labelCenter;
-        
     }
     return _viewFour;
+    
+}
+
+-(UIView *)viewFive {
+    if (!_viewFive) {
+        
+        CGFloat originWidth = self.frame.size.width;
+        CGFloat originHeight = self.frame.size.height;
+        
+        _viewFive = [[UIView alloc] initWithFrame:CGRectMake(originWidth*4, 0, originWidth, originHeight)];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
+        titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
+        titleLabel.text = [NSString stringWithFormat:@"Manage type"];
+        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
+        titleLabel.textColor = [UIColor whiteColor];
+        titleLabel.textAlignment =  NSTextAlignmentCenter;
+        titleLabel.numberOfLines = 0;
+        [_viewFive addSubview:titleLabel];
+        
+        UIImageView *imageview = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width*.2, self.frame.size.height*.15, self.frame.size.width*.6, self.frame.size.height*.6)];
+        imageview.contentMode = UIViewContentModeScaleAspectFit;
+        imageview.image = [UIImage imageNamed:@"introduce5.jpg"];
+        [_viewFive addSubview:imageview];
+    }
+    return _viewFive;
+    
+}
+
+-(UIView *)viewSix {
+    if (!_viewSix) {
+        
+        CGFloat originWidth = self.frame.size.width;
+        CGFloat originHeight = self.frame.size.height;
+        
+        _viewSix = [[UIView alloc] initWithFrame:CGRectMake(originWidth*5, 0, originWidth, originHeight)];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
+        titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
+        titleLabel.text = [NSString stringWithFormat:@"Clear bill list"];
+        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
+        titleLabel.textColor = [UIColor whiteColor];
+        titleLabel.textAlignment =  NSTextAlignmentCenter;
+        titleLabel.numberOfLines = 0;
+        [_viewSix addSubview:titleLabel];
+        
+        UIImageView *imageview = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width*.2, self.frame.size.height*.15, self.frame.size.width*.6, self.frame.size.height*.6)];
+        imageview.contentMode = UIViewContentModeScaleAspectFit;
+        imageview.image = [UIImage imageNamed:@"introduce6.jpg"];
+        [_viewSix addSubview:imageview];
+    }
+    return _viewSix;
     
 }
 
@@ -212,7 +243,7 @@
         _scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
         [_scrollView setDelegate:self];
         [_scrollView setPagingEnabled:YES];
-        [_scrollView setContentSize:CGSizeMake(self.frame.size.width*4, self.scrollView.frame.size.height)];
+        [_scrollView setContentSize:CGSizeMake(self.frame.size.width*6, self.scrollView.frame.size.height)];
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     return _scrollView;
@@ -222,7 +253,7 @@
     if (!_pageControl) {
         _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.8, self.frame.size.width, 10)];
         [_pageControl setCurrentPageIndicatorTintColor:[UIColor colorWithRed:0.153 green:0.533 blue:0.796 alpha:1.000]];
-        [_pageControl setNumberOfPages:4];
+        [_pageControl setNumberOfPages:6];
     }
     return _pageControl;
 }
