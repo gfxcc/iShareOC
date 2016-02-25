@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 iShare
+=======
+# iShareOC
+
+>>>>>>> e4eeb0f616994898345f1a74c4a08b5f6038c32a
 ==========
 
 This is an open source application based on Objective-C.
