@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>BoringSSL.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>FontAwesome+iOS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -82,32 +87,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>118D0B24F133D767CE41D26260192EBB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>11929A53A8AD141288485C2968E5803E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>199BAC7D3E698F4945F2B70C4BEC5F75</key>
+		<key>3277CAF199E0B93B34CCE53953844E35</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3D0F4913480F1F220EEDDF2069E34D02</key>
+		<key>4771956696D474737DC611D7D669E982</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>418F69572DC6690C2BDC1B67BA50F9EC</key>
+		<key>584FA3ED6BB7B6FA766BA9B256A4D93B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>54CC727B0D8849D8F9B4FF9F238D3BA7</key>
+		<key>5A0CC9A4E40E2B02CF107E4041263DEE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5DB0A116CCE687CCCA559A7DD754D3D7</key>
+		<key>662C29BCE50F2D2FB0DAE7752C820B91</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>77DEE7904D49D7B06D4E12F4BCAE7192</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,32 +137,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>8FFE31C0F7CFFDB599084060F6243F28</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>91DD3A06013D443F75BA2DDC6567987F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>924E68A8C4F891345FC9F5344BA0E8CA</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AEF89E7BE3106D578982C3EFF5506F2C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CEC41F8BB8B2FB8EDB5649501EC7AF6F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E16AA91FF415D1723374580AE3456896</key>
+		<key>92B1ED76E3EC83F59A4102BEC2257034</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E9EF397B95762DDB254C71DDCB4B1381</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F4F4C25F482FD272C1EFBDFF41D69BA2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

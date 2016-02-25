@@ -222,7 +222,7 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height*.05, self.frame.size.width*.8, 60)];
         titleLabel.center = CGPointMake(self.center.x, self.frame.size.height*.1);
-        titleLabel.text = [NSString stringWithFormat:@"Clear bill list"];
+        titleLabel.text = [NSString stringWithFormat:@"Bill list"];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:35.0];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.textAlignment =  NSTextAlignmentCenter;

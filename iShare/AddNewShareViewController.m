@@ -279,7 +279,17 @@
         NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
         request.data_p = prettyVersion;
     }
-    request.note = _comment.text;
+    
+    // handle comment. replace \n to 6
+    char *newComment = (char*)[_comment.text UTF8String];
+
+    for (int i = 0; i != _comment.text.length; i++) {
+        if (newComment[i] == '\n') {
+            newComment[i] = 6;
+        }
+    }
+    
+    request.note = [NSString stringWithUTF8String:newComment];
     
     // set image name
     request.image = NULL;

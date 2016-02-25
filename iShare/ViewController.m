@@ -74,9 +74,9 @@
     //Log the amount of times the application has been run
     NSLog(@"This application has been run %d amount of times", launchCount);
     
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.0541"]) {
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.10"]) {
         // Set the value to YES
-        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.0541"];
+        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.10"];
         self.navigationController.navigationBar.hidden = YES;
         //Run your first launch code (Bring user to info/setup screen, etc.)
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

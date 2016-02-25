@@ -122,11 +122,17 @@
     
     [UIView animateWithDuration:0.5f animations:^{
         
-        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x - 80, self.left_look.frame.origin.y, 40, 40);
+//        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x - 80, self.left_look.frame.origin.y, 40, 40);
+//        self.right_look.frame = CGRectMake(self.right_look.frame.origin.x + 40, self.right_look.frame.origin.y, 40, 40);
+//        
+//        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x+55, self.right_hidden.frame.origin.y+40, 40, 66);
+//        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x-60, self.left_hidden.frame.origin.y+40, 40, 66);
+        
+        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x - 40, self.left_look.frame.origin.y, 40, 40);
         self.right_look.frame = CGRectMake(self.right_look.frame.origin.x + 40, self.right_look.frame.origin.y, 40, 40);
         
-        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x+55, self.right_hidden.frame.origin.y+40, 40, 66);
-        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x-60, self.left_hidden.frame.origin.y+40, 40, 66);
+        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x + 40, self.right_hidden.frame.origin.y+40, 40, 66);
+        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x - 40, self.left_hidden.frame.origin.y+40, 40, 66);
         
     } completion:^(BOOL finished) {
         
@@ -138,11 +144,15 @@
 -(void)AnimationUserToPassword{
     [UIView animateWithDuration:0.5f animations:^{
         
-        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x + 80, self.left_look.frame.origin.y, 0, 0);
-        self.right_look.frame = CGRectMake(self.right_look.frame.origin.x - 40, self.right_look.frame.origin.y, 0, 0);
+//        self.right_look.frame = CGRectMake(self.right_look.frame.origin.x - 40, self.right_look.frame.origin.y, 0, 0);
+//        self.left_look.frame = CGRectMake(self.left_look.frame.origin.x + 80, self.left_look.frame.origin.y, 0, 0);
+        self.right_look.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 + 2, self.right_look.frame.origin.y, 0, 0);
+        self.left_look.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 20 - 40, self.left_look.frame.origin.y, 0, 0);
         
-        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x-55, self.right_hidden.frame.origin.y-40, 40, 66);
-        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x+60, self.left_hidden.frame.origin.y-40, 40, 66);
+//        self.right_hidden.frame = CGRectMake(self.right_hidden.frame.origin.x-55, self.right_hidden.frame.origin.y-40, 40, 66);
+//        self.left_hidden.frame = CGRectMake(self.left_hidden.frame.origin.x+60, self.left_hidden.frame.origin.y-40, 40, 66);
+        self.right_hidden.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 + 2, self.right_hidden.frame.origin.y-40, 40, 66);
+        self.left_hidden.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 20 - 40, self.left_hidden.frame.origin.y-40, 40, 66);
         
     } completion:^(BOOL finished) {
         
@@ -201,6 +211,7 @@
                 
                 ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
                 [mainUI obtain_bills];
+                [mainUI sendToken];
                 mainUI.helloWorld.text = @"Welcome to Ishare";
                 [self dismissViewControllerAnimated:true completion:^{
                     NSLog(@"Present Modal View");

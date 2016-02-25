@@ -206,10 +206,17 @@
 }
 
 - (void)RateiShareView {
-//    NSString * appId = @"545174222";
-//    NSString * theUrl = [NSString  stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software",appId];
-//    if ([[UIDevice currentDevice].systemVersion integerValue] > 6) theUrl = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@",appId];
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:theUrl]];
+    NSString *appID = @"1040263153";
+    NSString *str;
+    float ver = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (ver >= 7.0 && ver < 7.1) {
+        str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@",appID];
+    } else if (ver >= 8.0) {
+        str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software",appID];
+    } else {
+        str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@",appID];
+    }
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
 
 - (void)ContactDeveLoper {

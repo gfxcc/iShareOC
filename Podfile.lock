@@ -1,20 +1,21 @@
 PODS:
+  - BoringSSL (2.0)
   - FontAwesome+iOS (0.1.4)
-  - gRPC (0.11.1):
-    - gRPC/C-Core (= 0.11.1)
-    - gRPC/GRPCClient (= 0.11.1)
-    - gRPC/ProtoRPC (= 0.11.1)
-    - gRPC/RxLibrary (= 0.11.1)
-  - gRPC/C-Core (0.11.1):
-    - OpenSSL (~> 1.0.200)
-  - gRPC/GRPCClient (0.11.1):
+  - gRPC (0.12.0):
+    - gRPC/C-Core (= 0.12.0)
+    - gRPC/GRPCClient (= 0.12.0)
+    - gRPC/ProtoRPC (= 0.12.0)
+    - gRPC/RxLibrary (= 0.12.0)
+  - gRPC/C-Core (0.12.0):
+    - BoringSSL (~> 2.0)
+  - gRPC/GRPCClient (0.12.0):
     - gRPC/C-Core
     - gRPC/RxLibrary
-  - gRPC/ProtoRPC (0.11.1):
+  - gRPC/ProtoRPC (0.12.0):
     - gRPC/GRPCClient
     - gRPC/RxLibrary
-    - Protobuf (~> 3.0.0-alpha-4.1)
-  - gRPC/RxLibrary (0.11.1)
+    - Protobuf (~> 3.0.0-alpha-4)
+  - gRPC/RxLibrary (0.12.0)
   - gRPC_pod (0.0.1):
     - gRPC_pod/Messages (= 0.0.1)
     - gRPC_pod/Services (= 0.0.1)
@@ -25,7 +26,6 @@ PODS:
     - gRPC_pod/Messages
   - HexColors (2.2.1)
   - JDStatusBarNotification (1.5.2)
-  - OpenSSL (1.0.205)
   - PNChart (0.8.7):
     - UICountingLabel (~> 1.2.0)
   - pop (1.0.8)
@@ -53,12 +53,12 @@ EXTERNAL SOURCES:
     :path: ./Server
 
 SPEC CHECKSUMS:
+  BoringSSL: f9f1d54e79ad1795d8f47892009b1ba3de951c89
   FontAwesome+iOS: 9070b682a9255ca0fdc34bcfb129ad0ba2b73b87
-  gRPC: 25d5c4bc94988c483c4b429b7f341b776e7dd330
+  gRPC: 297fd91f82b8f36e6984cb701aa91eb3a2f1ef6c
   gRPC_pod: b917c2b340a6fe24877d4c74cf8637f0dfc85b59
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
-  OpenSSL: 162687d7e96a3edeb4cf443ca6ce7cdb2912df7b
   PNChart: c1755716bbd45386d2035b2bf2ce73e6d3f8cb22
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
   PopMenu: 26b97baeaf250070f4f61b93727ca86d127d7bc5
