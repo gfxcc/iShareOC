@@ -9,9 +9,10 @@
 #import "SecondTypeViewController.h"
 #import "BillTypeTableViewCell.h"
 #import "AddNewSecondClassTypeViewController.h"
+#import "FileOperation.h"
 
 @interface SecondTypeViewController ()
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation SecondTypeViewController
@@ -23,6 +24,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
+    
     //self.tableView.allowsMultipleSelectionDuringEditing = NO;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -45,13 +48,8 @@
 }
 
 - (void)reloadType {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
+
+    NSString *content = [_fileOperation getFileContent:@"billType"];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
@@ -185,13 +183,7 @@
             return;
         }
         
-        NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                              documentsDirectory];
-        NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                        usedEncoding:nil
-                                                               error:nil];
+        NSString *content = [_fileOperation getFileContent:@"billType"];
         NSMutableArray *linesOfFile= [[NSMutableArray alloc] initWithArray:[content componentsSeparatedByString:@"\n"]];
         NSArray *typeContent = [linesOfFile[_indexOfType] componentsSeparatedByString:@"#"];
         //_typeArray = [[NSMutableArray alloc] initWithArray:typeContent];
@@ -214,10 +206,7 @@
         for (int i = 1; i != linesOfFile.count; i++) {
             content = [NSString stringWithFormat:@"%@\n%@", content, linesOfFile[i]];
         }
-        [content writeToFile:fileName
-                  atomically:NO
-                    encoding:NSUTF8StringEncoding
-                       error:nil];
+        [_fileOperation setFileContent:content filename:@"billType"];
         
         [_typeArray removeObjectAtIndex:(indexPath.row + 1) * 2]; // remove name
         [_typeArray removeObjectAtIndex:(indexPath.row + 1) * 2]; // remove icon name

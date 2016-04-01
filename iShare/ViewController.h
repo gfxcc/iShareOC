@@ -13,10 +13,10 @@
 #import <gRPC/RxLibrary/GRXWriteable.h>
 #import <gRPC/RxLibrary/GRXWriter+Immediate.h>
 #import "RKTabView.h"
+#import "ABCIntroView.h"
 
 
-
-@interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ABCIntroViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *addNewButtion;
@@ -32,6 +32,7 @@
 @property(strong, nonatomic) LeftMenuViewController *leftMenu;
 @property(strong, nonatomic) NSMutableArray *request;
 @property(strong, nonatomic) NSString *deviceToken;
+@property(strong, nonatomic) NSString *user_id;
 
 @property(strong, nonatomic) RKTabItem *billList;
 @property(strong, nonatomic) RKTabItem *analyze;

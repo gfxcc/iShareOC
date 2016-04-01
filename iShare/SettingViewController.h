@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) UIViewController *mainUIView;
+@property (weak, nonatomic) UIViewController *leftUIView;
 @property (strong, nonatomic) NSString *username;
 
 @end

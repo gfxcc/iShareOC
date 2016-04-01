@@ -16,9 +16,10 @@
 #import <gRPC/RxLibrary/GRXWriteable.h>
 #import <gRPC/RxLibrary/GRXWriter+Immediate.h>
 #import "Bill.h"
+#import "FileOperation.h"
 
 @interface MessageCenterViewController ()
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation MessageCenterViewController
@@ -26,6 +27,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _fileOperation = [[FileOperation alloc] init];
+    _userId = [_fileOperation getUserId];
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -75,7 +78,7 @@
     [_requestArray removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
-    request.information = _idText;
+    request.information = [_fileOperation getUserId];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_requestWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
@@ -85,8 +88,8 @@
             [_requestArray addObject:req];
             
         } else if (error) {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"obtain_request"
+            [TSMessage showNotificationWithTitle:@"Sorry"
+                                        subtitle:@"Can not connect to server. Please try again later."
                                             type:TSMessageNotificationTypeError];
         } else {
             
@@ -100,7 +103,7 @@
     [_requestLogArray removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
-    request.information = _idText;
+    request.information = [_fileOperation getUserId];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
 
@@ -209,10 +212,11 @@
     [service add_friendWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
             [self responseToRequestID:index];
+        
         } else if (error) {
             [TSMessage showNotificationInViewController:self
-                                                  title:@"GRPC ERROR"
-                                               subtitle:@"add_friendWithRequest"
+                                                  title:@"Sorry"
+                                               subtitle:@"Please try again later."
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
         }
@@ -259,15 +263,8 @@
     
     NSMutableArray *billsNeedPaid = [[NSMutableArray alloc] init];
     // load bills
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
 
     for (NSInteger i = 0; i != bills.count; i++) {
@@ -287,7 +284,7 @@
             isMember = YES;
         } else {
             for (int i = 0; i != bill.members.count; i++) { // bill not paid by username. so bill need paid by idText and username owe it
-                if ([req.sender isEqualToString:bill.members[i]] && [bill.paidBy isEqualToString:_idText]) {
+                if ([req.sender isEqualToString:bill.members[i]] && [bill.paidBy isEqualToString:_userId]) {
                     isMember = YES;
                     break;
                 }
@@ -298,7 +295,7 @@
             continue;
         }
         
-        if ([bill.paidBy isEqualToString:_idText]) {
+        if ([bill.paidBy isEqualToString:_userId]) {
             //bill.status = LEND;
             NSInteger index = 0;
             for (NSInteger i = 0; i != bill.members.count; i++) {
@@ -336,7 +333,7 @@
             //bill.status = OWE;
             NSInteger index = 0;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([[bill.members objectAtIndex:i] isEqualToString:_idText]) {
+                if ([[bill.members objectAtIndex:i] isEqualToString:_userId]) {
                     index = i;
                     break;
                 }

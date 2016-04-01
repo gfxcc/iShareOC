@@ -47,10 +47,13 @@ typedef NS_ENUM(NSInteger, CYkeyboardKind) {
 @property (strong, nonatomic) NSMutableArray *secondTypeArray; // second class type
 
 @property (strong, nonatomic) NSMutableArray *memberArray;
+@property (strong, nonatomic) NSMutableArray *memberIdArray;
 @property (strong, nonatomic) UIViewController *mainUI;
 
 @property (strong, nonatomic) NSMutableArray *selectedItems;
 @property (strong, nonatomic) NSMutableArray *memberIcons;
+
+@property (weak, nonatomic) UILabel *amountLabel;
 
 - (id)initWithTitle:(NSString *)title;
 

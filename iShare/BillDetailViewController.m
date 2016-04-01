@@ -12,18 +12,20 @@
 #import <gRPC_pod/IShare.pbobjc.h>
 #import <TSMessageView.h>
 #import "ViewController.h"
+#import "FileOperation.h"
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface BillDetailViewController ()
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation BillDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
     
     // Do any additional setup after loading the view.
     self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
@@ -93,17 +95,13 @@
     [_memberBackground setUserInteractionEnabled:YES];
     [_memberBackground addGestureRecognizer:myLabelGesture5];
     
+    [_paidByBackground setFrame:CGRectMake(line6.frame.origin.x, _paidByBackground.frame.origin.y
+                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
+    
     _memberArray = [[NSMutableArray alloc] init];
     //
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     for (int i = 0; i != bills.count; i++) {
         NSArray *billContent = [bills[i] componentsSeparatedByString:@"*"];
@@ -112,8 +110,8 @@
             _amount.text = billContent[1];
             _type.text = billContent[2];
             _data.text = billContent[3];
-            _creater.text = billContent[4];
-            _paidBy.text = billContent[5];
+            _creater.text = [_fileOperation getUsernameByUserId:billContent[4]];
+            _paidBy.text = [_fileOperation getUsernameByUserId:billContent[5]];
             _comment.text = billContent[6];
             
             _image = NULL;
@@ -142,7 +140,8 @@
                 if ([billContent[j] isEqualToString:@""]) {
                     break;
                 }
-                [_memberArray addObject:billContent[j]];
+                // translate user_id to username
+                [_memberArray addObject:[_fileOperation getUsernameByUserId:billContent[j]]];
             }
             for (int j = 0; j != _memberArray.count; j++) {
                 if (j >= 3) {
@@ -202,7 +201,7 @@
     request.billId = _billId;
     for (int i = 0; i != 10; i++) {
         if (i < _memberArray.count) {
-            [request.membersArray addObject:_memberArray[i]];
+            [request.membersArray addObject:[_fileOperation getUserIdByUsername:_memberArray[i]]];
         } else {
             [request.membersArray addObject:@""];
         }
@@ -218,8 +217,8 @@
                                             type:TSMessageNotificationTypeSuccess];
         } else if (error) {
             [TSMessage showNotificationInViewController:self
-                                                  title:@"GRPC ERROR"
-                                               subtitle:@"delete_billWithRequest"
+                                                  title:@"Sorry"
+                                               subtitle:@"Fail to delete bill, Please try again later."
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
         }

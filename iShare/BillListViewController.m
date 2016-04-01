@@ -16,6 +16,7 @@
 #import "BillDetailViewController.h"
 #import "PullAction.h"
 #import "ODRefreshControl.h"
+#import "FileOperation.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -28,7 +29,7 @@
 @property (strong, nonatomic) UILabel *currentLabel;
 
 @property (nonatomic, strong) PullAction *pullAction;
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation BillListViewController
@@ -46,6 +47,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _fileOperation = [[FileOperation alloc] init];
+    _userId = [_fileOperation getUserId];
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -134,12 +137,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     if ([bills[0] isEqualToString:@""]) {
@@ -169,12 +167,12 @@
             continue;
         }
         
-        if ([bill.paidBy isEqualToString:_idText]) {
+        if ([bill.paidBy isEqualToString:_userId]) {
             // LEND mode
             
             bill.status = PAID;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([bill.paidStatus characterAtIndex:i] == '0' && ![[bill.members objectAtIndex:i] isEqualToString:_idText]) {
+                if ([bill.paidStatus characterAtIndex:i] == '0' && ![[bill.members objectAtIndex:i] isEqualToString:_userId]) {
                     bill.status = LEND;
                     break;
                 }
@@ -184,7 +182,7 @@
             
             NSInteger index = 0;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([[bill.members objectAtIndex:i] isEqualToString:_idText]) {
+                if ([[bill.members objectAtIndex:i] isEqualToString:_userId]) {
                     index = i;
                     break;
                 }

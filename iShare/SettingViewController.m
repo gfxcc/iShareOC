@@ -9,6 +9,7 @@
 #import "SettingViewController.h"
 #import "ViewController.h"
 #import "NotificationViewController.h"
+#import "AccountDetailViewController.h"
 #import <TSMessageView.h>
 
 #define Version @"Version 1.1.1";
@@ -171,7 +172,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"notification"]) {
         NotificationViewController *notificationView = (NotificationViewController *)[segue destinationViewController];
-        notificationView.username = _username;
+    } else if ([segue.identifier isEqualToString:@"accountDetail"]) {
+        AccountDetailViewController *accountDetailView = (AccountDetailViewController *)[segue destinationViewController];
+        accountDetailView.leftUIView = _leftUIView;
     }
 
 }
@@ -186,12 +189,14 @@
 
 - (void)QuickTypeSetting {
     //[self performSegueWithIdentifier:@"quickType" sender:self];
-    [TSMessage showNotificationInViewController:self
-                                          title:@"Warning"
-                                       subtitle:@"This function will release soon..."
-                                           type:TSMessageNotificationTypeWarning
-                                       duration:TSMessageNotificationDurationAutomatic];
-    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+//    [TSMessage showNotificationInViewController:self
+//                                          title:@"Warning"
+//                                       subtitle:@"This function will release soon..."
+//                                           type:TSMessageNotificationTypeWarning
+//                                       duration:TSMessageNotificationDurationAutomatic];
+//    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    
+    [self performSegueWithIdentifier:@"quickType" sender:self];
     
 }
 

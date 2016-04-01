@@ -106,12 +106,12 @@
     // Example gRPC call using a generated proto client library:
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service sign_upWithRequest:request handler:^(Inf *response, NSError *error) {
+    [service sign_upWithRequest:request handler:^(Reply_inf *response, NSError *error) {
         if (response) {
             if ([response.information isEqualToString:@"OK"]) {
                 
                 LeftMenuViewController *leftView = (LeftMenuViewController *)_LeftMenuView;
-                //[leftView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
+
                 [leftView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
                 [leftView.idText setText:_userTextField.text];
                 [leftView obtain_friends];

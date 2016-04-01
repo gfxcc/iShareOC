@@ -12,6 +12,8 @@
 #import "ViewController.h"
 #import "BaseNavigationController.h"
 #import "SignUpViewController.h"
+#import "FileOperation.h"
+#import <TSMessageView.h>
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -27,7 +29,7 @@
 //@property (strong, nonatomic) UIImageView* imgRightHandGone;
 
 @property (nonatomic) LogingAnimationType AnimationType;
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation LoginViewController
@@ -40,6 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self UISetting];
+    _fileOperation = [[FileOperation alloc] init];
 }
 
 -(void)UISetting{
@@ -104,14 +107,12 @@
         username = [username substringToIndex:username.length - 1];
     }
     // check invalid character
-    for (int i = 0; i != username.length; i++) {
-        if ([username characterAtIndex:i] == '*') {
-            UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"* is invalid character. Please change username." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            
-            [updateAlert show];
-            [_UserNameTextField setText:@""];
-            return;
-        }
+    if (![_fileOperation checkString:_UserNameTextField.text cha:'*'] ||! [_fileOperation checkString:_UserNameTextField.text cha:'\'']) {
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"'*', ''' is invalid character. Please change username." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        
+        [updateAlert show];
+        [_UserNameTextField setText:@""];
+        return;
     }
     
     [_UserNameTextField setText:username];
@@ -169,7 +170,7 @@
 
 
 - (IBAction)logIn:(id)sender {
-    NSLog(@"testsetets");
+    // string check
     [self usernameCheck];
     if ([_UserNameTextField.text isEqualToString:@""] || [_PasswordTextField.text isEqualToString:@""]) {
         UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Warming" message: @"Invalid Email or Password." delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
@@ -178,63 +179,139 @@
         return;
     }
     
+    NSString *text = _LoginButton.titleLabel.text;
+    if ([text isEqualToString:@"Sign in"]) {
+        
+        
+        NSString * const kRemoteHost = ServerHost;
+        Login_m *request = [[Login_m alloc] init];
+        request.username = _UserNameTextField.text;
+        request.password = _PasswordTextField.text;
+        
+        // Example gRPC call using a generated proto client library:
+        
+        Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+        [service loginWithRequest:request handler:^(Reply_inf *response, NSError *error) {
+            if (response) {
+                if ([response.status isEqualToString:@"OK"]) {
+                    [_fileOperation setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", _UserNameTextField.text, response.information]];
+                    _LeftMenuView.user_id = response.information;
+                    
+                    [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
+                    [_LeftMenuView.idText setText:_UserNameTextField.text];
+                    [_LeftMenuView obtain_friends];
+                    
+                    
+                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+                    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+                    
+                    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
+                    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+                    
+                    if (fileExists) {
+                        _LeftMenuView.headImage.image = [UIImage imageWithContentsOfFile:dataPath];
+                    } else {
+                        _LeftMenuView.headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
+                    }
+                    
+                    ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
+                    mainUI.user_id = response.information;
+                    [mainUI obtain_bills];
+                    [mainUI sendToken];
+                    
+                    mainUI.helloWorld.text = @"Welcome to Ishare";
+                    [self dismissViewControllerAnimated:true completion:^{
+                        NSLog(@"Present Modal View");
+                    }];
+                } else {
+                    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Message" message:response.information delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
+                    
+                    [updateAlert show];
+                }
+                
+            } else if (error) {
+                NSLog(@"Finished with error: %@", error);
+            }
+        }];
+    } else {
+        /*
+        NSString * const kRemoteHost = ServerHost;
+        Sign_m *request = [[Sign_m alloc] init];
+        request.username = _UserNameTextField.text;
+        request.password = _PasswordTextField.text;
+        
+        // Example gRPC call using a generated proto client library:
+        
+        Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+        [service sign_upWithRequest:request handler:^(Reply_inf *response, NSError *error) {
+        
+        }];
+         */
+        UIAlertView *emailInput = [[UIAlertView alloc] initWithTitle:@"Email" message:@"Please input your Email" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        emailInput.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [emailInput textFieldAtIndex:0].delegate = self;
+        [emailInput show];
+        
+    }
+
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            break;
+        case 1:// OK
+            [self signUpWithEmail:[alertView textFieldAtIndex:0].text];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)signUpWithEmail:(NSString*)email {
     NSString * const kRemoteHost = ServerHost;
-    Login_m *request = [[Login_m alloc] init];
+    Sign_m *request = [[Sign_m alloc] init];
     request.username = _UserNameTextField.text;
     request.password = _PasswordTextField.text;
+    request.email = email;
     
     // Example gRPC call using a generated proto client library:
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service loginWithRequest:request handler:^(Inf *response, NSError *error) {
+    [service sign_upWithRequest:request handler:^(Reply_inf *response, NSError *error) {
         if (response) {
-            if ([response.information isEqualToString:@"OK"]) {
+            if ([response.status isEqualToString:@"OK"]) {
+                [_fileOperation setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", _UserNameTextField.text, response.information]];
+                _LeftMenuView.user_id = response.information;
                 
-                
-                [_LeftMenuView.add_sign_button setTitle:@"Add" forState:UIControlStateNormal];
                 [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
                 [_LeftMenuView.idText setText:_UserNameTextField.text];
                 [_LeftMenuView obtain_friends];
                 
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-                NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-                
-                dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _LeftMenuView.idText.text];
-                BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-                
-                if (fileExists) {
-                    _LeftMenuView.headImage.image = [UIImage imageWithContentsOfFile:dataPath];
-                } else {
-                    _LeftMenuView.headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
-                }
-                
-                ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
+                ViewController *mainUI = (ViewController*)_LeftMenuView.mainUIView;
+                mainUI.user_id = response.information;
                 [mainUI obtain_bills];
                 [mainUI sendToken];
-                mainUI.helloWorld.text = @"Welcome to Ishare";
+                
+                
                 [self dismissViewControllerAnimated:true completion:^{
                     NSLog(@"Present Modal View");
                 }];
             } else {
-                UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Message" message:response.information delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
+                UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Warning" message: @"username has been used, please change" delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
                 
                 [updateAlert show];
             }
-            
-        } else if (error) {
-            NSLog(@"Finished with error: %@", error);
+        } else if(error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"ERROR"
+                                               subtitle:response.information
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationAutomatic];
         }
     }];
-
 }
-
-
-- (IBAction)signUp:(id)sender {
-    
-    [self performSegueWithIdentifier:@"transformToSignUp" sender:self];
-}
-
 
 
 - (IBAction)back_mainUI:(id)sender {
@@ -243,6 +320,18 @@
         NSLog(@"Present Modal View");
     }];
 }
+
+
+- (IBAction)changeSignMode:(id)sender {
+    NSString *text = _LoginButton.titleLabel.text;
+    if ([text isEqualToString:@"Sign in"]) {
+        [_LoginButton setTitle:@"Sign up" forState:UIControlStateNormal];
+    } else {
+        [_LoginButton setTitle:@"Sign in" forState:UIControlStateNormal];
+    }
+}
+
+
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

@@ -22,12 +22,15 @@
 #import "BaseNavigationController.h"
 #import "SettingViewController.h"
 #import <TSMessageView.h>
+#import "FileOperation.h"
+#import "BillListWithFriendViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface LeftMenuViewController ()
 
 @property(nonatomic, strong) NSIndexPath *deleteIndex;
+@property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
 
@@ -51,23 +54,26 @@
 {
     [super viewDidLoad];
     //self.tableView.separatorColor = [UIColor lightGrayColor];
+    
+    _fileOperation = [[FileOperation alloc] init];
+    _user_id = [_fileOperation getUserId];
 
     self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
     self.view.backgroundColor = RGB(61, 64, 71);
     _headImage.layer.cornerRadius = 5;
     _headImage.clipsToBounds = YES;
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
+    
+
     
     [_idText setTextColor:RGB(255, 255, 255)];
-    _idText.text = members.count == 0 ? @"" : members[0];
+    
+    NSString *username = [_fileOperation getUsername];
+    if ([username isEqualToString:@""] || !username) {
+        _idText.text = @"";
+    } else {
+        _idText.text = username;
+    }
     if ([_idText.text isEqualToString:@""]) {
         [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
     }
@@ -75,10 +81,11 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     
-    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _idText.text];
+    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id];
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
     
     if (fileExists) {
@@ -94,6 +101,7 @@
     [_headImage setUserInteractionEnabled:YES];
     
     _friendsArray = [[NSMutableArray alloc] init];
+    _friendsIdArray = [[NSMutableArray alloc] init];
     
     [self obtain_friends];
     //[self loadFriends];
@@ -104,19 +112,9 @@
 #pragma mark - custom functions
 
 - (void)loadFriends {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
-    /* if no exist friends data */
-    if ([content isEqualToString:@""]) {
-        return;
-    }
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
-    for (int i = 1; i < members.count; i++) {
+
+    NSArray *members = [_fileOperation getFriendsNameList];
+    for (int i = 0; i < members.count; i++) {
         [_friendsArray addObject:members[i]];
     }
 }
@@ -163,10 +161,14 @@
 }
 
 - (void)obtain_friends {
+    if ([_idText.text isEqualToString:@""]) {
+        return;
+    }
+    
     NSString * const kRemoteHost = ServerHost;
-
+    
     Inf *request = [[Inf alloc] init];
-    request.information = _idText.text;
+    request.information = _user_id;
     //NSString *t = _idText.text;
     
     // Example gRPC call using a generated proto client library:
@@ -175,10 +177,17 @@
     [service user_infWithRequest:request handler:^(User_detail *response, NSError *error) {
         if (response) {
             [_friendsArray removeAllObjects];
-            for (int i = 0; i != response.friendsArray.count; i++) {
+            for (int i = 0; i != response.friendsNameArray.count; i++) {
                 //NSLog(@"%@  ", response.friendsArray[i]);
-                _friendsArray[i] = response.friendsArray[i];
+                [_friendsArray addObject:response.friendsNameArray[i]];
             }
+            
+            [_friendsIdArray removeAllObjects];
+            for (int i = 0; i != response.friendsIdArray.count; i++) {
+                //NSLog(@"%@  ", response.friendsArray[i]);
+                [_friendsIdArray addObject:response.friendsIdArray[i]];
+            }
+            
             [self download_friends_icon];
             [self save_data];
             [_tableView reloadData];
@@ -194,25 +203,22 @@
 - (void)delete_friend {
     NSString * const kRemoteHost = ServerHost;
     Repeated_string *request = [[Repeated_string alloc] init];
-    [request.contentArray addObject:_idText.text];
-    [request.contentArray addObject:_friendsArray[_deleteIndex.row]];
+    [request.contentArray addObject:_user_id];
+    [request.contentArray addObject:_friendsIdArray[_deleteIndex.row]];
     
     // Example gRPC call using a generated proto client library:
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service delete_friendWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
-            
-            if ([response.information isEqualToString:@"OK"]) {
-                NSLog(@"Delete success!");
-            }
+            NSLog(@"Delete success!");
             [_friendsArray removeObjectAtIndex:_deleteIndex.row];
             [_tableView deleteRowsAtIndexPaths:@[_deleteIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
             
         } else if (error) {
             [TSMessage showNotificationInViewController:self
-                                                  title:@"GRPC ERROR"
-                                               subtitle:@"delete_friendWithRequest"
+                                                  title:@"Sorry"
+                                               subtitle:@"Please try again later."
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
         }
@@ -221,24 +227,15 @@
 
 // save friend list and icon
 - (void)save_data {
-
-    NSString *result = _idText.text;
-    for (int i = 0; i != _friendsArray.count ; i++) {
-        result = [NSString stringWithFormat:@"%@\n%@", result, _friendsArray[i]];
-    }
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    [result writeToFile:fileName
-             atomically:NO
-               encoding:NSUTF8StringEncoding
-                  error:nil];
+    
+    [_fileOperation setFriendListWithName:_friendsArray UserId:_friendsIdArray];
+    
     // save icon
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     NSData *image_data = UIImagePNGRepresentation(_headImage.image);
-    [image_data writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, _idText.text] atomically:YES];
+    [image_data writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id] atomically:YES];
 }
 
 - (void)loginView {
@@ -312,21 +309,17 @@
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _idText.text]]) {
-        [request.contentArray addObject:_idText.text];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id]]) {
+        [request.contentArray addObject:_user_id];
     }
     
     for (int i = 0; i != _friendsArray.count; i++) {
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsArray[i]]]) {
-            [request.contentArray addObject:_friendsArray[i]];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[i]]]) {
+            [request.contentArray addObject:_friendsIdArray[i]];
         }
     }
     
-    
-    for (int i = 0; i != request.contentArray.count; i++) {
-        NSLog(@"%@", request.contentArray[i]);
-    }
-    
+
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
         if (!done) {
@@ -343,7 +336,7 @@
             NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
             NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
             
-            dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _idText.text];
+            dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id];
             BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
             
             if (fileExists) {
@@ -360,18 +353,32 @@
     
 }
 
+#pragma mark  - prepareForSegue
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"setting"]) {
-
         
         UINavigationController *navgation = (UINavigationController *)[segue destinationViewController];
         //
         SettingViewController *settingView = (SettingViewController *)([navgation viewControllers][0]);
         settingView.mainUIView = _mainUIView;
         settingView.username = _idText.text;
+        settingView.leftUIView = self;
         
+        ViewController *mainUI = (ViewController *)_mainUIView;
+        [mainUI hideMainUI];
+    } else if ([segue.identifier isEqualToString:@"checkBillWithFriend"]) {
+        //BillListWithFriendViewController *billView = (BillListWithFriendViewController*)[segue destinationViewController];
+        BillListWithFriendViewController *billListView = (BillListWithFriendViewController*)[segue destinationViewController];
+        billListView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         
+        billListView.username = _friendsArray[[_tableView indexPathForSelectedRow].row];
+        billListView.navigationItem.title = _friendsArray[[_tableView indexPathForSelectedRow].row];
+        billListView.sum = @"NULL";
+        billListView.idText = [_friendsArray objectAtIndex:[_tableView indexPathForSelectedRow].row];
+        billListView.mainUIView = _mainUIView;
+        
+        // hide mainUI first
         ViewController *mainUI = (ViewController *)_mainUIView;
         [mainUI hideMainUI];
     }
@@ -395,7 +402,6 @@
                 mainUI.helloWorld.text = @"Sign In OR Log In";
                 [self clean];
                 [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
-                [_add_sign_button setTitle:@"Sign Up" forState:UIControlStateNormal];
                 
                 _idText.text = @"";
                 _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
@@ -434,28 +440,7 @@
         //[_log_button setTitle:@"log out" forState:UIControlStateNormal];
     }
 }
-- (IBAction)add_sign:(id)sender {
-    
-    if ([_add_sign_button.titleLabel.text isEqualToString:@"Add"]) {
-        
-        UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        SearchViewController *searchView = [mainStoryboard instantiateViewControllerWithIdentifier:@"SearchView"];
-        searchView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        searchView.LeftMenuView = self;
-        
-        // hide mainUI first
-        ViewController *mainUI = (ViewController *)_mainUIView;
-        [mainUI hideMainUI];
-        
-        [self presentViewController:searchView animated:YES completion:^{
-            NSLog(@"Present Modal View");
-        }];
-        
-    } else {
-        [self signUpView];
-        
-    }
-}
+
 
 // clean data like friends file, billRecord fill, billType
 - (void)clean {
@@ -498,6 +483,16 @@
           atomically:NO
             encoding:NSUTF8StringEncoding
                error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/quickType",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    
 
 }
 
@@ -513,7 +508,7 @@
     [mainUI hideMainUI];
     
     // send image
-    [self send_imge:chosenImage name:_idText.text path:@"icon"];
+    [self send_imge:chosenImage name:_user_id path:@"icon"];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -562,7 +557,9 @@
         title.text = @"FRIENDS";
         [headView addSubview:title];
         
-        UIButton *edit = [[UIButton alloc] initWithFrame:CGRectMake(200, 2, 100, 28)];
+        CGFloat originX = [UIScreen mainScreen].bounds.size.width;
+        originX = originX / 2 + 20;
+        UIButton *edit = [[UIButton alloc] initWithFrame:CGRectMake(originX, 2, 100, 28)];
         [edit setTitle:@"EDIT" forState:UIControlStateNormal];
         [edit setTitleColor:RGB(115, 117, 122) forState:UIControlStateNormal];
         [edit addTarget:self action:@selector(editClick) forControlEvents:UIControlEventTouchUpInside];
@@ -621,7 +618,7 @@
         NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
         NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
         
-        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsArray[indexPath.row]];
+        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[indexPath.row]];
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
         
         if (fileExists) {
@@ -660,6 +657,27 @@
         [self presentViewController:searchView animated:YES completion:^{
             NSLog(@"Present Modal View");
         }];
+    } else {
+        //[self performSegueWithIdentifier:@"checkBillWithFriend" sender:self];
+        /*
+        UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        BillListWithFriendViewController *billListView = [mainStoryboard instantiateViewControllerWithIdentifier:@"BillsWithFriendView"];
+        billListView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        
+        billListView.username = _friendsArray[[_tableView indexPathForSelectedRow].row];
+        billListView.navigationItem.title = _friendsArray[[_tableView indexPathForSelectedRow].row];
+        billListView.sum = @"NULL";
+        billListView.idText = [_friendsArray objectAtIndex:indexPath.row];
+        billListView.mainUIView = _mainUIView;
+        
+        // hide mainUI first
+        ViewController *mainUI = (ViewController *)_mainUIView;
+        [mainUI hideMainUI];
+        
+        [self presentViewController:billListView animated:YES completion:^{
+            NSLog(@"Present Modal View");
+        }];
+         */
     }
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
 }

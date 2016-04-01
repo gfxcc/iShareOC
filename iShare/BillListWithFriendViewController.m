@@ -19,6 +19,7 @@
 #import <gRPC/RxLibrary/GRXWriteable.h>
 #import <gRPC/RxLibrary/GRXWriter+Immediate.h>
 #import "PullAction.h"
+#import "FileOperation.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -30,6 +31,7 @@
 @property (strong, nonatomic) NSString *realYear;
 @property (strong, nonatomic) UILabel *currentLabel;
 @property (nonatomic, strong) PullAction *pullAction;
+@property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
 
@@ -46,18 +48,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
+    
+    //
+    
+    
     // Do any additional setup after loading the view.
     _tableView.dataSource = self;
     _tableView.delegate = self;
     
-    UIButton *button =  [UIButton buttonWithType:UIButtonTypeCustom];
-
-    [button setImage:[UIImage imageNamed:@"payment.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(payAllBills)forControlEvents:UIControlEventTouchUpInside];
-    [button setFrame:CGRectMake(0, 0, 50, 50)];
-    UIBarButtonItem *payment = [[UIBarButtonItem alloc] initWithCustomView:button];
+    if (![_sum isEqualToString:@"NULL"]) {
+        UIButton *button =  [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        [button setImage:[UIImage imageNamed:@"payment.png"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(payAllBills)forControlEvents:UIControlEventTouchUpInside];
+        [button setFrame:CGRectMake(0, 0, 50, 50)];
+        UIBarButtonItem *payment = [[UIBarButtonItem alloc] initWithCustomView:button];
+        self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:payment, nil];
+    }
     
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:payment, nil];
     _bills = [[NSMutableArray alloc] init];
     _billsWithMonth = [[NSMutableArray alloc] init];
     
@@ -188,15 +197,9 @@
     }
     
     // load bills
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     if ([bills[0] isEqualToString:@""]) {
@@ -204,6 +207,10 @@
     }
     
     _countOfBillsNeedPaid = 0;
+    
+    NSString* user_id = [_fileOperation getUserId];
+    NSString* friend_id = [_fileOperation getUserIdByUsername:_username];
+    
     for (NSInteger i = 0; i != bills.count; i++) {
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
         NSMutableArray *members = [[NSMutableArray alloc] init];
@@ -224,11 +231,11 @@
         }
         
         BOOL isMember = NO;
-        if ([_username isEqualToString:bill.paidBy]) {
+        if ([friend_id isEqualToString:bill.paidBy]) {
             isMember = YES;
         } else {
             for (int i = 0; i != bill.members.count; i++) { // bill not paid by username. so bill need paid by idText and username owe it
-                if ([_username isEqualToString:bill.members[i]] && [bill.paidBy isEqualToString:_idText]) {
+                if ([friend_id isEqualToString:bill.members[i]] && [bill.paidBy isEqualToString:user_id]) {
                     isMember = YES;
                     break;
                 }
@@ -240,17 +247,13 @@
         }
         
         // get login username
-        fileName = [NSString stringWithFormat:@"%@/friends",
-                    documentsDirectory];
-        exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                            usedEncoding:nil
-                                                   error:nil];
-        NSArray *friends = [exist componentsSeparatedByString:@"\n"];
-        if ([bill.paidBy isEqualToString:friends[0]]) {
+
+
+        if ([bill.paidBy isEqualToString:user_id]) {
             //bill.status = LEND;
             NSInteger index = 0;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([[bill.members objectAtIndex:i] isEqualToString:_username]) {
+                if ([[bill.members objectAtIndex:i] isEqualToString:friend_id]) {
                     index = i;
                     break;
                 }
@@ -284,7 +287,7 @@
             //bill.status = OWE;
             NSInteger index = 0;
             for (NSInteger i = 0; i != bill.members.count; i++) {
-                if ([[bill.members objectAtIndex:i] isEqualToString:friends[0]]) {
+                if ([[bill.members objectAtIndex:i] isEqualToString:user_id]) {
                     index = i;
                     break;
                 }
@@ -500,10 +503,19 @@
 }
 
 - (void)payAllBills {
+    if (_sum.doubleValue > 0) {
+        /* block this fun now */
+        //[self makePayment];
+        [TSMessage showNotificationWithTitle:@"wrong"
+                                    subtitle:[NSString stringWithFormat:@"only %@ can send request to you", _username]
+                                        type:TSMessageNotificationTypeWarning];
+    } else {
 
-    UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Payment" message:[NSString stringWithFormat:@"I have paid %.1f to %@", _sum.doubleValue, _username] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Sure!", nil];
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Payment" message:[NSString stringWithFormat:@"I have paid %.1f to %@", _sum.doubleValue, _username] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Sure!", nil];
     
-    [updateAlert show];
+        [updateAlert show];
+    }
+    
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -514,7 +526,7 @@
             if ([_sum isEqualToString:@"0.0"]) {
                 
                 [TSMessage showNotificationWithTitle:@"NO bill"
-                                            subtitle:@"...."
+                                            subtitle:@"The current balance is $0."
                                                 type:TSMessageNotificationTypeWarning];
             } else if (_sum.doubleValue > 0) {
                 /* block this fun now */
@@ -577,8 +589,8 @@
     
     
     Request *request = [Request message];
-    request.sender = _idText;
-    request.receiver = _username;
+    request.sender = [_fileOperation getUserId];
+    request.receiver = [_fileOperation getUserIdByUsername:_username];
     request.type = @"receivePayment";
     request.response = @"OK";
     
@@ -598,8 +610,8 @@
         if (response) {
             
         } else if (error) {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"send_requestWithRequest"
+            [TSMessage showNotificationWithTitle:@"Sorry"
+                                        subtitle:@"We can not connect to server. Please try again later."
                                             type:TSMessageNotificationTypeError];
         }
     }];
@@ -610,7 +622,7 @@
 
     NSString * const kRemoteHost = ServerHost;
     Request *request = [Request message];
-    request.sender = _idText;
+    request.sender = [_fileOperation getUserId];
     request.receiver = _username;
     request.type = @"payment";
     Bill *lastOfPaid = _bills[0];

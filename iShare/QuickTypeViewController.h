@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QuickTypeViewController : UIViewController
+@interface QuickTypeViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @end

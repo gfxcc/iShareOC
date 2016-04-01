@@ -8,13 +8,18 @@
 
 #import "CYkeyboard.h"
 #import "AddNewShareViewController.h"
+#import "FileOperation.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+
+@interface CYkeyboard ()
+@property (nonatomic, strong) FileOperation *fileOperation;
+@end
 
 @implementation CYkeyboard
 
 - (id)initWithTitle:(NSString *)title {
-
+    _fileOperation = [[FileOperation alloc] init];
     
     if (self = [super initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height + 40, [UIScreen mainScreen].bounds.size.width, InterfaceHigh)]) {
         
@@ -69,40 +74,30 @@
     }
     
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
-    //_memberArray = [[NSMutableArray alloc] initWithObjects:@"Yong Cao", @"Xiaotong Ding", @"Xiaohang Lv", @"Yuchi Chen", nil];
-    _memberArray = [NSMutableArray arrayWithArray:members];
+    _memberArray = [[NSMutableArray alloc] initWithArray:[_fileOperation getFriendsNameList]];
+    _memberIdArray = [[NSMutableArray alloc] initWithArray:[_fileOperation getFriendsIdList]];
+    [_memberArray insertObject:[_fileOperation getUsername] atIndex:0];
+    [_memberIdArray insertObject:[_fileOperation getUserId] atIndex:0];
     
     _mydata = NULL;
     _selectedItems = [[NSMutableArray alloc] init];
     // load member icon
     _memberIcons = [[NSMutableArray alloc] init];
-    for (int i = 0; i != _memberArray.count; i++) {
+    for (int i = 0; i != _memberIdArray.count; i++) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
         NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
         
-        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _memberArray[i]];
+        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _memberIdArray[i]];
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
         UIImage *icon = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"];
         [_memberIcons addObject:icon];
     }
     
     // ##load billType file.
-    fileName = [NSString stringWithFormat:@"%@/billType",
-                documentsDirectory];
-    content = [[NSString alloc] initWithContentsOfFile:fileName
-                                          usedEncoding:nil
-                                                 error:nil];
+
+    NSString *content = [_fileOperation getFileContent:@"billType"];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
@@ -177,10 +172,7 @@
             }
         }
         
-        [content writeToFile:fileName
-              atomically:NO
-                encoding:NSUTF8StringEncoding
-                   error:nil];
+        [_fileOperation setFileContent:content filename:@"billType"];
         
         
     } else {
@@ -349,9 +341,13 @@
     UIToolbar* doneToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
     doneToolbar.barStyle = UIBarStyleBlackTranslucent;
     doneToolbar.items = [NSArray arrayWithObjects:
+                         [[UIBarButtonItem alloc]initWithTitle:@"15%" style:UIBarButtonItemStyleDone target:self action:@selector(calculateTips15)],
+                         [[UIBarButtonItem alloc]initWithTitle:@"20%" style:UIBarButtonItemStyleDone target:self action:@selector(calculateTips20)],
+                         [[UIBarButtonItem alloc]initWithTitle:@"25%" style:UIBarButtonItemStyleDone target:self action:@selector(calculateTips25)],
                          [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                          [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonClickedDismissKeyboard)],
                          nil];
+
     [doneToolbar sizeToFit];
     _textfield.inputAccessoryView = doneToolbar;
     
@@ -369,6 +365,21 @@
 {
     [_textfield resignFirstResponder];
     [self clickFadeOut];
+}
+
+- (void)calculateTips15 {
+    double newAmount = [_amountLabel.text doubleValue] * 1.15;
+    _amountLabel.text = [NSString stringWithFormat:@"%.2f", newAmount];
+}
+
+- (void)calculateTips20 {
+    double newAmount = [_amountLabel.text doubleValue] * 1.20;
+    _amountLabel.text = [NSString stringWithFormat:@"%.2f", newAmount];
+}
+
+- (void)calculateTips25 {
+    double newAmount = [_amountLabel.text doubleValue] * 1.25;
+    _amountLabel.text = [NSString stringWithFormat:@"%.2f", newAmount];
 }
 
 - (void)typeMode {

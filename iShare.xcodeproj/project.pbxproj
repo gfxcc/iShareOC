@@ -11,6 +11,7 @@
 		4D2D751E1C30913D00B19DCA /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751C1C30913D00B19DCA /* arrowDown.png */; };
 		4D2D751F1C30913D00B19DCA /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2D751D1C30913D00B19DCA /* arrowUp.png */; };
 		4D4C50961C307C6400A8AABA /* PullAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4C50951C307C6400A8AABA /* PullAction.m */; };
+		4D540BBC1C9B2CB3001F8A6A /* DataHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D540BBB1C9B2CB3001F8A6A /* DataHandle.m */; };
 		4D5435231C5941A300A04DDC /* FileOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5435221C5941A300A04DDC /* FileOperation.m */; };
 		4D5773521C544F5D000BB5B5 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5773511C544F5D000BB5B5 /* SettingViewController.m */; };
 		4D5773571C548827000BB5B5 /* AccountDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5773561C548827000BB5B5 /* AccountDetailViewController.m */; };
@@ -477,6 +478,8 @@
 		4D2D751D1C30913D00B19DCA /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = iShare/Source/arrowUp.png; sourceTree = "<group>"; };
 		4D4C50941C307C6400A8AABA /* PullAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullAction.h; path = iShare/PullAction.h; sourceTree = "<group>"; };
 		4D4C50951C307C6400A8AABA /* PullAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PullAction.m; path = iShare/PullAction.m; sourceTree = "<group>"; };
+		4D540BBA1C9B2CB3001F8A6A /* DataHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataHandle.h; sourceTree = "<group>"; };
+		4D540BBB1C9B2CB3001F8A6A /* DataHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataHandle.m; sourceTree = "<group>"; };
 		4D5435211C5941A300A04DDC /* FileOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOperation.h; path = iShare/FileOperation.h; sourceTree = "<group>"; };
 		4D5435221C5941A300A04DDC /* FileOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileOperation.m; path = iShare/FileOperation.m; sourceTree = "<group>"; };
 		4D5773501C544F5D000BB5B5 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -1061,6 +1064,8 @@
 				4D131B2A1C429C7C00082105 /* BillStatistics.m */,
 				4D5435211C5941A300A04DDC /* FileOperation.h */,
 				4D5435221C5941A300A04DDC /* FileOperation.m */,
+				4D540BBA1C9B2CB3001F8A6A /* DataHandle.h */,
+				4D540BBB1C9B2CB3001F8A6A /* DataHandle.m */,
 			);
 			name = toolClass;
 			sourceTree = "<group>";
@@ -2440,6 +2445,7 @@
 				DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */,
 				DB952EA31B6A72B800482B00 /* BillListWithFriendViewController.m in Sources */,
 				DBA988D91BA295F800836FE7 /* SecondTypeViewController.m in Sources */,
+				4D540BBC1C9B2CB3001F8A6A /* DataHandle.m in Sources */,
 				DB94B2721B60FE7C007AEE7F /* ViewController.m in Sources */,
 				DB4EFC1A1B78F822003F917D /* MessageCenterViewController.m in Sources */,
 				DBF9FA721BE6B7C00070676C /* BaseNavigationController.m in Sources */,

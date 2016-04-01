@@ -10,6 +10,7 @@
 #import <JDStatusBarNotification/JDStatusBarNotification.h>
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import "FileOperation.h"
 
 @interface NotificationViewController ()
 
@@ -23,6 +24,7 @@
 
 @property (nonatomic) BOOL changed;
 
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation NotificationViewController
@@ -30,6 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _fileOperation = [[FileOperation alloc] init];
     _changed = NO;
     
     _tableView.delegate = self;
@@ -90,7 +93,11 @@
     NSString * const kRemoteHost = ServerHost;
     
     Inf *request = [[Inf alloc] init];
-    request.information = _username;
+    request.information = [_fileOperation getUserId];
+    
+    if ([request.information isEqualToString:@""]) {
+        return;
+    }
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_settingWithRequest:request handler:^(Setting *response, NSError *error) {
@@ -129,7 +136,8 @@
     
     NSString * const kRemoteHost = ServerHost;
     Setting *request = [[Setting alloc] init];
-    request.username = _username;
+    
+    request.userId = [_fileOperation getUserId];
     request.friendInvite = [(UISwitch*)_friendInvite.accessoryView isOn] ? 1 : 0;
     request.newBill = [(UISwitch*)_receiveBill.accessoryView isOn] ? 1 : 0;
     request.editedDeleteBill = [(UISwitch*)_editDeleteBill.accessoryView isOn] ? 1 : 0;

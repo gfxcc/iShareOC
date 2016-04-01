@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
 @property(strong, nonatomic) NSString *idText;
+@property(strong, nonatomic) NSString *userId;
 @property(strong, nonatomic) NSMutableArray *requestArray;
 @property(strong, nonatomic) NSMutableArray *requestLogArray;
 

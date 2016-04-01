@@ -12,11 +12,12 @@
 #import <gRPC_pod/IShare.pbobjc.h>
 #import "ViewController.h"
 #import <TSMessageView.h>
+#import "FileOperation.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface AddNewShareViewController ()
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation AddNewShareViewController
@@ -32,6 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _fileOperation = [[FileOperation alloc] init];
+    
     // Do any additional setup after loading the view.
     [DaiDodgeKeyboard addRegisterTheViewNeedDodgeKeyboard:self.view];
     
@@ -93,7 +97,7 @@
     line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
     line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
     line5.frame = CGRectMake(_memberBackground.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
+    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2, _creater.frame.origin.y, 1, _creater.frame.size.height);
     
     
     line1.backgroundColor = RGB(204, 204, 204).CGColor;
@@ -130,11 +134,14 @@
     [_memberBackground setUserInteractionEnabled:YES];
     [_memberBackground addGestureRecognizer:myLabelGesture5];
     
+    [_paidByBackground setFrame:CGRectMake(_paidByBackground.frame.origin.x, _paidByBackground.frame.origin.y
+                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
     
     
     _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];
     [_keyboard setLables:_amount type:_type data:_data member:_member paidBy:_paidBy];
     _keyboard.mainUI = self;
+    _keyboard.amountLabel = _amount;
     [self.view addSubview:_keyboard];
     [self label1Clicked];
     [_keyboard amountMode];
@@ -155,8 +162,8 @@
     _comment.textColor = [UIColor lightGrayColor]; //optional
     
     
-    _paidBy.text = _keyboard.memberArray.count > 0 ? _keyboard.memberArray[0] : @"none";
-    _creater.text = _keyboard.memberArray.count > 0 ? _keyboard.memberArray[0] : @"none";
+    _paidBy.text = [_fileOperation getUsername];
+    _creater.text = [_fileOperation getUsername];
 }
 
 //- (void)fadeoutTouch {
@@ -264,11 +271,11 @@
     NSString * const kRemoteHost = ServerHost;
     
     Share_inf *request = [Share_inf message];
-    request.creater = _keyboard.memberArray[0];
+    request.creater = [_fileOperation getUserId];
     //NSLog(@"%@",request.creater);
     request.amount = _amount.text;
     request.type = _type.text;
-    request.paidBy = _paidBy.text;
+    request.paidBy = [_fileOperation getUserIdByUsername:_paidBy.text];
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd hh:mm"];
@@ -305,11 +312,11 @@
     // set member
     for (int i = 0; i != _keyboard.selectedItems.count; i++) {
         NSInteger index = [_keyboard.selectedItems[i] integerValue];
-        [request.membersArray addObject:[_keyboard.memberArray objectAtIndex:index]];
+        [request.membersArray addObject:[_fileOperation getUserIdByUsername:[_keyboard.memberArray objectAtIndex:index]]];
         NSLog(@"%@", _keyboard.selectedItems[i]);
     }
     for (int i = (int)_keyboard.selectedItems.count; i != 10; i++) {
-        [request.membersArray addObject:@""];
+        [request.membersArray addObject:@"NULL"];
     }
     
     // set type icon name
@@ -339,8 +346,8 @@
             ViewController *mainUI = (ViewController *)_mainUIView;
             [mainUI obtain_bills];
         } else if (error) {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"obtain_request"
+            [TSMessage showNotificationWithTitle:@"Sorry"
+                                        subtitle:@"Please try again later."
                                             type:TSMessageNotificationTypeError];
         }
     }];
@@ -472,6 +479,8 @@
     }
     [textView resignFirstResponder];
 }
+
+
 
 
 - (void)didReceiveMemoryWarning {

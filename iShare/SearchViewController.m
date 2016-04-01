@@ -13,6 +13,7 @@
 #import <TSMessageView.h>
 #import "UIButton+PPiAwesome.h"
 #import "UIAwesomeButton.h"
+#import "FileOperation.h"
 
 
 
@@ -21,6 +22,7 @@
 @interface SearchViewController ()
 
 @property (strong, nonatomic) NSMutableArray* search_result;
+@property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
 
@@ -29,6 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _fileOperation = [[FileOperation alloc] init];
     
     UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 60)];
     navbar.barTintColor = RGB(26, 142, 180);
@@ -92,14 +95,9 @@
     _selectedIndex = indexPath.row;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     // check already be friend.
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
+
+
+    NSArray *members = [_fileOperation getFriendsNameList];
     
     for (int i = 0; i != members.count; i++) {
         if ([members[i] isEqualToString:_search_result[_selectedIndex]]) {
@@ -163,7 +161,7 @@
     // start grpc
     NSString * const kRemoteHost = ServerHost;
     Request *request = [Request message];
-    request.sender = _LeftMenuView.idText.text;
+    request.sender = [_fileOperation getUserId];
     request.receiver = _search_result[_selectedIndex];
     request.type = @"friendInvite";
     
@@ -219,6 +217,7 @@
 - (void)obtain_search_result:(NSString *)searchString {
 
     NSString * const kRemoteHost = ServerHost;
+    NSString *username = [_fileOperation getUsername];
     Inf *request = [[Inf alloc] init];
     request.information = searchString;
     
@@ -228,6 +227,9 @@
     [service search_usernameWithRequest:request handler:^(Repeated_string *response, NSError *error) {
         if (response) {
             for (int i = 0; i != response.contentArray.count; i++) {
+                if ([username isEqualToString:response.contentArray[i]]) {
+                    continue;
+                }
                 [_search_result addObject:response.contentArray[i]];
             }
             [self.searchDisplayController.searchResultsTableView reloadData];

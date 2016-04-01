@@ -11,6 +11,6 @@
 @interface AccountDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (weak, nonatomic) UIViewController *leftUIView;
 
 @end

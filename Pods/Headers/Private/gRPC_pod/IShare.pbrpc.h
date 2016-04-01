@@ -4,7 +4,7 @@
 #import <RxLibrary/GRXWriteable.h>
 #import <RxLibrary/GRXWriter.h>
 
-#define ServerHost @"54.201.29.228:50051"
+#define ServerHost @"54.201.29.228:50052"
 
 @protocol Greeter <NSObject>
 
@@ -15,18 +15,18 @@
 - (ProtoRPC *)RPCToSayHelloWithRequest:(HelloRequest *)request handler:(void(^)(HelloReply *response, NSError *error))handler;
 
 
-#pragma mark Login(Login_m) returns (Inf)
+#pragma mark Login(Login_m) returns (Reply_inf)
 
-- (void)loginWithRequest:(Login_m *)request handler:(void(^)(Inf *response, NSError *error))handler;
+- (void)loginWithRequest:(Login_m *)request handler:(void(^)(Reply_inf *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToLoginWithRequest:(Login_m *)request handler:(void(^)(Inf *response, NSError *error))handler;
+- (ProtoRPC *)RPCToLoginWithRequest:(Login_m *)request handler:(void(^)(Reply_inf *response, NSError *error))handler;
 
 
-#pragma mark Sign_up(Sign_m) returns (Inf)
+#pragma mark Sign_up(Sign_m) returns (Reply_inf)
 
-- (void)sign_upWithRequest:(Sign_m *)request handler:(void(^)(Inf *response, NSError *error))handler;
+- (void)sign_upWithRequest:(Sign_m *)request handler:(void(^)(Reply_inf *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToSign_upWithRequest:(Sign_m *)request handler:(void(^)(Inf *response, NSError *error))handler;
+- (ProtoRPC *)RPCToSign_upWithRequest:(Sign_m *)request handler:(void(^)(Reply_inf *response, NSError *error))handler;
 
 
 #pragma mark User_inf(Inf) returns (User_detail)

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '39EE839ACF8206119B3084BA'
+               BlueprintIdentifier = 'E13EB6C741FFB29FB72E0DBD'
                BlueprintName = 'BoringSSL'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libBoringSSL.a'>

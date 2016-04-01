@@ -12,6 +12,7 @@
 #import "Bill.h"
 #import "ODRefreshControl.h"
 #import "ViewController.h"
+#import "FileOperation.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -20,7 +21,7 @@
 //@property (nonatomic, strong) ODRefreshControl *refreshControl;
 
 @property (nonatomic, strong) ODRefreshControl *refreshControl;
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation AnalyzeViewController
@@ -36,6 +37,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
     
     /* setup refresh
     // Do any additional setup after loading the view.
@@ -56,20 +58,12 @@
     _refreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
     [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    
-    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *members = [content componentsSeparatedByString:@"\n"];
-    _friendsArray = [[NSMutableArray alloc] init];
-    for (int i = 1; i < members.count; i++) {
-        [_friendsArray addObject:members[i]];
-    }
-    _idText = members[0];
+
+
+    _friendsArray = [[NSMutableArray alloc] initWithArray:[_fileOperation getFriendsNameList]];
+    _friendsIdArray = [[NSMutableArray alloc] initWithArray:[_fileOperation getFriendsIdList]];
+
+    _idText = [_fileOperation getUsername];
     
     //  init billsWithFriend
     _billsWithFriend = [[NSMutableArray alloc] init];
@@ -80,12 +74,11 @@
         //[_result addObject:];
     }
     
-    fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
+    
+    NSString *user_id = [_fileOperation getUserId];
     
     if ([bills[0] isEqualToString:@""]) {
         bills = [[NSArray alloc] init];
@@ -103,13 +96,8 @@
         [bill initWithID:bill_content[0] amount:bill_content[1] type:bill_content[2] date:bill_content[3] members:members creater:bill_content[4] paidBy:bill_content[5] note:bill_content[6] image:bill_content[7] paidStatus:bill_content[18] typeIcon:bill_content[19]];
         //
         // get login username
-        fileName = [NSString stringWithFormat:@"%@/friends",
-                    documentsDirectory];
-        exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                            usedEncoding:nil
-                                                   error:nil];
-        NSArray *friends = [exist componentsSeparatedByString:@"\n"];
-        if ([bill.paidBy isEqualToString:friends[0]]) {
+
+        if ([bill.paidBy isEqualToString:user_id]) {
             // LEND mode
             for (NSInteger j = 0; j != bill.members.count; j++) {
                 NSString *paidStatus = bill.paidStatus;
@@ -120,13 +108,13 @@
                 }
                 
                 // share with self
-                if ([friends[0] isEqualToString:bill.members[j]]) {
+                if ([user_id isEqualToString:bill.members[j]]) {
                     continue;
                 }
                 
                 NSInteger friendIndex = -1;
                 for (NSInteger k = 0; k != _friendsArray.count; k++) {
-                    if ([[_friendsArray objectAtIndex:k] isEqualToString:bill.members[j]]) {
+                    if ([[_friendsIdArray objectAtIndex:k] isEqualToString:bill.members[j]]) {
                         friendIndex = k;
                         Bill *addBill = [[Bill alloc] init];
                         [addBill initWithBill:bill];
@@ -142,7 +130,7 @@
         } else { // OWE mode
             NSInteger index = 0;
             for (NSInteger j = 0; j != bill.members.count; j++) {
-                if ([[bill.members objectAtIndex:j] isEqualToString:friends[0]]) {
+                if ([[bill.members objectAtIndex:j] isEqualToString:user_id]) {
                     index = j;
                     break;
                 }
@@ -158,7 +146,7 @@
 
             NSInteger friendIndex = -1;
             for (NSInteger k = 0; k != _friendsArray.count; k++) {
-                if ([[_friendsArray objectAtIndex:k] isEqualToString:bill.paidBy]) {
+                if ([[_friendsIdArray objectAtIndex:k] isEqualToString:bill.paidBy]) {
                     friendIndex = k;
                     break;
                 }
@@ -176,6 +164,7 @@
         NSMutableArray *bills = [_billsWithFriend objectAtIndex:i];
         for (NSInteger j = 0; j != bills.count; j++) {
             Bill *bill = [bills objectAtIndex:j];
+            
             switch (bill.status) {
                 case OWE:
                     sum -= bill.amount.doubleValue / bill.members.count;
@@ -239,7 +228,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
     
-    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsArray[indexPath.row]];
+    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[indexPath.row]];
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
 
     

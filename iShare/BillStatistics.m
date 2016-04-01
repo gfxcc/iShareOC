@@ -7,6 +7,7 @@
 //
 
 #import "BillStatistics.h"
+#import "FileOperation.h"
 
 @implementation BillStatistics
 
@@ -15,19 +16,12 @@
  
  */
 - (void)initDate {
-    
+    FileOperation *fileOperation = [[FileOperation alloc] init];
     
     NSMutableDictionary *amountWithType = [[NSMutableDictionary alloc] init];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     if ([exist isEqualToString:@""]) {
@@ -70,12 +64,8 @@
         }
     }
     
-    fileName = [NSString stringWithFormat:@"%@/statisticsRecord",
-                          documentsDirectory];
-    [statistics writeToFile:fileName
-               atomically:NO
-                 encoding:NSUTF8StringEncoding
-                    error:nil];
+
+    [fileOperation setFileContent:statistics filename:@"statisticsRecord"];
 }
 
 - (void)update {

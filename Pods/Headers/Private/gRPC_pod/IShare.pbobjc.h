@@ -88,19 +88,27 @@ typedef GPB_ENUM(Repeated_string_FieldNumber) {
 
 typedef GPB_ENUM(User_detail_FieldNumber) {
   User_detail_FieldNumber_Username = 1,
-  User_detail_FieldNumber_Email = 2,
-  User_detail_FieldNumber_FriendsArray = 3,
+  User_detail_FieldNumber_UserId = 2,
+  User_detail_FieldNumber_Email = 3,
+  User_detail_FieldNumber_FriendsNameArray = 4,
+  User_detail_FieldNumber_FriendsIdArray = 5,
 };
 
 @interface User_detail : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *username;
 
+@property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
+
 @property(nonatomic, readwrite, copy, null_resettable) NSString *email;
 
-// |friendsArray| contains |NSString|
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *friendsArray;
-@property(nonatomic, readonly) NSUInteger friendsArray_Count;
+// |friendsNameArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *friendsNameArray;
+@property(nonatomic, readonly) NSUInteger friendsNameArray_Count;
+
+// |friendsIdArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *friendsIdArray;
+@property(nonatomic, readonly) NSUInteger friendsIdArray_Count;
 
 @end
 
@@ -332,7 +340,7 @@ typedef GPB_ENUM(Setting_FieldNumber) {
   Setting_FieldNumber_EditedDeleteBill = 3,
   Setting_FieldNumber_CommentBill = 4,
   Setting_FieldNumber_PaidNotice = 5,
-  Setting_FieldNumber_Username = 6,
+  Setting_FieldNumber_UserId = 6,
 };
 
 @interface Setting : GPBMessage
@@ -347,20 +355,23 @@ typedef GPB_ENUM(Setting_FieldNumber) {
 
 @property(nonatomic, readwrite) int32_t paidNotice;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *username;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
 
 @end
 
 #pragma mark - UserInfo
 
 typedef GPB_ENUM(UserInfo_FieldNumber) {
-  UserInfo_FieldNumber_Username = 1,
-  UserInfo_FieldNumber_Password = 2,
-  UserInfo_FieldNumber_Email = 3,
-  UserInfo_FieldNumber_Currency = 4,
+  UserInfo_FieldNumber_UserId = 1,
+  UserInfo_FieldNumber_Username = 2,
+  UserInfo_FieldNumber_Password = 3,
+  UserInfo_FieldNumber_Email = 4,
+  UserInfo_FieldNumber_Currency = 5,
 };
 
 @interface UserInfo : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *username;
 
@@ -369,6 +380,21 @@ typedef GPB_ENUM(UserInfo_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *email;
 
 @property(nonatomic, readwrite) int32_t currency;
+
+@end
+
+#pragma mark - Reply_inf
+
+typedef GPB_ENUM(Reply_inf_FieldNumber) {
+  Reply_inf_FieldNumber_Status = 1,
+  Reply_inf_FieldNumber_Information = 2,
+};
+
+@interface Reply_inf : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *status;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *information;
 
 @end
 

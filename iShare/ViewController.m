@@ -23,11 +23,11 @@
 #import "MessageCenterViewController.h"
 #import "AddNewShareViewController.h"
 #import "AppDelegate.h"
-#import "ABCIntroView.h"
 #import "popMenu.h"
 #import "BillStatistics.h"
 #import <JDStatusBarNotification/JDStatusBarNotification.h>
 #import <PNChart/PNChart.h>
+#import "FileOperation.h"
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
@@ -43,6 +43,8 @@
 @property (nonatomic, strong) NSString *quickType;
 @property (nonatomic, strong) PNPieChart *pieChart;
 @property (nonatomic, strong) UIView *legend;
+
+@property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
 
@@ -61,34 +63,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
+    _user_id = [_fileOperation getUserId];
+    
     [GRPCCall useInsecureConnectionsForHost:ServerHost];
     
-    NSUserDefaults *theDefaults;
-    int  launchCount;
-    //Set up the properties for the integer and default.
-    theDefaults = [NSUserDefaults standardUserDefaults];
-    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
-    [theDefaults setInteger:launchCount forKey:@"hasRun"];
-    [theDefaults synchronize];
     
-    //Log the amount of times the application has been run
-    NSLog(@"This application has been run %d amount of times", launchCount);
-    
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.10"]) {
-        // Set the value to YES
-        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.10"];
-        self.navigationController.navigationBar.hidden = YES;
-        //Run your first launch code (Bring user to info/setup screen, etc.)
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if (![defaults objectForKey:@"intro_screen_viewed"]) {
-            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
-            self.introView.delegate = self;
-            self.introView.backgroundColor = [UIColor greenColor];
-            [self.view addSubview:self.introView];
-        }
-    }
-    
-    // Do any additional setup after loading the view, typically from a nib.
     
     // clear notification number
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -121,6 +101,41 @@
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    
+    
+    
+    
+    
+    NSUserDefaults *theDefaults;
+    int  launchCount;
+    //Set up the properties for the integer and default.
+    theDefaults = [NSUserDefaults standardUserDefaults];
+    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
+    [theDefaults setInteger:launchCount forKey:@"hasRun"];
+    [theDefaults synchronize];
+    
+    //Log the amount of times the application has been run
+    NSLog(@"This application has been run %d amount of times", launchCount);
+    
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.11.1"]) {
+        
+        // Set the value to YES
+        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.11.1"];
+        self.navigationController.navigationBar.hidden = YES;
+        //Run your first launch code (Bring user to info/setup screen, etc.)
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if (![defaults objectForKey:@"intro_screen_viewed"]) {
+            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
+            self.introView.delegate = self;
+            self.introView.backgroundColor = [UIColor greenColor];
+            [self.view addSubview:self.introView];
+        }
+    }
+    
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    
+    
     
     // modify tableViewCells
     static NSString *CellIdentifier = @"BillListCell";
@@ -155,9 +170,9 @@
     _statusView.layer.masksToBounds = YES;
     
     [self loadCharts];
-    //[self obtain_bills];
     [self loadLastestBill];
     [self keepSyn];
+    [self obtain_bills];
     [self create_folder];
     //[self updateAllBills];
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -244,12 +259,13 @@
         
     } completion:^(BOOL finished) {
         [self.introView removeFromSuperview];
-        
+        [_leftMenu loginView];
     }];
 }
 
 - (void)sendToken {
-    if (!_deviceTokenBool) {
+    NSString *currentId = [_fileOperation getUserId];
+    if (!_deviceTokenBool || [currentId isEqualToString:@""]) {
         NSLog(@"deviceToken does not exist!");
         return;
     }
@@ -257,8 +273,8 @@
     NSString *const kRemoteHost = ServerHost;
     
     Repeated_string *request = [Repeated_string message];
-    NSString *t = _leftMenu.idText.text;
-    [request.contentArray addObject:t];
+    
+    [request.contentArray addObject:currentId];
     [request.contentArray addObject:_deviceToken];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
@@ -299,9 +315,10 @@
     //[self deleteAllRequests];
     // Example gRPC call using a generated proto client library:
 
+    //NSString *user_id = [_fileOperation getUserId];
     GRXWriter *_requestsWriter = [GRXWriter writerWithValueSupplier:^id() {
         Inf *test1 = [Inf message];
-        test1.information = _leftMenu.idText.text;
+        test1.information = _user_id;
         [NSThread sleepForTimeInterval:1.0f];
         return test1;
     }];
@@ -363,7 +380,7 @@
     [_request removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
-    request.information = _leftMenu.idText.text;
+    request.information = _user_id;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_requestLogWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
@@ -373,8 +390,8 @@
             [_request addObject:req];
             
         } else if (error) {
-            [TSMessage showNotificationWithTitle:@"GRPC ERROR"
-                                        subtitle:@"obtain_request"
+            [TSMessage showNotificationWithTitle:@"Sorry"
+                                        subtitle:@"Can not connect to server. Please try again later"
                                             type:TSMessageNotificationTypeError];
         } else {
             if (_request.count > 0) {
@@ -426,7 +443,7 @@
     [_request removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
-    request.information = _leftMenu.idText.text;
+    request.information = _user_id;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_requestWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
@@ -473,7 +490,7 @@
     
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
-    request.username = _leftMenu.idText.text;
+    request.username = _user_id;
     NSLog(@"%@", request.username);
     request.start = @"0";
     request.amount = @"4";
@@ -544,7 +561,7 @@
     
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
-    request.username = _leftMenu.idText.text;
+    request.username = _user_id;
     request.start = @"0";
     request.amount = @"all";
     
@@ -594,7 +611,7 @@
 - (void)finishUpdate {
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
-    request.information = _leftMenu.idText.text;
+    request.information = _user_id;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service reset_StatusWithRequest:request handler:^(Inf *response, NSError *error) {
@@ -603,8 +620,8 @@
         
         } else if (error) {
             [TSMessage showNotificationInViewController:self
-                                                  title:@"GRPC ERROR"
-                                               subtitle:@"reset_StatusWithRequest"
+                                                  title:@"Sorry"
+                                               subtitle:@"Some error happend, please contact developer."
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
         }
@@ -807,7 +824,7 @@
 
     } else if ([segue.identifier isEqualToString:@"billList"]) {
         BillListViewController *billList = (BillListViewController *)[segue destinationViewController];
-        billList.idText = _leftMenu.idText.text;
+        //billList.idText = _leftMenu.idText.text;
         billList.mainUIView = self;
     } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
         MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
@@ -831,15 +848,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 - (void)addBillToFile:(NSString *)bill {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                          usedEncoding:nil
-                                                 error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSString *newBills;
     if (![exist isEqualToString:@""]) {
         newBills = [NSString stringWithFormat:@"%@\n%@", bill, exist];
@@ -848,35 +858,16 @@
     }
     
     
-    [newBills writeToFile:fileName
-              atomically:NO
-                encoding:NSUTF8StringEncoding
-                   error:nil];
+    [_fileOperation setFileContent:newBills filename:@"billRecord"];
 }
 
 - (void)deleteAllBills {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    [@"" writeToFile:fileName
-               atomically:NO
-                 encoding:NSUTF8StringEncoding
-                    error:nil];
+    [_fileOperation setFileContent:@"" filename:@"billRecord"];
 }
 
 - (NSString *)getLatestBill {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     return bills.count == 0 ? nil : bills[0];
@@ -885,15 +876,8 @@
 
 
 - (BOOL)noBillRecord {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     return [exist isEqualToString:@""] ? YES : NO;
 }
 
@@ -902,15 +886,8 @@
     if ([self noBillRecord]) {
         return;
     }
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    //make a file name to write the data to using the documents directory:
-    NSString *fileName = [NSString stringWithFormat:@"%@/billRecord",
-                          documentsDirectory];
-    NSString *exist = [[NSString alloc] initWithContentsOfFile:fileName
-                                                  usedEncoding:nil
-                                                         error:nil];
+
+    NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
     for (int i = 0; i != 4 && i != bills.count; i++) {

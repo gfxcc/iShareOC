@@ -10,9 +10,10 @@
 #import "BillTypeTableViewCell.h"
 #import "SecondTypeViewController.h"
 #import "AddFirstClassTypeViewController.h"
+#import "FileOperation.h"
 
 @interface TypeEditerViewController ()
-
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation TypeEditerViewController
@@ -26,18 +27,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
     // Do any additional setup after loading the view.
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                          usedEncoding:nil
-                                                 error:nil];
+    NSString *content = [_fileOperation getFileContent:@"billType"];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
@@ -72,13 +68,8 @@
 }
 
 - (void)reloadType {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
+
+    NSString *content = [_fileOperation getFileContent:@"billType"];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
@@ -154,13 +145,8 @@
     
     NSLog(@"%ld   %ld",(long)sourceIndexPath.row, (long)destinationIndexPath.row);
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
+
+    NSString *content = [_fileOperation getFileContent:@"billType"];
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     
@@ -210,10 +196,7 @@
         content = [NSString stringWithFormat:@"%@\n%@", content, newOrderType[i]];
     }
     
-    [content writeToFile:fileName
-             atomically:NO
-               encoding:NSUTF8StringEncoding
-                  error:nil];
+    [_fileOperation setFileContent:content filename:@"billType"];
 }
 
 
@@ -226,13 +209,8 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //[_chats removeObjectAtIndex:indexPath.row];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                              documentsDirectory];
-        NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                        usedEncoding:nil
-                                                               error:nil];
+
+        NSString *content = [_fileOperation getFileContent:@"billType"];
         NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
         NSMutableArray *types = [[NSMutableArray alloc] initWithArray:linesOfFile];
         
@@ -248,10 +226,7 @@
         for (int i = 1; i != types.count; i++) {
             content = [NSString stringWithFormat:@"%@\n%@", content, types[i]];
         }
-        [content writeToFile:fileName
-                  atomically:NO
-                    encoding:NSUTF8StringEncoding
-                       error:nil];
+        [_fileOperation setFileContent:content filename:@"billType"];
         // delete from view
         [_typeArray removeObjectAtIndex:indexPath.row];
         

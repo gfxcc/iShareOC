@@ -12,6 +12,7 @@
 #import <TSMessageView.h>
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
+#import "LeftMenuViewController.h"
 
 @interface AccountDetailViewController ()
 
@@ -32,6 +33,8 @@
 @property (nonatomic) BOOL changed;
 @property (strong, nonatomic) NSString *originalPassword;
 
+@property (nonatomic, strong) NSString *userId;
+@property (nonatomic, strong) FileOperation *fileOperation;
 @end
 
 @implementation AccountDetailViewController
@@ -39,10 +42,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    _fileOperation = [[FileOperation alloc] init];
+    _userId = [_fileOperation getUserId];
     _changed = NO;
-    
-    FileOperation *fileOperation = [[FileOperation alloc] init];
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -80,7 +82,7 @@
                       action:@selector(textFieldDidChange:)
          forControlEvents:UIControlEventEditingChanged];
     
-    _usernameText.text = [fileOperation getUsername];
+    _usernameText.text = [_fileOperation getUsername];
     
     
     _emailText = [[UITextField alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 185 - 10,
@@ -122,20 +124,24 @@
     
     [self loadSetting];
     
-    [TSMessage showNotificationInViewController:self
-                                          title:@"Warning"
-                                       subtitle:@"Username can not be changed"
-                                           type:TSMessageNotificationTypeWarning
-                                       duration:TSMessageNotificationDurationAutomatic];
+//    [TSMessage showNotificationInViewController:self
+//                                          title:@"Warning"
+//                                       subtitle:@"Username can not be changed"
+//                                           type:TSMessageNotificationTypeWarning
+//                                       duration:TSMessageNotificationDurationAutomatic];
 }
 
 
 - (void)loadSetting {
+    if ([_userId isEqualToString:@""]) {
+        return;
+    }
+    
     NSString * const kRemoteHost = ServerHost;
     
     Inf *request = [[Inf alloc] init];
-    FileOperation *fileOperation = [[FileOperation alloc] init];
-    request.information = [fileOperation getUsername];
+    
+    request.information = _userId;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_userInfoWithRequest:request handler:^(UserInfo *response, NSError *error) {
@@ -143,6 +149,7 @@
             _emailText.text = response.email;
             _passwordText.text = response.password;
             _originalPassword = response.password;
+            _usernameText.text = response.username;
         } else if (error) {
             //NSLog(@"Finished with error: %@", error);
             return;
@@ -159,9 +166,9 @@
     
     NSString * const kRemoteHost = ServerHost;
     
-    UserInfo *request = [[UserInfo alloc] init];
-    FileOperation *fileOperation = [[FileOperation alloc] init];
-    request.username = [fileOperation getUsername];
+    UserInfo *request = [UserInfo message];
+    request.userId = _userId;
+    request.username = _usernameText.text;
     request.password = _passwordText.text;
     request.email = _emailText.text;
     
@@ -169,10 +176,29 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service reset_userInfoWithRequest:request handler:^(Inf *response, NSError *error) {
         if (response) {
-            [JDStatusBarNotification dismiss];
-            [self.navigationController popViewControllerAnimated:YES];
+            
+            if ([response.information isEqualToString:@"OK"]) {
+                [_fileOperation setUsername:request.username userId:request.userId];
+                LeftMenuViewController *leftView = (LeftMenuViewController *)_leftUIView;
+                leftView.idText.text = request.username;
+                //[_leftUIView viewDidLoad];
+                [JDStatusBarNotification dismiss];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [TSMessage showNotificationInViewController:self
+                                                      title:@"Sorry"
+                                                   subtitle:response.information
+                                                       type:TSMessageNotificationTypeWarning
+                                                   duration:TSMessageNotificationDurationAutomatic];
+                [JDStatusBarNotification dismiss];
+            }
         } else if (error) {
-            //NSLog(@"Finished with error: %@", error);
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"Sorry"
+                                               subtitle:@"can not connect to server, Please contact with the developer."
+                                                   type:TSMessageNotificationTypeWarning
+                                               duration:TSMessageNotificationDurationAutomatic];
+            [JDStatusBarNotification dismiss];
             return;
         }
     }];
@@ -182,9 +208,11 @@
 // used to verify user have the permission to change the information
 // need input original password
 - (void)verify {
+    
     UIAlertView *verifyAlert = [[UIAlertView alloc] initWithTitle:@"Verify" message:@"Please input your original password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     verifyAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [verifyAlert textFieldAtIndex:0].delegate = self;
+    [verifyAlert textFieldAtIndex:0].tag = 5;
     [verifyAlert show];
 }
 
@@ -213,13 +241,29 @@
 #pragma mark UITextField
 
 - (void)textFieldDidChange:(UITextField *)textField {
-    if (textField.tag == 0) {
-        FileOperation *fileOperation = [[FileOperation alloc] init];
-        textField.text = [fileOperation getUsername];
+
+    if (![_fileOperation checkString:textField.text cha:'*'] || ![_fileOperation checkString:textField.text cha:'\'']) {
+        [TSMessage showNotificationInViewController:self
+                                              title:@"Warning"
+                                           subtitle:@"username and password can not contain '*' and '''."
+                                               type:TSMessageNotificationTypeWarning
+                                           duration:TSMessageNotificationDurationAutomatic];
+        _changed = NO;
+        _saveCell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else {
         _changed = YES;
         _saveCell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == 0) {
+
+        UIAlertView *verifyAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"We do not advise you change your username frequently. Your friends might have a problem to recognize you. After you change your username, all of your friends will receive a notification about that." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [verifyAlert show];
+    }
+    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -293,6 +337,7 @@
 
 - (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
     if (indexPath.section == 3 && _changed) {
+        
         [self verify];
     }
 }
