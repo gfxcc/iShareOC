@@ -203,7 +203,7 @@
         if (i < _memberArray.count) {
             [request.membersArray addObject:[_fileOperation getUserIdByUsername:_memberArray[i]]];
         } else {
-            [request.membersArray addObject:@""];
+            [request.membersArray addObject:@"00000000000"];
         }
     }
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
