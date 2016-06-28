@@ -34,6 +34,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *comment;
 @property (weak, nonatomic) IBOutlet UILabel *creater;
+@property (weak, nonatomic) IBOutlet UIView *createrBackground;
 
 
 //@property (weak, nonatomic) NSString *idText;

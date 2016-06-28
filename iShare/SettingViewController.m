@@ -12,7 +12,7 @@
 #import "AccountDetailViewController.h"
 #import <TSMessageView.h>
 
-#define Version @"Version 1.1.1";
+#define Version @"Version 1.2.0";
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface SettingViewController ()

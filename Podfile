@@ -9,9 +9,10 @@ pod 'gRPC_pod', :path => './Server'
 
 pod "TSMessages"
 pod "JDStatusBarNotification"
-pod "PopMenu"
+#pod "PopMenu"
 pod 'PPiAwesomeButton'
 pod 'PNChart'
+pod 'pop'
 #pod 'FontAwesome+iOS', :git => 'git@github.com:alexdrone/ios-fontawesome.git'
 
 end

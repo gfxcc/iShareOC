@@ -39,11 +39,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>PopMenu.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Protobuf.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -55,11 +50,6 @@
 			<false/>
 		</dict>
 		<key>UICountingLabel.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>XHRealTimeBlur.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -87,6 +77,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>093B70FB30E46D4170BEFF0476E28A9E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>118D0B24F133D767CE41D26260192EBB</key>
 		<dict>
 			<key>primary</key>
@@ -97,7 +92,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3277CAF199E0B93B34CCE53953844E35</key>
+		<key>199B497A0569C214C6ED004FA7212DEC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,27 +107,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5A0CC9A4E40E2B02CF107E4041263DEE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>662C29BCE50F2D2FB0DAE7752C820B91</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>77DEE7904D49D7B06D4E12F4BCAE7192</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>7CEEB7F4CD0B847C8524FB6C3FD41570</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>7E67D6D6AA3FF9378DDA58F469C3FB33</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8F989D8BACB943CCFD03FC24B9788533</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,17 +132,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>92B1ED76E3EC83F59A4102BEC2257034</key>
+		<key>B9FD9E9C8B42A39C0F6CD1991288795F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E9EF397B95762DDB254C71DDCB4B1381</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F4F4C25F482FD272C1EFBDFF41D69BA2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

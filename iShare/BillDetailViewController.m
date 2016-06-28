@@ -23,29 +23,9 @@
 
 @implementation BillDetailViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    _fileOperation = [[FileOperation alloc] init];
-    
-    // Do any additional setup after loading the view.
-    self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
-    [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
-    //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteConfirm)];
-    
-    //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
-    //set date label
-    UIDatePicker *_datepicker = [[UIDatePicker alloc] init];
-    _datepicker.datePickerMode = UIDatePickerModeDateAndTime;
-    _datepicker.minuteInterval = 1;
-    //_mydate = [[NSDate alloc] init];
-    _mydate = _datepicker.date;
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"MMM d, yyyy 'at' hh:mm aa"];
-    NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
-    _data.text = prettyVersion;
-    NSLog(@"%@", prettyVersion);
-    
+
+- (void)viewDidLayoutSubviews {
+    // layerout subview
     CALayer *line1 = [CALayer layer];
     CALayer *line2 = [CALayer layer];
     CALayer *line3 = [CALayer layer];
@@ -57,9 +37,9 @@
     line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
     line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
     line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _creater.frame.origin.y, 1, _creater.frame.size.height);
-    
+    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _createrBackground.frame.origin.y + _createrBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 1, _createrBackground.frame.origin.y, 1.0f, _createrBackground.frame.size.height);
+ 
     
     line1.backgroundColor = RGB(204, 204, 204).CGColor;
     line2.backgroundColor = RGB(204, 204, 204).CGColor;
@@ -97,6 +77,32 @@
     
     [_paidByBackground setFrame:CGRectMake(line6.frame.origin.x, _paidByBackground.frame.origin.y
                                            , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    _fileOperation = [[FileOperation alloc] init];
+    
+    // Do any additional setup after loading the view.
+    self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
+    [self.navigationController.navigationBar setTintColor:RGB(255, 255, 255)];
+    //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteConfirm)];
+    
+    //[_amount setFont:[UIFont fontWithName:@"Allura-Regular.ttf" size:35]];
+    //set date label
+    UIDatePicker *_datepicker = [[UIDatePicker alloc] init];
+    _datepicker.datePickerMode = UIDatePickerModeDateAndTime;
+    _datepicker.minuteInterval = 1;
+    //_mydate = [[NSDate alloc] init];
+    _mydate = _datepicker.date;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"MMM d, yyyy 'at' hh:mm aa"];
+    NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
+    _data.text = prettyVersion;
+    NSLog(@"%@", prettyVersion);
+    
+    
     
     _memberArray = [[NSMutableArray alloc] init];
     //

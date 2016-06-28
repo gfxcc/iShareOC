@@ -74,20 +74,20 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
-    if ([textField isEqual:_PasswordTextField]) {
-        _AnimationType = LogingAnimationType_PWD;
-        [self AnimationUserToPassword];
-        
-    }else{
-        
-        if (_AnimationType == LogingAnimationType_NONE) {
-            _AnimationType = LogingAnimationType_USER;
-            return;
-        }
-        _AnimationType = LogingAnimationType_USER;
-        [self AnimationPasswordToUser];
-        
-    }
+//    if ([textField isEqual:_PasswordTextField]) {
+//        _AnimationType = LogingAnimationType_PWD;
+//        [self AnimationUserToPassword];
+//        
+//    }else{
+//        
+//        if (_AnimationType == LogingAnimationType_NONE) {
+//            _AnimationType = LogingAnimationType_USER;
+//            return;
+//        }
+//        _AnimationType = LogingAnimationType_USER;
+//        [self AnimationPasswordToUser];
+//        
+//    }
     
 }
 

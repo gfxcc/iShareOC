@@ -22,6 +22,63 @@
 
 @implementation AddNewShareViewController
 
+- (void)viewDidLayoutSubviews {
+    CALayer *line1 = [CALayer layer];
+    CALayer *line2 = [CALayer layer];
+    CALayer *line3 = [CALayer layer];
+    CALayer *line4 = [CALayer layer];
+    CALayer *line5 = [CALayer layer];
+    CALayer *line6 = [CALayer layer];
+    
+    line1.frame = CGRectMake(_amount.frame.origin.x, _amount.frame.origin.y + _amount.frame.size.height, _amount.frame.size.width, 1.0f);
+    line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
+    line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
+    line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _createrBackground.frame.origin.y + _createrBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
+    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2, _createrBackground.frame.origin.y, 1.0f, _createrBackground.frame.size.height);
+    
+    CGRect t = line4.frame;
+    CGRect tt = [UIScreen mainScreen].bounds;
+    
+    line1.backgroundColor = RGB(204, 204, 204).CGColor;
+    line2.backgroundColor = RGB(204, 204, 204).CGColor;
+    line3.backgroundColor = RGB(204, 204, 204).CGColor;
+    line4.backgroundColor = RGB(204, 204, 204).CGColor;
+    line5.backgroundColor = RGB(204, 204, 204).CGColor;
+    line6.backgroundColor = RGB(204, 204, 204).CGColor;
+    
+    [self.view.layer addSublayer:line1];
+    [self.view.layer addSublayer:line2];
+    [self.view.layer addSublayer:line3];
+    [self.view.layer addSublayer:line4];
+    [self.view.layer addSublayer:line5];
+    [self.view.layer addSublayer:line6];
+    
+    UITapGestureRecognizer* myLabelGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label1Clicked)];
+    [_amount setUserInteractionEnabled:YES];
+    [_amount addGestureRecognizer:myLabelGesture1];
+    
+    UITapGestureRecognizer* myLabelGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label2Clicked)];
+    [_typeBackground setUserInteractionEnabled:YES];
+    [_typeBackground addGestureRecognizer:myLabelGesture2];
+    
+    UITapGestureRecognizer* myLabelGesture3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label3Clicked)];
+    [_paidByBackground setUserInteractionEnabled:YES];
+    [_paidByBackground addGestureRecognizer:myLabelGesture3];
+    
+    UITapGestureRecognizer* myLabelGesture4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label4Clicked)];
+    [_dataBackground setUserInteractionEnabled:YES];
+    [_dataBackground addGestureRecognizer:myLabelGesture4];
+    
+    UITapGestureRecognizer* myLabelGesture5 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label5Clicked)];
+    [_memberBackground setUserInteractionEnabled:YES];
+    [_memberBackground addGestureRecognizer:myLabelGesture5];
+    
+    [_paidByBackground setFrame:CGRectMake(_paidByBackground.frame.origin.x, _paidByBackground.frame.origin.y
+                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
+
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [_keyboard reloadType];
@@ -84,58 +141,6 @@
             _type.text = @"Night Food";
         }
     }
-    
-    CALayer *line1 = [CALayer layer];
-    CALayer *line2 = [CALayer layer];
-    CALayer *line3 = [CALayer layer];
-    CALayer *line4 = [CALayer layer];
-    CALayer *line5 = [CALayer layer];
-    CALayer *line6 = [CALayer layer];
-    
-    line1.frame = CGRectMake(_amount.frame.origin.x, _amount.frame.origin.y + _amount.frame.size.height, _amount.frame.size.width, 1.0f);
-    line2.frame = CGRectMake(_typeBackground.frame.origin.x, _typeBackground.frame.origin.y + _typeBackground.frame.size.height, _typeBackground.frame.size.width, 1.0f);
-    line3.frame = CGRectMake(_dataBackground.frame.origin.x, _dataBackground.frame.origin.y + _dataBackground.frame.size.height, _dataBackground.frame.size.width, 1.0f);
-    line4.frame = CGRectMake(_memberBackground.frame.origin.x, _memberBackground.frame.origin.y + _memberBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line5.frame = CGRectMake(_memberBackground.frame.origin.x, _creater.frame.origin.y + _creater.frame.size.height, _memberBackground.frame.size.width, 1.0f);
-    line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2, _creater.frame.origin.y, 1, _creater.frame.size.height);
-    
-    
-    line1.backgroundColor = RGB(204, 204, 204).CGColor;
-    line2.backgroundColor = RGB(204, 204, 204).CGColor;
-    line3.backgroundColor = RGB(204, 204, 204).CGColor;
-    line4.backgroundColor = RGB(204, 204, 204).CGColor;
-    line5.backgroundColor = RGB(204, 204, 204).CGColor;
-    line6.backgroundColor = RGB(204, 204, 204).CGColor;
-    
-    [self.view.layer addSublayer:line1];
-    [self.view.layer addSublayer:line2];
-    [self.view.layer addSublayer:line3];
-    [self.view.layer addSublayer:line4];
-    [self.view.layer addSublayer:line5];
-    [self.view.layer addSublayer:line6];
-    
-    UITapGestureRecognizer* myLabelGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label1Clicked)];
-    [_amount setUserInteractionEnabled:YES];
-    [_amount addGestureRecognizer:myLabelGesture1];
-    
-    UITapGestureRecognizer* myLabelGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label2Clicked)];
-    [_typeBackground setUserInteractionEnabled:YES];
-    [_typeBackground addGestureRecognizer:myLabelGesture2];
-    
-    UITapGestureRecognizer* myLabelGesture3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label3Clicked)];
-    [_paidByBackground setUserInteractionEnabled:YES];
-    [_paidByBackground addGestureRecognizer:myLabelGesture3];
-    
-    UITapGestureRecognizer* myLabelGesture4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label4Clicked)];
-    [_dataBackground setUserInteractionEnabled:YES];
-    [_dataBackground addGestureRecognizer:myLabelGesture4];
-    
-    UITapGestureRecognizer* myLabelGesture5 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(label5Clicked)];
-    [_memberBackground setUserInteractionEnabled:YES];
-    [_memberBackground addGestureRecognizer:myLabelGesture5];
-    
-    [_paidByBackground setFrame:CGRectMake(_paidByBackground.frame.origin.x, _paidByBackground.frame.origin.y
-                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
     
     
     _keyboard = [[CYkeyboard alloc] initWithTitle:@"keyboard"];

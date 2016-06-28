@@ -2,6 +2,14 @@
   "name": "gRPC_pod",
   "version": "0.0.1",
   "license": "New BSD",
+  "authors": "YongCao",
+  "homepage": "https://github.com/gfxcc",
+  "source": {
+    "git": "https://github.com/grpc/grpc.git",
+    "tag": "release-0_14_0-objectivec-0.14.0",
+    "submodules": true
+  },
+  "summary": "...",
   "platforms": {
     "ios": "7.1",
     "osx": "10.9"

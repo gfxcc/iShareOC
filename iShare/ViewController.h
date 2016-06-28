@@ -14,6 +14,7 @@
 #import <gRPC/RxLibrary/GRXWriter+Immediate.h>
 #import "RKTabView.h"
 #import "ABCIntroView.h"
+#import "ComBinedImage.h"
 
 
 @interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ABCIntroViewDelegate>

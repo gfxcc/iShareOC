@@ -31,6 +31,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *comment;
 @property (weak, nonatomic) IBOutlet UILabel *creater;
+@property (weak, nonatomic) IBOutlet UIView *createrBackground;
 
 @property (strong, nonatomic) NSMutableArray *memberArray;
 @property (strong, nonatomic) NSDate *mydate;

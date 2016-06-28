@@ -57,8 +57,14 @@
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
     
     //self.navigationController.hidesBarsOnSwipe = true;
+    
+    
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    // layerout subview
+    [self loadCharts];
+}
 
 
 - (void)viewDidLoad {
@@ -169,7 +175,7 @@
     _statusView.layer.cornerRadius = 5.0f;
     _statusView.layer.masksToBounds = YES;
     
-    [self loadCharts];
+    
     [self loadLastestBill];
     [self keepSyn];
     [self obtain_bills];
@@ -195,13 +201,14 @@
 }
 
 - (IBAction)addNewShare:(id)sender {
+
     NSArray *menuItems = @[
-                           [MenuItem itemWithTitle:@"food" iconName:@"ifood" index:0],
-                           [MenuItem itemWithTitle:@"drink" iconName:@"idrink" index:1],
-                           [MenuItem itemWithTitle:@"shopping" iconName:@"ishopping" index:2],
-                           [MenuItem itemWithTitle:@"transportation" iconName:@"ibus" index:3],
-                           [MenuItem itemWithTitle:@"home" iconName:@"ihome" index:4],
-                           [MenuItem itemWithTitle:@"trip" iconName:@"itrip" index:5],
+                           [[MenuItem alloc] initWithTitle:@"food" iconName:@"ifood" index:0],
+                           [[MenuItem alloc] initWithTitle:@"drink" iconName:@"idrink" index:1],
+                           [[MenuItem alloc] initWithTitle:@"shopping" iconName:@"ishopping" index:2],
+                           [[MenuItem alloc] initWithTitle:@"transportation" iconName:@"ibus" index:3],
+                           [[MenuItem alloc] initWithTitle:@"home" iconName:@"ihome" index:4],
+                           [[MenuItem alloc] initWithTitle:@"trip" iconName:@"itrip" index:5],
                            ];
     if (!_myPopMenu) {
         _myPopMenu = [[PopMenu alloc] initWithFrame:[UIScreen mainScreen].bounds items:menuItems];
@@ -742,51 +749,27 @@
             break;
         }
     }
-    
-    
-    switch (0) {
-        case 0:
-            [_lastCell initWithTypeIcon:[UIImage imageNamed:bill.typeIcon]
+    NSMutableArray* imageArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i != 10; i++) {
+        if (![bill.members[i] isEqualToString:@""]) {
+            BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[i]]];
+            [imageArray addObject:(fileExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[i]]] : [UIImage imageNamed:@"icon-user-default.png"])];
+        }
+    }
+
+            /*[_lastCell initWithTypeIcon:[UIImage imageNamed:bill.typeIcon]
                              noteOrType:bill.type
                                    date:date[0]
                                  amount:bill.amount
                             shareWith_0:([bill.members[0] isEqualToString:@""] ? nil : (fileExist_0 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[0]]] : [UIImage imageNamed:@"icon-user-default.png"]))
                             shareWith_1:([bill.members[1] isEqualToString:@""] ? nil : (fileExist_1 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[1]]] : [UIImage imageNamed:@"icon-user-default.png"]))
                             shareWith_2:([bill.members[2] isEqualToString:@""] ? nil : (fileExist_2 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[2]]] : [UIImage imageNamed:@"icon-user-default.png"]))
-                            shareWith_3:([bill.members[3] isEqualToString:@""] ? nil : (fileExist_3 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[3]]] : [UIImage imageNamed:@"icon-user-default.png"]))];
+                            shareWith_3:([bill.members[3] isEqualToString:@""] ? nil : (fileExist_3 ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[3]]] : [UIImage imageNamed:@"icon-user-default.png"]))];*/
+            
+            [_lastCell initWithTypeCombinedImage:[UIImage imageNamed:bill.typeIcon] noteOrType:bill.type date:date[0] amount:bill.amount imageArray:imageArray];
             //_lastCell.textLabel.text = @"fdsafds";
             return _lastCell;
-        case 1:
-            [_todayCell initWithTypeIcon:[UIImage imageNamed:@"calendar_day.png"]
-                              noteOrType:@"Today"
-                                    date:[NSString stringWithFormat:@"%@ %@, %@", month, day,year]
-                                  amount:bill.amount
-                             shareWith_0:nil
-                             shareWith_1:nil
-                             shareWith_2:nil
-                             shareWith_3:nil];
-            return _todayCell;
-        case 2:
-            [_thisWeekCell initWithTypeIcon:[UIImage imageNamed:@"calendar_week.png"]
-                                 noteOrType:@"This Week"
-                                       date:[NSString stringWithFormat:@"%ld,%@ - %ld,%@", (long)week_head, month, (long)week_tail, month]
-                                     amount:bill.amount
-                                shareWith_0:nil
-                                shareWith_1:nil
-                                shareWith_2:nil
-                                shareWith_3:nil];
-            return _thisWeekCell;
-        case 3:
-            [_thisMonthCell initWithTypeIcon:[UIImage imageNamed:@"calendar_month.png"]
-                                  noteOrType:@"This Month"
-                                        date:[NSString stringWithFormat:@"01,%@ - %@,%@", month, [dateTranslate.dayOfMonth objectForKey:monthWithInt], month]
-                                      amount:bill.amount
-                                 shareWith_0:nil
-                                 shareWith_1:nil
-                                 shareWith_2:nil
-                                 shareWith_3:nil];
-            return _thisMonthCell;
-    }
+
     
     return nil;
 }
@@ -950,6 +933,8 @@
             [items addObject:item];
         }
         self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(5, 5, _statusView.frame.size.height - 10, _statusView.frame.size.height - 10) items:items];
+        CGRect t = self.pieChart.frame;
+        CGRect tt = _statusView.frame;
         self.pieChart.descriptionTextColor = [UIColor whiteColor];
         self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:11.0];
         self.pieChart.descriptionTextShadowColor = [UIColor clearColor];
