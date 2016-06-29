@@ -28,6 +28,8 @@
 		4D812DA31C51685C00990968 /* introduce4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4D812D9D1C51685C00990968 /* introduce4.jpg */; };
 		4D812DA61C516EA100990968 /* introduce5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4D812DA41C516EA100990968 /* introduce5.jpg */; };
 		4D812DA71C516EA100990968 /* introduce6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4D812DA51C516EA100990968 /* introduce6.jpg */; };
+		DB0764101D23834100CF452F /* Jelloween_Machinato_Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB07640E1D23834100CF452F /* Jelloween_Machinato_Light.ttf */; };
+		DB0764111D23834100CF452F /* Jelloween_Machinato.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB07640F1D23834100CF452F /* Jelloween_Machinato.ttf */; };
 		DB0E85101B6C653300A1C74D /* payment.png in Resources */ = {isa = PBXBuildFile; fileRef = DB0E850F1B6C653300A1C74D /* payment.png */; };
 		DB0E85131B6D164100A1C74D /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = DB0E85121B6D164100A1C74D /* Request.m */; };
 		DB47DD4D1BE83093006AB66C /* EaseStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = DB47DD4C1BE83093006AB66C /* EaseStartView.m */; };
@@ -509,6 +511,8 @@
 		4D812DA51C516EA100990968 /* introduce6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = introduce6.jpg; path = iShare/Source/introduce/introduce6.jpg; sourceTree = "<group>"; };
 		5CDA012379C9BD5090DDAF9E /* Pods-iShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iShare/Pods-iShare.debug.xcconfig"; sourceTree = "<group>"; };
 		CB420F4A91DFC5B3E671E2DE /* libPods-iShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB07640E1D23834100CF452F /* Jelloween_Machinato_Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Jelloween_Machinato_Light.ttf; path = iShare/Source/fonts/Jelloween_Machinato_Light.ttf; sourceTree = "<group>"; };
+		DB07640F1D23834100CF452F /* Jelloween_Machinato.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Jelloween_Machinato.ttf; path = iShare/Source/fonts/Jelloween_Machinato.ttf; sourceTree = "<group>"; };
 		DB0E850F1B6C653300A1C74D /* payment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = payment.png; path = iShare/Source/payment.png; sourceTree = "<group>"; };
 		DB0E85111B6D164100A1C74D /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
 		DB0E85121B6D164100A1C74D /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
@@ -1145,6 +1149,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DB07640D1D23831200CF452F /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DB07640E1D23834100CF452F /* Jelloween_Machinato_Light.ttf */,
+				DB07640F1D23834100CF452F /* Jelloween_Machinato.ttf */,
+			);
+			name = fonts;
+			sourceTree = "<group>";
+		};
 		DB507E241D224DB6005C004A /* PopMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1286,6 +1299,7 @@
 		DB94B28F1B611485007AEE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DB07640D1D23831200CF452F /* fonts */,
 				DB507E311D224E7A005C004A /* XHRealTimeBlur */,
 				DB507E241D224DB6005C004A /* PopMenu */,
 				DBC486741C33407700D4574F /* SlideNavigation */,
@@ -2026,6 +2040,7 @@
 				DBA988D31BA26FA200836FE7 /* network.png in Resources */,
 				DBF9FBBB1BE7AE3E0070676C /* biker.png in Resources */,
 				DBA988BA1BA26FA200836FE7 /* PSEG.png in Resources */,
+				DB0764101D23834100CF452F /* Jelloween_Machinato_Light.ttf in Resources */,
 				DBF9FBED1BE7AE3E0070676C /* key.png in Resources */,
 				DB94B3721B6117AD007AEE7F /* Rent.png in Resources */,
 				DB4EFC211B794BFB003F917D /* Btn0@2x.png in Resources */,
@@ -2366,6 +2381,7 @@
 				DBF9FBAD1BE7AE3E0070676C /* shipwheel.png in Resources */,
 				DBA988B71BA26FA200836FE7 /* house.png in Resources */,
 				DBA988CB1BA26FA200836FE7 /* soap.png in Resources */,
+				DB0764111D23834100CF452F /* Jelloween_Machinato.ttf in Resources */,
 				DBF9FC1C1BE7AE3F0070676C /* anchor.png in Resources */,
 				DBF9FB5C1BE7AE3E0070676C /* Online-Shopping-icon.png in Resources */,
 				DBF9FBE11BE7AE3E0070676C /* download.png in Resources */,

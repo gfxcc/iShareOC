@@ -74,8 +74,11 @@
     
     [GRPCCall useInsecureConnectionsForHost:ServerHost];
     
-    
-    
+    if ([UIScreen mainScreen].bounds.size.height <= 568) {
+        _deviceModel = 5;
+    } else {
+        _deviceModel = 6;
+    }
     // clear notification number
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     

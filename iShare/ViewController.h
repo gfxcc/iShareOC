@@ -42,6 +42,7 @@
 @property(atomic) BOOL billProcessing;
 @property(atomic) BOOL updateAllBillsProcessing;
 @property(nonatomic) BOOL deviceTokenBool;
+@property(nonatomic) int deviceModel;
 
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
