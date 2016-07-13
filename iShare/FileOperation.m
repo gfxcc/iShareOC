@@ -71,6 +71,21 @@
     return @"nil";
 }
 
+- (NSString*)getLastModifiedByUserId:(NSString*)userId {
+    NSString *fileContent = [self getFileContent:@"friends"];
+    NSArray *nameList = [fileContent componentsSeparatedByString:@"\n"];
+    for (int i = 0; i != nameList.count; i++) {
+        NSString *line = nameList[i];
+        NSArray *content = [line componentsSeparatedByString:@"*"];
+        if ([(NSString*)content[1] isEqualToString:userId]) {
+            if (content.count < 3)
+                return @"nil";
+            return content[2];
+        }
+    }
+    return @"nil";
+}
+
 
 - (NSString*)getUserId {
 
@@ -121,6 +136,26 @@
         NSString *line = array[i];
         NSArray *contentOfLine = [line componentsSeparatedByString:@"*"];
         [friendIdList addObject:contentOfLine[1]];
+    }
+    
+    NSArray *result = [[NSArray alloc] initWithArray:friendIdList];
+    return result;
+}
+
+- (NSArray*)getFriendsLastModifiedList {
+    NSString *exist = [self getFileContent:@"friends"];
+    NSArray *array = [exist componentsSeparatedByString:@"\n"];
+    
+    if (array.count < 2) {
+        NSArray *empyt = [[NSArray alloc] init];
+        return empyt;
+    }
+    
+    NSMutableArray *friendIdList = [[NSMutableArray alloc] init];
+    for (int i = 1; i != array.count; i++) {
+        NSString *line = array[i];
+        NSArray *contentOfLine = [line componentsSeparatedByString:@"*"];
+        [friendIdList addObject:contentOfLine[2]];
     }
     
     NSArray *result = [[NSArray alloc] initWithArray:friendIdList];
@@ -202,13 +237,13 @@
     [self setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", username, userId]];
 }
 
-- (void)setFriendListWithName:(NSArray*)nameList UserId:(NSArray*)idList {
+- (void)setFriendList:(NSArray*)nameList UserId:(NSArray*)idList LastModified:(NSArray*)lastModifiedList {
     NSString *exist = [self getFileContent:@"friends"];
     NSArray *array = [exist componentsSeparatedByString:@"\n"];
     
     NSString *newContent = array[0];
     for (int i = 0; i != nameList.count; i++) {
-        NSString *line = [NSString stringWithFormat:@"%@*%@", nameList[i], idList[i]];
+        NSString *line = [NSString stringWithFormat:@"%@*%@*%@", nameList[i], idList[i], lastModifiedList[i]];
         
         newContent = [NSString stringWithFormat:@"%@\n%@", newContent, line];
     }

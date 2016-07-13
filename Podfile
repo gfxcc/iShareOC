@@ -7,12 +7,14 @@ pod 'gRPC_pod', :path => './Server'
 #pod 'Protobuf', :path => "~/Downloads/grpc-master/third_party/protobuf"
 #pod 'gRPC', :path => "~/Downloads/grpc-master"
 
-pod "TSMessages"
-pod "JDStatusBarNotification"
+pod "TSMessages", '0.9.12'
+pod "JDStatusBarNotification", '1.5.2'
 #pod "PopMenu"
-pod 'PPiAwesomeButton'
-pod 'PNChart'
-pod 'pop'
+pod 'PPiAwesomeButton', '1.5.2'
+pod 'PNChart', '0.8.7'
+pod 'pop', '1.0.9'
+pod 'APParallaxHeader', '0.1.6'
 #pod 'FontAwesome+iOS', :git => 'git@github.com:alexdrone/ios-fontawesome.git'
+pod 'Masonry'
 
 end

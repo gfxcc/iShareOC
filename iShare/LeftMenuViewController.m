@@ -24,6 +24,8 @@
 #import <TSMessageView.h>
 #import "FileOperation.h"
 #import "BillListWithFriendViewController.h"
+#import <APParallaxHeader/UIScrollView+APParallaxHeader.h>
+
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -48,6 +50,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    
 }
 
 - (void)viewDidLoad
@@ -58,14 +61,15 @@
     _fileOperation = [[FileOperation alloc] init];
     _user_id = [_fileOperation getUserId];
 
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
     self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
     self.view.backgroundColor = RGB(61, 64, 71);
-    _headImage.layer.cornerRadius = 5;
-    _headImage.clipsToBounds = YES;
-    
     
 
-    
+    _headImage.layer.cornerRadius = 5;
+    _headImage.clipsToBounds = YES;
+  
     [_idText setTextColor:RGB(255, 255, 255)];
     
     NSString *username = [_fileOperation getUsername];
@@ -78,8 +82,7 @@
         [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
     }
     
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
@@ -100,8 +103,19 @@
     [_headImage addGestureRecognizer:singleTap];
     [_headImage setUserInteractionEnabled:YES];
     
+    __weak typeof(self) weakSelf = self;
+    _headerView = [EaseUserHeaderView userHeaderViewWithBackground:[UIImage imageNamed:@"background_stars.jpg"] Icon:_headImage.image Username:_idText.text];
+    _headerView.userIconClicked = ^(){
+        [weakSelf touch_icon];
+    };
+    [_tableView addParallaxWithView:_headerView andHeight:CGRectGetHeight(_headerView.frame)];
+//    [_tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+//    [_tableView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
+//    
     _friendsArray = [[NSMutableArray alloc] init];
     _friendsIdArray = [[NSMutableArray alloc] init];
+    _friendsLastModified = [[NSMutableArray alloc] init];
+    _friendsIconList = [[NSMutableArray alloc] init];
     
     [self obtain_friends];
     //[self loadFriends];
@@ -177,20 +191,18 @@
     [service user_infWithRequest:request handler:^(User_detail *response, NSError *error) {
         if (response) {
             [_friendsArray removeAllObjects];
+            [_friendsIdArray removeAllObjects];
+            [_friendsLastModified removeAllObjects];
             for (int i = 0; i != response.friendsNameArray.count; i++) {
                 //NSLog(@"%@  ", response.friendsArray[i]);
                 [_friendsArray addObject:response.friendsNameArray[i]];
-            }
-            
-            [_friendsIdArray removeAllObjects];
-            for (int i = 0; i != response.friendsIdArray.count; i++) {
-                //NSLog(@"%@  ", response.friendsArray[i]);
                 [_friendsIdArray addObject:response.friendsIdArray[i]];
+                [_friendsLastModified addObject:response.friendsLastModifiedArray[i]];
             }
             
-            [self download_friends_icon];
+            [self updateFriendsIcon];
             [self save_data];
-            [_tableView reloadData];
+            
         } else if (error) {
             //NSLog(@"Finished with error: %@", error);
             return;
@@ -205,6 +217,7 @@
     Repeated_string *request = [[Repeated_string alloc] init];
     [request.contentArray addObject:_user_id];
     [request.contentArray addObject:_friendsIdArray[_deleteIndex.row]];
+
     
     // Example gRPC call using a generated proto client library:
     
@@ -230,7 +243,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    [_fileOperation setFriendListWithName:_friendsArray UserId:_friendsIdArray];
+    [_fileOperation setFriendList:_friendsArray UserId:_friendsIdArray LastModified:_friendsLastModified];
     
     // save icon
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
@@ -291,8 +304,26 @@
     
 }
 
+- (void)updateLastModified {
+    NSString * const kRemoteHost = ServerHost;
+    Inf *request = [Inf message];
+    request.information = _user_id;
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service update_user_lastModifiedWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+           
+        } else if (error) {
+            [TSMessage showNotificationInViewController:self
+                                                  title:@"Sorry"
+                                               subtitle:@"Some error happend, please contact developer."
+                                                   type:TSMessageNotificationTypeError
+                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+}
 
-- (void)download_friends_icon {
+- (void)updateFriendsIcon {
     NSString * const kRemoteHost = ServerHost;
     
     Repeated_string *request = [Repeated_string message];
@@ -313,10 +344,13 @@
         [request.contentArray addObject:_user_id];
     }
     
+    // compare lastModified
     for (int i = 0; i != _friendsArray.count; i++) {
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[i]]]) {
-            [request.contentArray addObject:_friendsIdArray[i]];
-        }
+        //if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[i]]]) {}
+        NSString *lastModifiedFromFile = [_fileOperation getLastModifiedByUserId:_friendsIdArray[i]];
+        if ([lastModifiedFromFile isEqualToString:_friendsLastModified[i]])
+            continue;
+        [request.contentArray addObject:_friendsIdArray[i]];
     }
     
 
@@ -326,7 +360,7 @@
             if (response.data_p.length == 0) {
                 return;
             }
-            NSLog(@"%lu", (unsigned long)response.data_p.length);
+            NSLog(@"%@  %lu", response.name, (unsigned long)response.data_p.length);
             [response.data_p writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, response.name] atomically:YES];
             
         } else if (error) {
@@ -340,10 +374,9 @@
             BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
             
             if (fileExists) {
-                _headImage.image = [UIImage imageWithContentsOfFile:dataPath];
-            } else {
-                _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
+                _headerView.userIconView.image = [UIImage imageWithContentsOfFile:dataPath];
             }
+            [self loadFriendsIcons];
             // reload
             [_tableView reloadData];
             ViewController *mainView = (ViewController *)_mainUIView;
@@ -351,6 +384,24 @@
         }
     }];
     
+}
+
+- (void)loadFriendsIcons {
+    // obtin image into FriendsIconList
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    for (int i = 0; i != _friendsIdArray.count; i++) {
+        NSString *imagePath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[i]];
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:imagePath];
+        
+        if (fileExists) {
+            [_friendsIconList addObject:[UIImage imageWithContentsOfFile:imagePath]];
+        } else {
+            [_friendsIconList addObject:[UIImage imageNamed:@"icon-user-default.png"]];
+        }
+    }
 }
 
 #pragma mark  - prepareForSegue
@@ -509,6 +560,7 @@
     
     // send image
     [self send_imge:chosenImage name:_user_id path:@"icon"];
+    [self updateLastModified];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -523,7 +575,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     // If You have only one(1) section, return 1, otherwise you must handle sections
-    return 2;
+    return 3;
 }
 
 
@@ -533,14 +585,15 @@
     switch(section)
     {
         case 0:  return 1;  // section 0 has 1 rows
-        case 1:  return _friendsArray.count;;  // section 1 has  row
+        case 1:  return 0;  // section 1 has  row
+        case 2:  return _friendsArray.count;
         default: return 0;
     };
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 0 || section == 2)
         return 0.0f;
     return 32.0f;
 }
@@ -565,6 +618,8 @@
         [edit addTarget:self action:@selector(editClick) forControlEvents:UIControlEventTouchUpInside];
         [headView addSubview:edit];
         return headView;
+    } else if (section == 2) {
+        return nil;
     }
     return nil;
 }
@@ -605,7 +660,7 @@
          */
         return cell;
         
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
         static NSString *CellIdentifier = @"UserListCell";
         
         //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -613,20 +668,7 @@
         //
         //    cell.textLabel.text = _friendsArray[indexPath.row];
         UserListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-        NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-        
-        dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _friendsIdArray[indexPath.row]];
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-        
-        if (fileExists) {
-            [cell initWith:_friendsArray[indexPath.row] icon:[UIImage imageWithContentsOfFile:dataPath]];
-        } else {
-            [cell initWith:_friendsArray[indexPath.row] icon:[UIImage imageNamed:@"icon-user-default.png"]];
-        }
-        
+        [cell initWith:_friendsArray[indexPath.row] icon:_friendsIconList[indexPath.row]];
         FullSizeView *fullSizeImage = [[FullSizeView alloc] initWithBounds:self.view.bounds SuperView:self.view ImageView:cell.icon Image:cell.icon.image];
         fullSizeImage.delegate = self;
         [self.view addSubview:fullSizeImage];
@@ -711,6 +753,24 @@
     }
 }
 
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+//    if ([keyPath isEqualToString:@"contentInset"]) {
+//        NSLog(@"t");
+//    } else {
+//        NSLog(@"%f  %f   %f", _tableView.contentInset.top, _tableView.contentOffset.y, _headerView.bounds.size.height);
+//        if ((-_tableView.contentOffset.y) < kScaleFrom_iPhone5_Desgin(190)) {
+//            UIEdgeInsets newInset = _tableView.contentInset;
+//            newInset.top = -_tableView.contentOffset.y;
+//            _tableView.contentInset = newInset;
+//        } else {
+//            UIEdgeInsets newInset = _tableView.contentInset;
+//            newInset.top = kScaleFrom_iPhone5_Desgin(190);
+//            _tableView.contentInset = newInset;
+//        }
+//
+//    }
+//}
+
 #pragma mark - FullSizeView delegate -
 - (void)originalImageViewTapped {
     ViewController *mainUI = (ViewController *)_mainUIView;
@@ -722,6 +782,7 @@
     ViewController *mainUI = (ViewController *)_mainUIView;
     [mainUI hideMainUI];
 }
+
 
 
 @end

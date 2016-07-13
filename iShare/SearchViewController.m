@@ -136,7 +136,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {

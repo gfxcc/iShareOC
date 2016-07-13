@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "FullSizeView.h"
+#import "EaseUserHeaderView.h"
 
 
 @interface LeftMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FullSizeViewDelegate>
@@ -22,11 +23,15 @@
 
 @property(strong, nonatomic) NSMutableArray *friendsArray;
 @property(strong, nonatomic) NSMutableArray *friendsIdArray;
+@property(strong, nonatomic) NSMutableArray *friendsLastModified;
+@property(strong, nonatomic) NSMutableArray *friendsIconList;
 
 @property(strong, nonatomic) NSString *user_id;
 
 @property (weak, nonatomic) UIViewController *mainUIView;
 @property (weak, nonatomic) UINavigationController *mainUINavgation;
+
+@property (strong, nonatomic) EaseUserHeaderView *headerView;
 
 - (void)obtain_friends;
 - (void)loginView;

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>APParallaxHeader.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>BoringSSL.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -20,6 +25,11 @@
 			<false/>
 		</dict>
 		<key>JDStatusBarNotification.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Masonry.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -77,11 +87,6 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>093B70FB30E46D4170BEFF0476E28A9E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>118D0B24F133D767CE41D26260192EBB</key>
 		<dict>
 			<key>primary</key>
@@ -92,7 +97,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>199B497A0569C214C6ED004FA7212DEC</key>
+		<key>1B8062F9B4DD6B301D7A703B668D5233</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3580F0894B05CD7AE085EE477E5604FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,7 +112,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>53480ED0BE09FF49E34B1702D485CAAB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>584FA3ED6BB7B6FA766BA9B256A4D93B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5A59DC9F58E47B5D38D069C0B2AA192B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5DF21164C6E1DC7DEE4CA35AD0FD7B25</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7A8DAB2B161677425C6C05327E29552F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -117,22 +147,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F989D8BACB943CCFD03FC24B9788533</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>8FFE31C0F7CFFDB599084060F6243F28</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>91DD3A06013D443F75BA2DDC6567987F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B9FD9E9C8B42A39C0F6CD1991288795F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

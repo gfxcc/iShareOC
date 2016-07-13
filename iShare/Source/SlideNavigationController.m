@@ -27,6 +27,7 @@
 
 #import "SlideNavigationController.h"
 #import "SlideNavigationContorllerAnimator.h"
+#import "ViewController.h"
 
 typedef enum {
 	PopTypeAll,
@@ -484,7 +485,12 @@ static SlideNavigationController *singletonInstance;
 
 - (void)openMenu:(Menu)menu withDuration:(float)duration andCompletion:(void (^)())completion
 {
-	[self enableTapGestureToCloseMenu:YES];
+
+//    ViewController *mainUI = (ViewController*)_mainUIView;
+//    mainUI.hideStatusBar = YES;
+//    [mainUI setNeedsStatusBarAppearanceUpdate];
+//    [self setNeedsStatusBarAppearanceUpdate];
+//	[self enableTapGestureToCloseMenu:YES];
 
 	[self prepareMenuForReveal:menu];
 	
@@ -531,7 +537,10 @@ static SlideNavigationController *singletonInstance;
 
 - (void)closeMenuWithDuration:(float)duration andCompletion:(void (^)())completion
 {
-	[self enableTapGestureToCloseMenu:NO];
+//    ViewController *mainUI = (ViewController*)_mainUIView;
+//    mainUI.hideStatusBar = NO;
+//    [mainUI setNeedsStatusBarAppearanceUpdate];
+//	[self enableTapGestureToCloseMenu:NO];
     
      Menu menu = (self.horizontalLocation > 0) ? MenuLeft : MenuRight;
 	

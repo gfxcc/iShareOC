@@ -43,7 +43,7 @@
 @property(atomic) BOOL updateAllBillsProcessing;
 @property(nonatomic) BOOL deviceTokenBool;
 @property(nonatomic) int deviceModel;
-
+@property (nonatomic) BOOL hideStatusBar;
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
 - (void)loadCharts;

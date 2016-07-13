@@ -44,6 +44,7 @@
 @property (nonatomic, strong) PNPieChart *pieChart;
 @property (nonatomic, strong) UIView *legend;
 
+
 @property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
@@ -57,7 +58,7 @@
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
     
     //self.navigationController.hidesBarsOnSwipe = true;
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
 }
 
@@ -66,6 +67,9 @@
     [self loadCharts];
 }
 
+-(BOOL)prefersStatusBarHidden{
+    return self.hideStatusBar;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -104,6 +108,7 @@
     _leftMenu.mainUIView = self;
     
     [SlideNavigationController sharedInstance].leftMenu = _leftMenu;
+    [SlideNavigationController sharedInstance].mainUIView = self;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
     [SlideNavigationController sharedInstance].enableShadow = NO;
     [_leftMenu viewDidLoad];
@@ -163,17 +168,20 @@
     // RKTabView Setting
 
     
-    _billList = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon6@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon7@2x.png"]];
-    _analyze = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon2@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon3@2x.png"]];
-    _messageCenter = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon0@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon1@2x.png"]];
+//    _billList = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon6@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon7@2x.png"]];
+//    _analyze = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon2@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon3@2x.png"]];
+//    _messageCenter = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon0@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon1@2x.png"]];
     
+    _billList = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"project_normal"] target:self selector:@selector(buttonTabPressedBillList:)];
+    _analyze = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"task_normal"] target:self selector:@selector(buttonTabPressedAnalyze:)];
+    _messageCenter = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"privatemessage_normal"] target:self selector:@selector(buttonTabPressedMessageCenter:)];
     
     self.standardView.horizontalInsets = HorizontalEdgeInsetsMake(25, 25);
     
-    self.standardView.darkensBackgroundForEnabledTabs = YES;
+    //self.standardView.darkensBackgroundForEnabledTabs = YES;
     self.standardView.drawSeparators = YES;
     self.standardView.tabItems = @[_billList, _analyze, _messageCenter];
-    self.standardView.delegate = (id<RKTabViewDelegate>)self;
+    //self.standardView.delegate = (id<RKTabViewDelegate>)self;
     
     _statusView.layer.cornerRadius = 5.0f;
     _statusView.layer.masksToBounds = YES;
@@ -192,6 +200,21 @@
         [self sendToken];
     }
 }
+
+- (void)buttonTabPressedBillList:(id)sender {
+
+    [self performSegueWithIdentifier:@"billList" sender:self];
+
+}
+
+- (void)buttonTabPressedAnalyze:(id)sender {
+    [self performSegueWithIdentifier:@"analyze" sender:self];
+}
+
+- (void)buttonTabPressedMessageCenter:(id)sender {
+    [self performSegueWithIdentifier:@"messageCenter" sender:self];
+}
+
 
 - (void)buttonHighlight {
 
@@ -492,7 +515,7 @@
     
     
     
-    [_bill_latest removeAllObjects];
+    
     
     if ([_leftMenu.idText.text isEqualToString:@""]) {
         return;
@@ -503,16 +526,17 @@
     request.username = _user_id;
     NSLog(@"%@", request.username);
     request.start = @"0";
-    request.amount = @"4";
-    
+    request.amount = @"5";
+    //[_bill_latest removeAllObjects];
+    NSMutableArray *receivedData = [[NSMutableArray alloc] init];
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_billsWithRequest:request eventHandler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
 
-            [_bill_latest addObject:bill];
-            NSLog(@"%@", response.data_p);
+            [receivedData addObject:bill];
+            //NSLog(@"%@", response.data_p);
 
         } else if (error) {
             [TSMessage showNotificationInViewController:self
@@ -520,8 +544,9 @@
                                                subtitle:@"obtain_billsWithRequest part"
                                                    type:TSMessageNotificationTypeError
                                                duration:TSMessageNotificationDurationEndless];
+            NSLog(@"error:%@", error);
         } else {
-            [_tableView reloadData];
+            //[_tableView reloadData];
             
 //            if (0) { //_billProcessing
 //                [TSMessage showNotificationWithTitle:@"New Bill"
@@ -534,16 +559,17 @@
             } else {
             
                 NSString *lastID = [[self getLatestBill] componentsSeparatedByString:@"*"][0];
-                for (NSInteger i = 0; i != _bill_latest.count; i++) {
-                    Bill *bill = [_bill_latest objectAtIndex:i];
+                for (NSInteger i = 0; i != receivedData.count; i++) {
+                    Bill *bill = [receivedData objectAtIndex:i];
                     if ([bill.bill_id isEqualToString:lastID]) {
                         if (i == 0) {
                             [JDStatusBarNotification showWithStatus:@"update successfully" dismissAfter:2.0];
                             break;
                         }
-                        
+                        _bill_latest = receivedData;
+                        [_tableView reloadData];
                         for (NSInteger j = i - 1; j >= 0; j--) {
-                            bill = [_bill_latest objectAtIndex:j];
+                            bill = [receivedData objectAtIndex:j];
                             NSString *bill_string = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", bill.bill_id, bill.amount, bill.type, bill.date, bill.creater, bill.paidBy, bill.note, bill.image, bill.members[0], bill.members[1], bill.members[2], bill.members[3], bill.members[4], bill.members[5], bill.members[6], bill.members[7], bill.members[8], bill.members[9], bill.paidStatus, bill.typeIcon];
                             [self addBillToFile:bill_string];
                         }
@@ -553,7 +579,7 @@
                         break;
                     }
                     // do not update
-                    if (i == _bill_latest.count - 1) {
+                    if (i == receivedData.count - 1) {
                         [self updateAllBills];
                     }
                 }
@@ -587,7 +613,7 @@
         if (!done) {
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
-            if (bills.count < 4) {
+            if (bills.count < 5) {
                 [bills addObject:bill];
             }
             NSString *billString = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", response.billId, response.amount, response.type, response.data_p, response.creater, response.paidBy, response.note, response.image, response.membersArray[0], response.membersArray[1], response.membersArray[2], response.membersArray[3], response.membersArray[4], response.membersArray[5], response.membersArray[6], response.membersArray[7], response.membersArray[8], response.membersArray[9], response.paidStatus, response.typeIcon];
@@ -642,37 +668,37 @@
 
 #pragma mark - RKTabViewDelegate
 
-- (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
-    NSLog(@"Tab № %tu became enabled on tab view", index);
-    
-    if ([_leftMenu.idText.text isEqualToString:@""]) {
-        [TSMessage showNotificationWithTitle:(NSString *)@"Warning"
-                                    subtitle:(NSString *)@"You need Login or Sign in."
-                                        type:(TSMessageNotificationType)TSMessageNotificationTypeWarning];
-        
-        //[_standardView disableAllItems];
-        
-        return;
-    }
-    switch (index) {
-        case 0:
-            [self performSegueWithIdentifier:@"billList" sender:self];
-            break;
-        case 1:
-            [self performSegueWithIdentifier:@"analyze" sender:self];
-            break;
-        case 2:
-            [self performSegueWithIdentifier:@"messageCenter" sender:self];
-            break;
-        default:
-            break;
-    }
-
-}
-
-- (void)tabView:(RKTabView *)tabView tabBecameDisabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
-    NSLog(@"Tab № %tu became disabled on tab view", index);
-}
+//- (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
+//    NSLog(@"Tab № %tu became enabled on tab view", index);
+//    
+//    if ([_leftMenu.idText.text isEqualToString:@""]) {
+//        [TSMessage showNotificationWithTitle:(NSString *)@"Warning"
+//                                    subtitle:(NSString *)@"You need Login or Sign in."
+//                                        type:(TSMessageNotificationType)TSMessageNotificationTypeWarning];
+//        
+//        //[_standardView disableAllItems];
+//        
+//        return;
+//    }
+//    switch (index) {
+//        case 0:
+//            [self performSegueWithIdentifier:@"billList" sender:self];
+//            break;
+//        case 1:
+//            [self performSegueWithIdentifier:@"analyze" sender:self];
+//            break;
+//        case 2:
+//            [self performSegueWithIdentifier:@"messageCenter" sender:self];
+//            break;
+//        default:
+//            break;
+//    }
+//
+//}
+//
+//- (void)tabView:(RKTabView *)tabView tabBecameDisabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
+//    NSLog(@"Tab № %tu became disabled on tab view", index);
+//}
 
 
 #pragma mark - SlideNavigationController Methods
@@ -693,7 +719,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return _bill_latest.count <= 4 ? _bill_latest.count : 0;
+    return _bill_latest.count <= 5 ? _bill_latest.count : 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -793,6 +819,9 @@
         case 3:
             [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
             break;
+        case 4:
+            [self performSegueWithIdentifier:@"lastBillDetail" sender:self];
+            break;
         default:
             break;
     }
@@ -876,7 +905,7 @@
     NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
-    for (int i = 0; i != 4 && i != bills.count; i++) {
+    for (int i = 0; i != 5 && i != bills.count; i++) {
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
         NSMutableArray *members = [[NSMutableArray alloc] init];
         for (int j = 0; j != 10; j++) {
@@ -915,19 +944,19 @@
             UIColor *color;
             switch (i) {
                 case 0:
-                    color = PNLightBlue;
+                    color = RGB(90, 200, 250);
                     break;
                 case 1:
-                    color = PNFreshGreen;
+                    color = RGB(76, 217, 100);
                     break;
                 case 2:
-                    color = PNDeepGreen;
+                    color = RGB(255, 149, 0);
                     break;
                 case 3:
-                    color = PNButtonGrey;
+                    color = RGB(88, 86, 214);
                     break;
                 case 4:
-                    color = PNBlue;
+                    color = RGB(0, 122, 255);
                     break;
                 default:
                     break;
@@ -936,8 +965,6 @@
             [items addObject:item];
         }
         self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(5, 5, _statusView.frame.size.height - 10, _statusView.frame.size.height - 10) items:items];
-        CGRect t = self.pieChart.frame;
-        CGRect tt = _statusView.frame;
         self.pieChart.descriptionTextColor = [UIColor whiteColor];
         self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:11.0];
         self.pieChart.descriptionTextShadowColor = [UIColor clearColor];
@@ -989,6 +1016,7 @@
 //    }
 }
 - (void)hidehelp {
+    
     [[SlideNavigationController sharedInstance] hideMainUI:nil];
 }
 
@@ -1007,6 +1035,11 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
     
     dataPath = [documentsDirectory stringByAppendingPathComponent:@"/billsImage"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
+        [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
+    
+    dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder

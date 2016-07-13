@@ -14,7 +14,7 @@
 #define MenuButtonHeight 110
 #define MenuButtonVerticalPadding 10
 #define MenuButtonHorizontalMargin 10
-#define MenuButtonAnimationTime 0.2
+#define MenuButtonAnimationTime 0.1
 #define MenuButtonAnimationInterval (MenuButtonAnimationTime / 5)
 
 #define kMenuButtonBaseTag 100
@@ -58,7 +58,7 @@
     typeof(self) __weak weakSelf = self;
     _realTimeBlur = [[XHRealTimeBlur alloc] initWithFrame:self.bounds];
     _realTimeBlur.showDuration = 0.3;
-    _realTimeBlur.disMissDuration = 0.5;
+    _realTimeBlur.disMissDuration = 0.1;
     _realTimeBlur.willShowBlurViewcomplted = ^(void) {
         weakSelf.isShowed = YES;
         [weakSelf showButtons];

@@ -1,4 +1,5 @@
 PODS:
+  - APParallaxHeader (0.1.6)
   - BoringSSL (2.0)
   - FontAwesome+iOS (0.1.4)
   - gRPC (0.12.0):
@@ -26,6 +27,7 @@ PODS:
     - gRPC_pod/Messages
   - HexColors (2.2.1)
   - JDStatusBarNotification (1.5.2)
+  - Masonry (1.0.1)
   - PNChart (0.8.7):
     - UICountingLabel (~> 1.2.0)
   - pop (1.0.9)
@@ -37,24 +39,28 @@ PODS:
   - UICountingLabel (1.2.0)
 
 DEPENDENCIES:
+  - APParallaxHeader (= 0.1.6)
   - gRPC_pod (from `./Server`)
-  - JDStatusBarNotification
-  - PNChart
-  - pop
-  - PPiAwesomeButton
-  - TSMessages
+  - JDStatusBarNotification (= 1.5.2)
+  - Masonry
+  - PNChart (= 0.8.7)
+  - pop (= 1.0.9)
+  - PPiAwesomeButton (= 1.5.2)
+  - TSMessages (= 0.9.12)
 
 EXTERNAL SOURCES:
   gRPC_pod:
     :path: ./Server
 
 SPEC CHECKSUMS:
+  APParallaxHeader: 854bc48a2487ca12c702f8a236fec0d89cdac5c3
   BoringSSL: f9f1d54e79ad1795d8f47892009b1ba3de951c89
   FontAwesome+iOS: 9070b682a9255ca0fdc34bcfb129ad0ba2b73b87
   gRPC: 297fd91f82b8f36e6984cb701aa91eb3a2f1ef6c
   gRPC_pod: 55a410c7e71b9f28b3668ca652628b59c514e2de
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
+  Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
   PNChart: c1755716bbd45386d2035b2bf2ce73e6d3f8cb22
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   PPiAwesomeButton: 16f7279582fd36f65186b24b83ef876217363eb5
@@ -62,6 +68,6 @@ SPEC CHECKSUMS:
   TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
   UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
 
-PODFILE CHECKSUM: 9edf276dfc499c958a95ecb9d4c429b086c286e3
+PODFILE CHECKSUM: 5f4f99f359401af7abaf5b08d6180efb89917bb4
 
 COCOAPODS: 1.0.1

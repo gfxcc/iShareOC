@@ -36,8 +36,11 @@
 - (NSString*)getUserId;
 - (NSString*)getUserIdByUsername:(NSString*)username;
 - (NSString*)getUsernameByUserId:(NSString*)userId;
+- (NSString*)getLastModifiedByUserId:(NSString*)userId;
 - (NSArray*)getFriendsNameList;
 - (NSArray*)getFriendsIdList;
+- (NSArray*)getFriendsLastModifiedList;
+
 - (NSArray*)getQuickType;
 
 
@@ -45,7 +48,7 @@
 - (void)setFileContent:(NSString*)content filename:(NSString*)filename;
 - (void)setUserId:(NSString*)userId;
 - (void)setUsername:(NSString*)username;
-- (void)setFriendListWithName:(NSArray*)nameList UserId:(NSArray*)idList;
+- (void)setFriendList:(NSArray*)nameList UserId:(NSArray*)idList LastModified:(NSArray*)lastModifiedList;
 - (void)setUsernameAndUserId:(NSString*)nameAndId;
 - (void)setUsername:(NSString*)username userId:(NSString*)userId;
 - (void)setQuickType:(NSArray*)quickType;
