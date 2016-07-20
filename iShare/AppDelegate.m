@@ -54,10 +54,19 @@
     
     _fileOperation = [[FileOperation alloc] init];
     
-    if ([self isLogin]) {
-        [self setupTabViewController];
-    } else {
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce_1.2.0.2"])
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce_1.2.0.2"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [_fileOperation cleanAllFile];
         [self setupIntroductionViewController];
+    } else {
+        if ([self isLogin]) {
+            [self setupTabViewController];
+        } else {
+            [self setupIntroductionViewController];
+        }
     }
     
     [self.window makeKeyAndVisible];

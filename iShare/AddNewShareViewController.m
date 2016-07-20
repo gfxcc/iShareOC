@@ -124,7 +124,8 @@
     
     _type.text = _quickType;
     // judge food type
-    if ([_quickType isEqualToString:@"Food"]) {
+
+    if ([[_quickType uppercaseString] isEqualToString:@"FOOD"]) {
         [dateFormat setDateFormat:@"HH"];
         NSString *prettyVersion = [dateFormat stringFromDate:_mydate];
         int hour = [prettyVersion intValue];

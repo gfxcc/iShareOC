@@ -303,4 +303,55 @@
 
 }
 
+- (void)cleanAllFile {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/friends",
+                          documentsDirectory];
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/billRecord",
+                documentsDirectory];
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/billType",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/statisticsRecord",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/settingRecord",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+    fileName = [NSString stringWithFormat:@"%@/quickType",
+                documentsDirectory];
+    
+    [@"" writeToFile:fileName
+          atomically:NO
+            encoding:NSUTF8StringEncoding
+               error:nil];
+    
+}
+
 @end

@@ -57,5 +57,5 @@
 - (void)setQucikTypeWithName:(NSString*)typeName TypeIcon:(NSString*)typeIcon Index:(NSInteger)index;
 
 - (void)setDeviceToken:(NSString*)deviceToken;
-
+- (void)cleanAllFile;
 @end
