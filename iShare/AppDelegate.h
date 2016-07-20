@@ -13,5 +13,9 @@
 @property (strong, nonatomic) UIWindow *window;
 @property(nonatomic) NSInteger synchronismFlag;
 
+
+- (void)setupIntroductionViewController;
+
+- (void)setupTabViewController;
 @end
 

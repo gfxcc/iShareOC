@@ -14,7 +14,7 @@
 @interface EaseUserHeaderView ()
 
 
-@property (strong, nonatomic) UILabel *userLabel;
+
 @property (strong, nonatomic) UIView *coverView;
 @property (assign, nonatomic) CGFloat userIconViewWith;
 @end
@@ -99,6 +99,7 @@
         make.bottom.equalTo(_userLabel.mas_top).offset(-15);
         make.centerX.equalTo(self).offset(-30);
     }];
+
 
 }
 

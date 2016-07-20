@@ -41,7 +41,9 @@
 - (NSArray*)getFriendsIdList;
 - (NSArray*)getFriendsLastModifiedList;
 
-- (NSArray*)getQuickType;
+- (NSString*)getDeviceToken;
+
+- (NSMutableArray*)getQuickType;
 
 
 // write
@@ -52,6 +54,8 @@
 - (void)setUsernameAndUserId:(NSString*)nameAndId;
 - (void)setUsername:(NSString*)username userId:(NSString*)userId;
 - (void)setQuickType:(NSArray*)quickType;
+- (void)setQucikTypeWithName:(NSString*)typeName TypeIcon:(NSString*)typeIcon Index:(NSInteger)index;
 
+- (void)setDeviceToken:(NSString*)deviceToken;
 
 @end

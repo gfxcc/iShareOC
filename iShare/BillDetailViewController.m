@@ -76,7 +76,7 @@
     [_memberBackground addGestureRecognizer:myLabelGesture5];
     
     [_paidByBackground setFrame:CGRectMake(line6.frame.origin.x, _paidByBackground.frame.origin.y
-                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
+                                           , _memberBackground.frame.size.width / 2 - 1, _memberBackground.frame.size.height)];
 }
 
 - (void)viewDidLoad {

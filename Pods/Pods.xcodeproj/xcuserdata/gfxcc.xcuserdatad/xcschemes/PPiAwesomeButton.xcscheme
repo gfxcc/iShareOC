@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '5A59DC9F58E47B5D38D069C0B2AA192B'
+               BlueprintIdentifier = 'A77E80EE0FB5C849D58F76BB3E9F2A55'
                BlueprintName = 'PPiAwesomeButton'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libPPiAwesomeButton.a'>

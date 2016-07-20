@@ -600,7 +600,7 @@
             NSMutableArray *type = _typeArray[row];
             
             UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
-            image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", type[1]]];
+            image.image = [UIImage imageNamed:type[1]];
             [typeView addSubview:image];
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, ([UIScreen mainScreen].bounds.size.width / 2) - 40, 40)];
@@ -613,7 +613,7 @@
             NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
             
             UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 30, 30)];
-            image.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", type[(row + 1)*2 + 1]]];
+            image.image = [UIImage imageNamed:type[(row + 1)*2 + 1]];
             [typeView addSubview:image];
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, ([UIScreen mainScreen].bounds.size.width / 2) - 40, 40)];
@@ -645,11 +645,11 @@
     if ([pickerView isEqual:_typePicker]) {
         if (component == 1) {
             NSMutableArray *type = _typeArray[[_typePicker selectedRowInComponent:0]];
-            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[(row + 1) * 2]];
+            type_.text = type[(row + 1) * 2];
         } else if (component == 0){
             [_typePicker reloadComponent:1];
             NSMutableArray *type = _typeArray[row];
-            type_.text = [NSString stringWithFormat:@"%@>%@", type[0], type[2]];
+            type_.text = type[2];
         }
     }
     

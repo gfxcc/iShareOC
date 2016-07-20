@@ -37,9 +37,6 @@
     line5.frame = CGRectMake(_memberBackground.frame.origin.x, _createrBackground.frame.origin.y + _createrBackground.frame.size.height, _memberBackground.frame.size.width, 1.0f);
     line6.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2, _createrBackground.frame.origin.y, 1.0f, _createrBackground.frame.size.height);
     
-    CGRect t = line4.frame;
-    CGRect tt = [UIScreen mainScreen].bounds;
-    
     line1.backgroundColor = RGB(204, 204, 204).CGColor;
     line2.backgroundColor = RGB(204, 204, 204).CGColor;
     line3.backgroundColor = RGB(204, 204, 204).CGColor;
@@ -75,7 +72,7 @@
     [_memberBackground addGestureRecognizer:myLabelGesture5];
     
     [_paidByBackground setFrame:CGRectMake(_paidByBackground.frame.origin.x, _paidByBackground.frame.origin.y
-                                           , _memberBackground.frame.size.width / 2 - 1, _paidBy.frame.size.height)];
+                                           , _memberBackground.frame.size.width / 2 - 1, _memberBackground.frame.size.height)];
 
 }
 
@@ -326,19 +323,19 @@
     
     // set type icon name
     NSMutableArray *type = _keyboard.typeArray[[_keyboard.typePicker selectedRowInComponent:0]];
-    request.typeIcon = [NSString stringWithFormat:@"%@.png", type[([_keyboard.typePicker selectedRowInComponent:1] + 1)*2 + 1]];
+    request.typeIcon = type[([_keyboard.typePicker selectedRowInComponent:1] + 1)*2 + 1];
     if ([_type.text isEqualToString:@"Breakfast"] || [_type.text isEqualToString:@"Lunch"] || [_type.text isEqualToString:@"Dinner"] || [_type.text isEqualToString:@"Night Food"])
-        request.typeIcon = @"ifood.png";
+        request.typeIcon = @"ifood";
     else if ([_type.text isEqualToString:@"Drink"])
-        request.typeIcon = @"idrink.png";
+        request.typeIcon = @"idrink";
     else if ([_type.text isEqualToString:@"Shopping"])
-        request.typeIcon = @"ishopping.png";
+        request.typeIcon = @"ishopping";
     else if ([_type.text isEqualToString:@"Transportation"])
-        request.typeIcon = @"ibus.png";
+        request.typeIcon = @"ibus";
     else if ([_type.text isEqualToString:@"Home"])
-        request.typeIcon = @"ihome.png";
+        request.typeIcon = @"ihome";
     else if ([_type.text isEqualToString:@"Trip"])
-        request.typeIcon = @"itrip.png";
+        request.typeIcon = @"itrip";
     
     
     NSLog(@"%@", request.typeIcon);

@@ -38,8 +38,10 @@
 - (NSString*)getUsername {
 
     NSString *exist = [self getFileContent:@"friends"];
+    if (!exist) {
+        return @"";
+    }
     NSArray *array = [exist componentsSeparatedByString:@"\n"];
-
     NSString *line = array[0];
     NSArray *content = [line componentsSeparatedByString:@"*"];
     return content[0];
@@ -162,6 +164,27 @@
     return result;
 }
 
+- (NSMutableArray*)getQuickType {
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSString *exist = [self getFileContent:@"quickType"];
+    if ([exist isEqualToString:@""] || !exist) {
+        exist = @"food*ifood\ndrink*idrink\nshopping*ishopping\ntransportation*ibus\nhome*ihome\ntrip*itrip";
+    }
+    NSArray *array = [exist componentsSeparatedByString:@"\n"];
+    
+    for (int i = 0; i != array.count; i++) {
+        NSArray *contentOfLine = [array[i] componentsSeparatedByString:@"*"];
+        [result addObject:contentOfLine];
+    }
+    
+    return result;
+}
+
+- (NSString*)getDeviceToken {
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];;
+    return deviceToken;
+}
+
 #pragma mark - write functions
 
 - (void)setFileContent:(NSString*)content filename:(NSString*)filename {
@@ -251,6 +274,33 @@
     [self setFileContent:newContent filename:@"friends"];
 }
 
+- (void)setQucikTypeWithName:(NSString*)typeName TypeIcon:(NSString*)typeIcon Index:(NSInteger)index {
+    if (index < 0 || index > 5)
+        return;
+    NSString *exist = [self getFileContent:@"quickType"];
+    if ([exist isEqualToString:@""]) {
+        exist = @"food*ifood\ndrink*idrink\nshopping*ishopping\ntransportation*ibus\nhome*ihome\ntrip*itrip";
+    }
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:[exist componentsSeparatedByString:@"\n"]];
+    NSString *newLine = [NSString stringWithFormat:@"%@*%@", typeName, typeIcon];
+    NSString *newContent;
+    array[index] = newLine;
+    
+    newContent = array[0];
+    for (int i = 1; i != 6; i++) {
+        newContent = [NSString stringWithFormat:@"%@\n%@", newContent, array[i]];
+    }
+    
+    
+    [self setFileContent:newContent filename:@"quickType"];
+}
 
+- (void)setDeviceToken:(NSString*)deviceToken {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:deviceToken forKey:@"deviceToken"];
+    [defaults synchronize];
+
+}
 
 @end

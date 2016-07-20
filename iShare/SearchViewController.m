@@ -21,7 +21,9 @@
 
 @interface SearchViewController ()
 
-@property (strong, nonatomic) NSMutableArray* search_result;
+@property (strong, nonatomic) NSMutableArray* search_result_username;
+@property (strong, nonatomic) NSMutableArray* search_result_userIcon;
+@property (strong, nonatomic) NSMutableArray* search_result_userId;
 @property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
@@ -44,7 +46,9 @@
     [navbar pushNavigationItem:item animated:NO];
     [self.view addSubview:navbar];
     
-    _search_result = [[NSMutableArray alloc] init];
+    _search_result_username = [[NSMutableArray alloc] init];
+    _search_result_userIcon = [[NSMutableArray alloc] init];
+    _search_result_userId = [[NSMutableArray alloc] init];
     self.navigationItem.title = @"Search";
 }
 
@@ -54,7 +58,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    return [_search_result count];
+    return [_search_result_username count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -70,14 +74,24 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     cell.accessoryType = UITableViewCellAccessoryNone;
+    // remove subview
+    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
     
     UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 40, 40)];
-    icon.image = [UIImage imageNamed:@"icon.png"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _search_result_userId[indexPath.row]]]) {
+        icon.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, _search_result_userId[indexPath.row]]];
+    } else {
+        icon.image = [UIImage imageNamed:@"placeholder_coding_square_55"];
+    }
     [cell addSubview:icon];
     
     // Configure the cell.
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 100, 40)];
-    label.text = _search_result[indexPath.row];
+    label.text = _search_result_username[indexPath.row];
     [cell addSubview:label];
     
 //    UIButton *twitter1=[UIButton buttonWithType:UIButtonTypeCustom text:@"add" icon:nil textAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:[UIColor whiteColor]} andIconPosition:IconPositionLeft];
@@ -87,7 +101,7 @@
 //    [twitter1 setRadius:5.0];
 //    [cell addSubview:twitter1];
     
-    //cell.textLabel.text = _search_result[indexPath.row];
+    //cell.textLabel.text = _search_result_username[indexPath.row];
     return cell;
 }
 
@@ -100,7 +114,7 @@
     NSArray *members = [_fileOperation getFriendsNameList];
     
     for (int i = 0; i != members.count; i++) {
-        if ([members[i] isEqualToString:_search_result[_selectedIndex]]) {
+        if ([members[i] isEqualToString:_search_result_username[_selectedIndex]]) {
             [TSMessage showNotificationInViewController:self
                                                   title:@"Wrong"
                                                subtitle:@"You are already friend."
@@ -119,24 +133,29 @@
 }
 
 #pragma mark - RequestViewDelegate -
-- (void)download_friends_icon {
+- (void)downloadUserIcon {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
     NSString * const kRemoteHost = ServerHost;
     
     Repeated_string *request = [Repeated_string message];
     
     // better?
-    
-    request.contentArray = [NSMutableArray arrayWithArray:_search_result];
-    [request.contentArray insertObject:@"icon" atIndex:0];
+    if (_search_result_username.count == 0)
+        return;
+    //request.contentArray = [NSMutableArray arrayWithArray:_search_result_userId];
+    [request.contentArray addObject:@"icon"];
 
-    
-    for (int i = 0; i != request.contentArray.count; i++) {
-        NSLog(@"%@", request.contentArray[i]);
+    for (int i = 0; i != _search_result_userId.count; i++) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, _search_result_userId[i]]]) {
+            [request.contentArray addObject:_search_result_userId[i]];
+        }
     }
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
+    if (request.contentArray.count  == 1) {
+        [self.searchDisplayController.searchResultsTableView reloadData];
+        return;
+    }
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
@@ -150,8 +169,7 @@
         } else if (error) {
             
         } else { // done
-
-            //[_searchBar ];
+            [self.searchDisplayController.searchResultsTableView reloadData];
         }
     }];
     
@@ -162,8 +180,17 @@
     NSString * const kRemoteHost = ServerHost;
     Request *request = [Request message];
     request.sender = [_fileOperation getUserId];
-    request.receiver = _search_result[_selectedIndex];
+    request.receiver = _search_result_username[_selectedIndex];
     request.type = @"friendInvite";
+    
+    if ([request.sender isEqualToString:@""]) {
+        [TSMessage showNotificationInViewController:self
+                                              title:@"Wrong"
+                                           subtitle:@"Please login."
+                                               type:TSMessageNotificationTypeWarning
+                                           duration:TSMessageNotificationDurationAutomatic];
+        return;
+    }
     
     NSDate *now = [NSDate date];
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -208,7 +235,7 @@
         return NO;
     }
     
-    [_search_result removeAllObjects];
+    [_search_result_username removeAllObjects];
     [self.searchDisplayController.searchResultsTableView reloadData];
     [self obtain_search_result:searchString];
     return NO;
@@ -216,23 +243,31 @@
 
 - (void)obtain_search_result:(NSString *)searchString {
 
+    [_search_result_userId removeAllObjects];
+    [_search_result_username removeAllObjects];
+    [_search_result_userIcon removeAllObjects];
     NSString * const kRemoteHost = ServerHost;
     NSString *username = [_fileOperation getUsername];
     Inf *request = [[Inf alloc] init];
     request.information = searchString;
     
     // Example gRPC call using a generated proto client library:
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/cacheFolder"];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    [service search_usernameWithRequest:request handler:^(Repeated_string *response, NSError *error) {
+    [service search_usernameWithRequest:request handler:^(Search_result *response, NSError *error) {
         if (response) {
-            for (int i = 0; i != response.contentArray.count; i++) {
-                if ([username isEqualToString:response.contentArray[i]]) {
+            for (int i = 0; i != response.usernameArray.count; i++) {
+                if ([username isEqualToString:response.usernameArray[i]]) {
                     continue;
                 }
-                [_search_result addObject:response.contentArray[i]];
+                [_search_result_username addObject:response.usernameArray[i]];
+                [_search_result_userId addObject:response.userIdArray[i]];
             }
             [self.searchDisplayController.searchResultsTableView reloadData];
+            [self downloadUserIcon];
 
         } else if (error) {
             NSLog(@"Finished with error: %@", error);

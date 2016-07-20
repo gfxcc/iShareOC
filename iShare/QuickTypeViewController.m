@@ -7,18 +7,31 @@
 //
 
 #import "QuickTypeViewController.h"
+#import "QuickTypeCollectionViewCell.h"
+#import "NewQuickTypeViewController.h"
 
 @interface QuickTypeViewController ()
 
 @property (nonatomic) CGFloat cellWidth;
-
+@property (nonatomic, strong) FileOperation *fileOperation;
+@property (nonatomic, strong) NSMutableArray *quickTypeList;
+@property (nonatomic, weak) NSIndexPath *selectedIndex;
 @end
 
 @implementation QuickTypeViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    _quickTypeList = [_fileOperation getQuickType];
+    [_collectionView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _fileOperation = [[FileOperation alloc] init];
+    
+    _quickTypeList = [_fileOperation getQuickType];
     _cellWidth = ([UIScreen mainScreen].bounds.size.width - 80) / 3;
     
     _collectionView.dataSource = self;
@@ -38,8 +51,9 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UICollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    //cell[cell initWithFrame:CGRectMake(0, 0, 50, 50)];
+    QuickTypeCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    [cell initWithTypeIcon:_quickTypeList[indexPath.row][1] TypeName:_quickTypeList[indexPath.row][0]];
+//    cell[cell initWithFrame:CGRectMake(0, 0, 50, 50)];
     
 //    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
 //    imageView.image = [UIImage imageNamed:[self getImageNameWithTag:indexPath.row]];
@@ -51,8 +65,21 @@
 //    cell.tag = indexPath.row;
 //    [cell addGestureRecognizer:myLabelGesture1];
     //cell.layer.borderWidth = 0.5;
-    cell.backgroundColor = [UIColor blackColor];
+    //cell.backgroundColor = [UIColor blackColor];
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    QuickTypeCollectionViewCell *cell = (QuickTypeCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.backgroundColor = RGB(211, 214, 219);
+    
+    _selectedIndex = indexPath;
+    
+    [self performSegueWithIdentifier:@"newQuickType" sender:self];
+    cell.backgroundColor = [UIColor clearColor];
+
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -65,7 +92,13 @@
     return UIEdgeInsetsMake(20, 20, 20, 20);
 }
 
-
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"newQuickType"]) {
+        NewQuickTypeViewController *newQuickTypeView = (NewQuickTypeViewController *)[segue destinationViewController];
+        newQuickTypeView.selectedIndex = _selectedIndex.row;
+    }
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

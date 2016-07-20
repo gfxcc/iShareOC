@@ -111,7 +111,7 @@
     static NSString *CellIdentifier = @"billTypeCell";
     BillTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    [cell initWithIcon:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", _typeArray[(indexPath.row + 1) * 2 + 1]]] typeName:_typeArray[(indexPath.row + 1) * 2]];
+    [cell initWithIcon:[UIImage imageNamed:_typeArray[(indexPath.row + 1) * 2 + 1]] typeName:_typeArray[(indexPath.row + 1) * 2]];
     
     return cell;
 }

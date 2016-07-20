@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LeftMenuViewController.h"
 
+
 @interface LoginViewController : UIViewController <UITextFieldDelegate>
 
 typedef NS_ENUM(NSInteger, LogingAnimationType) {
@@ -31,5 +32,11 @@ typedef NS_ENUM(NSInteger, LogingAnimationType) {
 @property (weak, nonatomic) IBOutlet UIButton *LoginButton;
 
 @property (weak, nonatomic) LeftMenuViewController *LeftMenuView;
+@property (nonatomic) BOOL reLoadFlag;
 
+@property (strong, nonatomic) NSString *buttonText;
+
+- (void)signInMode;
+
+- (void)loginMode;
 @end

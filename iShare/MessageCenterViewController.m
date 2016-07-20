@@ -79,6 +79,8 @@
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
     request.information = [_fileOperation getUserId];
+    if ([request.information isEqualToString:@""])
+        return;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_requestWithRequest:request eventHandler:^(BOOL done, Request *response, NSError *error){
@@ -104,6 +106,8 @@
     NSString * const kRemoteHost = ServerHost;
     Inf *request = [Inf message];
     request.information = [_fileOperation getUserId];
+    if ([request.information isEqualToString:@""])
+        return;
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
 

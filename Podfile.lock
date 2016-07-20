@@ -26,6 +26,7 @@ PODS:
     - gRPC (~> 0.11)
     - gRPC_pod/Messages
   - HexColors (2.2.1)
+  - JazzHands (2.0.0)
   - JDStatusBarNotification (1.5.2)
   - Masonry (1.0.1)
   - PNChart (0.8.7):
@@ -41,6 +42,7 @@ PODS:
 DEPENDENCIES:
   - APParallaxHeader (= 0.1.6)
   - gRPC_pod (from `./Server`)
+  - JazzHands (= 2.0.0)
   - JDStatusBarNotification (= 1.5.2)
   - Masonry
   - PNChart (= 0.8.7)
@@ -59,6 +61,7 @@ SPEC CHECKSUMS:
   gRPC: 297fd91f82b8f36e6984cb701aa91eb3a2f1ef6c
   gRPC_pod: 55a410c7e71b9f28b3668ca652628b59c514e2de
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
+  JazzHands: 00002e9b1284e7fc1ac6555012e81b8942477242
   JDStatusBarNotification: a36d09ccbb047217572b074a61e7ca10dddc5f0a
   Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
   PNChart: c1755716bbd45386d2035b2bf2ce73e6d3f8cb22
@@ -68,6 +71,6 @@ SPEC CHECKSUMS:
   TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
   UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
 
-PODFILE CHECKSUM: 5f4f99f359401af7abaf5b08d6180efb89917bb4
+PODFILE CHECKSUM: 0108910b6200e528456ea03b077fe5abfe853c49
 
 COCOAPODS: 1.0.1

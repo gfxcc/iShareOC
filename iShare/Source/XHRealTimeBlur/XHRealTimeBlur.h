@@ -3,7 +3,7 @@
 //  XHRealTimeBlurExample
 //
 //  Created by 曾 宪华 on 14-9-7.
-//  Copyright (c) 2014年 嗨，我是曾宪华(@xhzengAIB)，曾加入YY Inc.担任高级移动开发工程师，拍立秀App联合创始人，热衷于简洁、而富有理性的事物 QQ:543413507 主页:http://zengxianhua.com All rights reserved.
+//  Copyright (c) 2014年 曾宪华 QQ群: (142557668) QQ:543413507  Gmail:xhzengAIB@gmail.com. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -27,8 +27,10 @@ static NSString * const XHRealTimeDidDismissBlurViewBlcokKey = @"XHRealTimeDidDi
 typedef NS_ENUM(NSInteger, XHBlurStyle) {
     // 垂直梯度背景从黑色到半透明的。
     XHBlurStyleBlackGradient = 0,
-    // 类似UIToolbar的半透明背景
+    // 类似UIToolbar的半透明背景（黑）
     XHBlurStyleTranslucent,
+    // 类似UIToolbar的半透明背景（白）
+    XHBlurStyleTranslucentWhite,
     // 黑色半透明背景
     XHBlurStyleBlackTranslucent,
     // 纯白色

@@ -125,7 +125,7 @@
 
     NSMutableArray *type = _typeArray[indexPath.row];
     
-    [cell initWithIcon:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", type[1]]] typeName:type[0]];
+    [cell initWithIcon:[UIImage imageNamed:type[1]] typeName:type[0]];
     
     NSLog(@"%f  %f", cell.icon.frame.size.width, cell.icon.frame.size.height);
     return cell;

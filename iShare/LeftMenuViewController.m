@@ -25,14 +25,16 @@
 #import "FileOperation.h"
 #import "BillListWithFriendViewController.h"
 #import <APParallaxHeader/UIScrollView+APParallaxHeader.h>
+#import <JDStatusBarNotification/JDStatusBarNotification.h>
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 @interface LeftMenuViewController ()
 
-@property(nonatomic, strong) NSIndexPath *deleteIndex;
+@property (nonatomic, strong) NSIndexPath *deleteIndex;
 @property (nonatomic, strong) FileOperation *fileOperation;
+@property (nonatomic, strong) UIImage *headImage;
 
 @end
 
@@ -58,70 +60,43 @@
     [super viewDidLoad];
     //self.tableView.separatorColor = [UIColor lightGrayColor];
     
-    _fileOperation = [[FileOperation alloc] init];
-    _user_id = [_fileOperation getUserId];
-
+    
+    [self customedViewDidLoad];
+    
+    
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
     self.view.backgroundColor = RGB(61, 64, 71);
     
-
-    _headImage.layer.cornerRadius = 5;
-    _headImage.clipsToBounds = YES;
-  
+    _headImageView.layer.cornerRadius = 5;
+    _headImageView.clipsToBounds = YES;
     [_idText setTextColor:RGB(255, 255, 255)];
-    
-    NSString *username = [_fileOperation getUsername];
-    if ([username isEqualToString:@""] || !username) {
-        _idText.text = @"";
-    } else {
-        _idText.text = username;
-    }
     if ([_idText.text isEqualToString:@""]) {
         [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
     }
-    
-    
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-    
-    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id];
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-    
-    if (fileExists) {
-        _headImage.image = [UIImage imageWithContentsOfFile:dataPath];
-    } else {
-        _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
-    }
-    
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch_icon)];
-    singleTap.numberOfTapsRequired = 1;
-    singleTap.numberOfTouchesRequired = 1;
-    [_headImage addGestureRecognizer:singleTap];
-    [_headImage setUserInteractionEnabled:YES];
-    
     __weak typeof(self) weakSelf = self;
-    _headerView = [EaseUserHeaderView userHeaderViewWithBackground:[UIImage imageNamed:@"background_stars.jpg"] Icon:_headImage.image Username:_idText.text];
+    _headerView = [EaseUserHeaderView userHeaderViewWithBackground:[UIImage imageNamed:@"background_stars.jpg"] Icon:_headImage Username:_idText.text];
     _headerView.userIconClicked = ^(){
         [weakSelf touch_icon];
     };
     [_tableView addParallaxWithView:_headerView andHeight:CGRectGetHeight(_headerView.frame)];
-//    [_tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-//    [_tableView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
-//    
+}
+
+- (void)customedViewDidLoad {
+    _fileOperation = [[FileOperation alloc] init];
+    _user_id = [_fileOperation getUserId];
+    
+
     _friendsArray = [[NSMutableArray alloc] init];
     _friendsIdArray = [[NSMutableArray alloc] init];
     _friendsLastModified = [[NSMutableArray alloc] init];
     _friendsIconList = [[NSMutableArray alloc] init];
+    [self loadUserData];
+    //
     
-    [self obtain_friends];
-    //[self loadFriends];
 }
-
-
 
 #pragma mark - custom functions
 
@@ -199,7 +174,7 @@
                 [_friendsIdArray addObject:response.friendsIdArray[i]];
                 [_friendsLastModified addObject:response.friendsLastModifiedArray[i]];
             }
-            
+            [self loadFriendsIcons];
             [self updateFriendsIcon];
             [self save_data];
             
@@ -247,7 +222,7 @@
     
     // save icon
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-    NSData *image_data = UIImagePNGRepresentation(_headImage.image);
+    NSData *image_data = UIImagePNGRepresentation(_headImage);
     [image_data writeToFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, _user_id] atomically:YES];
 }
 
@@ -255,9 +230,10 @@
     UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginViewController *loginPage = [mainStoryboard instantiateViewControllerWithIdentifier:@"LogInView"];
     
+    [loginPage loginMode];
     //loginPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     loginPage.LeftMenuView = self;
-    
+    loginPage.reLoadFlag = YES;
     UINavigationController *nav = [[BaseNavigationController alloc] initWithRootViewController:loginPage];
     //[_mainUINavgation presentViewController:loginPage animated:YES completion:nil];
     [_mainUIView presentViewController:nav animated:YES completion:nil];
@@ -352,7 +328,13 @@
             continue;
         [request.contentArray addObject:_friendsIdArray[i]];
     }
+    if (request.contentArray.count == 1) {
+        return;
+    }
     
+    [JDStatusBarNotification showWithStatus:@"load data"];
+    [JDStatusBarNotification showActivityIndicator:YES
+                                    indicatorStyle:UIActivityIndicatorViewStyleGray];
 
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service receive_ImgWithRequest:request eventHandler:^(BOOL done, Image *response, NSError *error) {
@@ -366,6 +348,7 @@
         } else if (error) {
             
         } else { // done
+            [JDStatusBarNotification dismiss];
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
             NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
@@ -378,7 +361,7 @@
             }
             [self loadFriendsIcons];
             // reload
-            [_tableView reloadData];
+            
             ViewController *mainView = (ViewController *)_mainUIView;
             [mainView.tableView reloadData];
         }
@@ -397,11 +380,12 @@
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:imagePath];
         
         if (fileExists) {
-            [_friendsIconList addObject:[UIImage imageWithContentsOfFile:imagePath]];
+            _friendsIconList[i] = [UIImage imageWithContentsOfFile:imagePath];
         } else {
-            [_friendsIconList addObject:[UIImage imageNamed:@"icon-user-default.png"]];
+            _friendsIconList[i] = [UIImage imageNamed:@"icon-user-default.png"];
         }
     }
+    [_tableView reloadData];
 }
 
 #pragma mark  - prepareForSegue
@@ -455,7 +439,9 @@
                 [_log_button setTitle:@"Log In/Sign up" forState:UIControlStateNormal];
                 
                 _idText.text = @"";
-                _headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
+                //_headImageView.image = [UIImage imageNamed:@"icon-user-default.png"];
+                _headerView.userIconView.image = [UIImage imageNamed:@"icon-user-default.png"];
+                _headerView.userLabel.text = @"";
                 
                 break;
             default:
@@ -542,8 +528,6 @@
           atomically:NO
             encoding:NSUTF8StringEncoding
                error:nil];
-    
-    
 
 }
 
@@ -551,7 +535,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     
-    [_headImage setImage:chosenImage];
+    _headImage = chosenImage;
+    [_headerView.userIconView setImage:_headImage];
     [self save_data];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     
@@ -559,7 +544,7 @@
     [mainUI hideMainUI];
     
     // send image
-    [self send_imge:chosenImage name:_user_id path:@"icon"];
+    [self send_imge:_headImage name:_user_id path:@"icon"];
     [self updateLastModified];
 }
 
@@ -640,7 +625,7 @@
     if (indexPath.section == 0) {
         static NSString *CellIdentifier = @"UserListCell";
         UserListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        [cell initWith:@"Add New Friend" icon:[UIImage imageNamed:@"search.png"]];
+        [cell initWith:@"Add New Friend" icon:[UIImage imageNamed:@"Search-80"]];
         cell.username.textColor = RGB(115, 117, 122);
         /*
         static NSString *CellIdentifier = @"Cell";
@@ -699,27 +684,28 @@
         [self presentViewController:searchView animated:YES completion:^{
             NSLog(@"Present Modal View");
         }];
-    } else {
+    } else if (indexPath.section == 2){
         //[self performSegueWithIdentifier:@"checkBillWithFriend" sender:self];
-        /*
-        UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        BillListWithFriendViewController *billListView = [mainStoryboard instantiateViewControllerWithIdentifier:@"BillsWithFriendView"];
-        billListView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         
-        billListView.username = _friendsArray[[_tableView indexPathForSelectedRow].row];
-        billListView.navigationItem.title = _friendsArray[[_tableView indexPathForSelectedRow].row];
-        billListView.sum = @"NULL";
-        billListView.idText = [_friendsArray objectAtIndex:indexPath.row];
-        billListView.mainUIView = _mainUIView;
-        
-        // hide mainUI first
+//        UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//        BillListWithFriendViewController *billListView = [mainStoryboard instantiateViewControllerWithIdentifier:@"BillsWithFriendView"];
+//        billListView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//        
+//        billListView.username = _friendsArray[[_tableView indexPathForSelectedRow].row];
+//        billListView.navigationItem.title = _friendsArray[[_tableView indexPathForSelectedRow].row];
+//        billListView.sum = @"NULL";
+//        billListView.idText = [_friendsArray objectAtIndex:indexPath.row];
+//        billListView.mainUIView = _mainUIView;
+//        
+//        // hide mainUI first
+//        ViewController *mainUI = (ViewController *)_mainUIView;
+//        [mainUI hideMainUI];
+//        
+//        [mainUI presentViewController:billListView animated:YES completion:^{
+//            NSLog(@"Present Modal View");
+//        }];
         ViewController *mainUI = (ViewController *)_mainUIView;
-        [mainUI hideMainUI];
-        
-        [self presentViewController:billListView animated:YES completion:^{
-            NSLog(@"Present Modal View");
-        }];
-         */
+        [mainUI viewBillWithFriend:[_friendsArray objectAtIndex:indexPath.row]];
     }
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
 }
@@ -770,6 +756,41 @@
 //
 //    }
 //}
+
+- (void)loadUserData {
+    FileOperation *fileOperation = [[FileOperation alloc] init];
+    NSString *username = [fileOperation getUsername];
+    NSString *userId = [fileOperation getUserId];
+    
+    _user_id = userId;
+    [self.log_button setTitle:@"Log out" forState:UIControlStateNormal];
+    [self.idText setText:username];
+    [self.headerView.userLabel setText:username];
+    [self obtain_friends];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+    
+    if (fileExists) {
+        _headImage = [UIImage imageWithContentsOfFile:dataPath];
+    } else {
+        _headImage = [UIImage imageNamed:@"icon-user-default.png"];
+    }
+    
+    _headImageView.image = _headImage;
+    
+//    ViewController *mainUI = (ViewController *)self.mainUIView;
+//    mainUI.user_id = userId;
+//    [mainUI obtain_bills];
+//    [mainUI sendToken];
+}
+
+- (void)cleanUserData {
+    
+}
 
 #pragma mark - FullSizeView delegate -
 - (void)originalImageViewTapped {

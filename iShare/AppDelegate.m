@@ -13,10 +13,17 @@
 #import "ViewController.h"
 #import "UIViewController+Utils.h"
 #import "EaseStartView.h"
+#import "IntroductionViewController.h"
+#import <GRPCClient/GRPCCall+Tests.h>
+#import "LeftMenuViewController.h"
+#import "SlideNavigationController.h"
+#import "FileOperation.h"
 
 @interface AppDelegate ()
 
 @property(strong, nonatomic) ViewController *mainUI;
+@property(strong, nonatomic) IntroductionViewController *introductionVC;
+@property (nonatomic, strong) FileOperation *fileOperation;
 
 @end
 
@@ -24,6 +31,12 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [GRPCCall useInsecureConnectionsForHost:ServerHost];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
     // Override point for customization after application launch.
     UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
@@ -39,12 +52,78 @@
         [application registerForRemoteNotifications];
     }
     
-//    EaseStartView *startView = [EaseStartView startView];
-//    [startView startAnimationWithCompletionBlock:^(EaseStartView *easeStartView) {
-//    }];
+    _fileOperation = [[FileOperation alloc] init];
+    
+    if ([self isLogin]) {
+        [self setupTabViewController];
+    } else {
+        [self setupIntroductionViewController];
+    }
+    
+    [self.window makeKeyAndVisible];
+    
+//    UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//    ViewController *mainView = [mainStoryboard instantiateViewControllerWithIdentifier:@"ViewController"];
+//    SlideNavigationController *nav = [[SlideNavigationController alloc] initWithRootViewController:mainView];
+//    
+//    [self.window setRootViewController:nav];
+//
+//    mainView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//
+//    LeftMenuViewController *leftMenu = (LeftMenuViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+//    leftMenu.mainUINavgation = nav;
+//    leftMenu.mainUIView = mainView;
+//    mainView.leftMenu = leftMenu;
+//    [leftMenu viewDidLoad];
+//    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+//    [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
+//    [SlideNavigationController sharedInstance].enableShadow = NO;
+//    
+//    
+    
     
     return YES;
 }
+
+- (bool)isLogin {
+    NSString *username = [_fileOperation getUsername];
+    if ([username isEqualToString:@""]) {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)setupIntroductionViewController{
+    _introductionVC = [[IntroductionViewController alloc] init];
+    //    [self.window setRootViewController:[[BaseNavigationController alloc] initWithRootViewController:introductionVC]];
+    [self.window setRootViewController:_introductionVC];
+}
+
+- (void)setupTabViewController{
+    [_introductionVC.view setHidden:YES];
+    
+    UIStoryboard* mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ViewController *mainView = [mainStoryboard instantiateViewControllerWithIdentifier:@"ViewController"];
+    SlideNavigationController *nav = [[SlideNavigationController alloc] initWithRootViewController:mainView];
+    
+    [self.window setRootViewController:nav];
+    
+    mainView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    
+    LeftMenuViewController *leftMenu = (LeftMenuViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+    leftMenu.mainUINavgation = nav;
+    leftMenu.mainUIView = mainView;
+    mainView.leftMenu = leftMenu;
+    
+    [leftMenu customedViewDidLoad];
+
+    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
+    [SlideNavigationController sharedInstance].enableShadow = NO;
+    
+    [self.window setRootViewController:nav];
+}
+
 
 //注册成功，返回deviceToken
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -62,21 +141,17 @@
         //NSString *tmp = [tokenStringOriginal characterAtIndex:i];
         tokenString = [NSString stringWithFormat:@"%@%c", tokenString, [tokenStringOriginal characterAtIndex:i]];
     }
-    
-//    UIWindow *window=[UIApplication sharedApplication].keyWindow;
-//    UIViewController *root = [window rootViewController];
-//    
-//    UIStoryboard *storyboard = root.storyboard;
-    
-    //UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    //UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    ViewController *mainUI = (ViewController *)[UIViewController currentViewController];
-    _mainUI = mainUI;
 
-    mainUI.deviceToken = tokenString;
-    mainUI.deviceTokenBool = true;
-    [mainUI sendToken];
-
+    
+//    ViewController *mainUI = (ViewController *)[UIViewController currentViewController];
+//    _mainUI = mainUI;
+//
+//    mainUI.deviceToken = tokenString;
+//    mainUI.deviceTokenBool = true;
+//    [mainUI sendToken];
+    
+    //[_fileOperation setDeviceToken:tokenString];
+    [self sendToken:tokenString];
 }
 
 //注册失败
@@ -102,6 +177,34 @@
     NSLog(@"%@", userInfo);
 }
 ///////////////////
+
+- (void)sendToken:(NSString*)deviceToken {
+    NSString *currentId = [_fileOperation getUserId];
+    if ([currentId isEqualToString:@""]) {
+        return;
+    }
+    
+    NSString *const kRemoteHost = ServerHost;
+    
+    Repeated_string *request = [Repeated_string message];
+    
+    [request.contentArray addObject:currentId];
+    [request.contentArray addObject:deviceToken];
+    
+    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
+    [service send_DeviceTokenWithRequest:request handler:^(Inf *response, NSError *error) {
+        if (response) {
+            NSLog(@"%@", response.information);
+            
+        } else if(error){
+//            [TSMessage showNotificationInViewController:self
+//                                                  title:@"GRPC ERROR"
+//                                               subtitle:@"send_DeviceTokenWithRequest"
+//                                                   type:TSMessageNotificationTypeError
+//                                               duration:TSMessageNotificationDurationEndless];
+        }
+    }];
+}
 
 
 

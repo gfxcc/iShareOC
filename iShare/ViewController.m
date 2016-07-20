@@ -28,22 +28,24 @@
 #import <JDStatusBarNotification/JDStatusBarNotification.h>
 #import <PNChart/PNChart.h>
 #import "FileOperation.h"
+#import "BillListWithFriendViewController.h"
+#import "IntroductionViewController.h"
+#import "BaseNavigationController.h"
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
-@interface ViewController () <ABCIntroViewDelegate>
+@interface ViewController ()
 
 //@property (strong, nonatomic) BillsTableViewCell *lastCell;
 @property (strong, nonatomic) BillsTableViewCell *todayCell;
 @property (strong, nonatomic) BillsTableViewCell *thisWeekCell;
 @property (strong, nonatomic) BillsTableViewCell *thisMonthCell;
-@property ABCIntroView *introView;
 @property (nonatomic, strong) PopMenu *myPopMenu;
 @property (nonatomic, strong) NSString *quickType;
 @property (nonatomic, strong) PNPieChart *pieChart;
 @property (nonatomic, strong) UIView *legend;
-
+@property (nonatomic, strong) NSArray *quickTypeList;
 
 @property (nonatomic, strong) FileOperation *fileOperation;
 
@@ -52,31 +54,55 @@
 @implementation ViewController
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    
     [super viewWillAppear:animated];
 
-    [_standardView disableAllItems];
+    //[_standardView disableAllItems];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
     
-    //self.navigationController.hidesBarsOnSwipe = true;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+}
+
+- (void)viewDidLayoutSubviews {
+    // draw line
+    
+    
+    if (kDevice_Is_iPhone6Plus) {
+        _statusView.frame = CGRectMake(_statusView.frame.origin.x, _statusView.frame.origin.y, _statusView.frame.size.width, _statusView.frame.size.height - 55);
+        _addNewButtion.frame = CGRectMake(_addNewButtion.frame.origin.x, _addNewButtion.frame.origin.y - 55, _addNewButtion.frame.size.width, _addNewButtion.frame.size.height);
+        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y - 55, _tableView.frame.size.width, _tableView.frame.size.height + 55);
+    } else if (kDevice_Is_iPhone5) {
+        _statusView.frame = CGRectMake(_statusView.frame.origin.x, _statusView.frame.origin.y, _statusView.frame.size.width, _statusView.frame.size.height + 55);
+        _addNewButtion.frame = CGRectMake(_addNewButtion.frame.origin.x, _addNewButtion.frame.origin.y + 55, _addNewButtion.frame.size.width, _addNewButtion.frame.size.height);
+        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y + 55, _tableView.frame.size.width, _tableView.frame.size.height);
+    } else if (kDevice_Is_iPhone4) {
+        _statusView.frame = CGRectMake(_statusView.frame.origin.x, _statusView.frame.origin.y, _statusView.frame.size.width, _statusView.frame.size.height + 110);
+        _addNewButtion.frame = CGRectMake(_addNewButtion.frame.origin.x, _addNewButtion.frame.origin.y + 110, _addNewButtion.frame.size.width, _addNewButtion.frame.size.height);
+        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y + 110, _tableView.frame.size.width, _tableView.frame.size.height);
+        
+    }
+    CALayer *line1 = [CALayer layer];
+    line1.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y - 1, _tableView.frame.size.width, 1.0f);
+    line1.backgroundColor = RGB(199, 199, 199).CGColor;
+    [self.view.layer addSublayer:line1];
     
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     // layerout subview
     [self loadCharts];
-}
-
--(BOOL)prefersStatusBarHidden{
-    return self.hideStatusBar;
+    
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+
     _fileOperation = [[FileOperation alloc] init];
     _user_id = [_fileOperation getUserId];
     
-    [GRPCCall useInsecureConnectionsForHost:ServerHost];
+    
     
     if ([UIScreen mainScreen].bounds.size.height <= 568) {
         _deviceModel = 5;
@@ -90,11 +116,9 @@
     //[self.navigationController.navigationBar setBackgroundColor:RGB(78, 107, 165)];
     self.navigationController.navigationBar.barTintColor = RGB(26, 142, 180);
     
-    self.view.backgroundColor = RGB(211, 214, 219);
+    //self.view.backgroundColor = RGB(211, 214, 219);
     [TSMessage setDefaultViewController:self.navigationController];
-    
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
-                                                             bundle: nil];
+
     
     [_addNewButtion setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     _addNewButtion.layer.cornerRadius = 5;
@@ -102,55 +126,46 @@
     [_addNewButtion addTarget:self action:@selector(buttonHighlight) forControlEvents:UIControlEventTouchDown];
     [_addNewButtion addTarget:self action:@selector(buttonNormal) forControlEvents:UIControlEventTouchUpInside];
     
-    _leftMenu = (LeftMenuViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
     
-    _leftMenu.mainUINavgation = self.navigationController;
-    _leftMenu.mainUIView = self;
-    
-    [SlideNavigationController sharedInstance].leftMenu = _leftMenu;
-    [SlideNavigationController sharedInstance].mainUIView = self;
-    [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
-    [SlideNavigationController sharedInstance].enableShadow = NO;
-    [_leftMenu viewDidLoad];
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
+
     
-    
-    
-    
-    
-    NSUserDefaults *theDefaults;
-    int  launchCount;
-    //Set up the properties for the integer and default.
-    theDefaults = [NSUserDefaults standardUserDefaults];
-    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
-    [theDefaults setInteger:launchCount forKey:@"hasRun"];
-    [theDefaults synchronize];
-    
-    //Log the amount of times the application has been run
-    NSLog(@"This application has been run %d amount of times", launchCount);
-    
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.11.1"]) {
-        
-        // Set the value to YES
-        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.11.1"];
-        self.navigationController.navigationBar.hidden = YES;
-        //Run your first launch code (Bring user to info/setup screen, etc.)
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if (![defaults objectForKey:@"intro_screen_viewed"]) {
-            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
-            self.introView.delegate = self;
-            self.introView.backgroundColor = [UIColor greenColor];
-            [self.view addSubview:self.introView];
-        }
-    }
+
+//    NSUserDefaults *theDefaults;
+//    int  launchCount;
+//    //Set up the properties for the integer and default.
+//    theDefaults = [NSUserDefaults standardUserDefaults];
+//    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
+//    [theDefaults setInteger:launchCount forKey:@"hasRun"];
+//    [theDefaults synchronize];
+//    
+//    //Log the amount of times the application has been run
+//    NSLog(@"This application has been run %d amount of times", launchCount);
+//    
+//    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.11.1"]) {
+//        
+//        // Set the value to YES
+//        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.11.1"];
+//        self.navigationController.navigationBar.hidden = YES;
+//        //Run your first launch code (Bring user to info/setup screen, etc.)
+//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//        if (![defaults objectForKey:@"intro_screen_viewed"]) {
+//            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
+//            self.introView.delegate = self;
+//            self.introView.backgroundColor = [UIColor greenColor];
+//            [self.view addSubview:self.introView];
+//        }
+//    }
     
     // Do any additional setup after loading the view, typically from a nib.
     
-    
-    
-    
+    if (![self isLogin]) {
+
+        IntroductionViewController *introductionVC = [[IntroductionViewController alloc] init];
+        [self.navigationController presentViewController:introductionVC animated:YES completion:nil];
+    }
     // modify tableViewCells
     static NSString *CellIdentifier = @"BillListCell";
     
@@ -163,28 +178,29 @@
     _bill_latest = [[NSMutableArray alloc] init];
     _bills = [[NSMutableArray alloc] init];
     _request = [[NSMutableArray alloc] init];
-    //
+    
+    //*
+
+    //*
     
     // RKTabView Setting
-
-    
-//    _billList = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon6@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon7@2x.png"]];
-//    _analyze = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon2@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon3@2x.png"]];
-//    _messageCenter = [RKTabItem createUsualItemWithImageEnabled:[UIImage imageNamed:@"TableIcon0@2x.png"] imageDisabled:[UIImage imageNamed:@"TableIcon1@2x.png"]];
-    
     _billList = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"project_normal"] target:self selector:@selector(buttonTabPressedBillList:)];
     _analyze = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"task_normal"] target:self selector:@selector(buttonTabPressedAnalyze:)];
     _messageCenter = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"privatemessage_normal"] target:self selector:@selector(buttonTabPressedMessageCenter:)];
     
-    self.standardView.horizontalInsets = HorizontalEdgeInsetsMake(25, 25);
+//    _billList.titleString = @"statement";
+//    _analyze.titleString = @"balance";
+//    _messageCenter.titleString = @"message";
     
-    //self.standardView.darkensBackgroundForEnabledTabs = YES;
+    //self.standardView.horizontalInsets = HorizontalEdgeInsetsMake(25, 25);
+    
+    self.standardView.darkensBackgroundForEnabledTabs = YES;
     self.standardView.drawSeparators = YES;
     self.standardView.tabItems = @[_billList, _analyze, _messageCenter];
     //self.standardView.delegate = (id<RKTabViewDelegate>)self;
     
-    _statusView.layer.cornerRadius = 5.0f;
-    _statusView.layer.masksToBounds = YES;
+//    _statusView.layer.cornerRadius = 5.0f;
+//    _statusView.layer.masksToBounds = YES;
     
     
     [self loadLastestBill];
@@ -196,9 +212,8 @@
 //        [self updateAllBills];
 //    });
 
-    if (![_leftMenu.idText.text isEqualToString:@""] && _deviceTokenBool) {
-        [self sendToken];
-    }
+    //[self sendToken];
+
 }
 
 - (void)buttonTabPressedBillList:(id)sender {
@@ -228,15 +243,16 @@
 
 - (IBAction)addNewShare:(id)sender {
 
+    _quickTypeList = [_fileOperation getQuickType];
     NSArray *menuItems = @[
-                           [[MenuItem alloc] initWithTitle:@"food" iconName:@"ifood" index:0],
-                           [[MenuItem alloc] initWithTitle:@"drink" iconName:@"idrink" index:1],
-                           [[MenuItem alloc] initWithTitle:@"shopping" iconName:@"ishopping" index:2],
-                           [[MenuItem alloc] initWithTitle:@"transportation" iconName:@"ibus" index:3],
-                           [[MenuItem alloc] initWithTitle:@"home" iconName:@"ihome" index:4],
-                           [[MenuItem alloc] initWithTitle:@"trip" iconName:@"itrip" index:5],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[0][0] iconName:_quickTypeList[0][1] index:0],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[1][0] iconName:_quickTypeList[1][1] index:1],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[2][0] iconName:_quickTypeList[2][1] index:2],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[3][0] iconName:_quickTypeList[3][1] index:3],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[4][0] iconName:_quickTypeList[4][1] index:4],
+                           [[MenuItem alloc] initWithTitle:_quickTypeList[5][0] iconName:_quickTypeList[5][1] index:5],
                            ];
-    if (!_myPopMenu) {
+    if (!_myPopMenu || YES) {
         _myPopMenu = [[PopMenu alloc] initWithFrame:[UIScreen mainScreen].bounds items:menuItems];
         _myPopMenu.perRowItemCount = 3;
         _myPopMenu.menuAnimationType = kPopMenuAnimationTypeSina;
@@ -244,30 +260,31 @@
     
     _myPopMenu.didSelectedItemCompletion = ^(MenuItem *selectedItem){
 
-        
+        if (!selectedItem)
+            return;
         switch (selectedItem.index) {
             case 0:
-                _quickType = @"Food";
+                _quickType = _quickTypeList[0][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             case 1:
-                _quickType = @"Drink";
+                _quickType = _quickTypeList[1][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             case 2:
-                _quickType = @"Shopping";
+                _quickType = _quickTypeList[2][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             case 3:
-                _quickType = @"Transportation";
+                _quickType = _quickTypeList[3][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             case 4:
-                _quickType = @"Home";
+                _quickType = _quickTypeList[4][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             case 5:
-                _quickType = @"Trip";
+                _quickType = _quickTypeList[5][0];
                 [self performSegueWithIdentifier:@"createShareView" sender:self];
                 break;
             default:
@@ -276,39 +293,25 @@
         }
     };
     [_myPopMenu showMenuAtView:[UIApplication sharedApplication].keyWindow startPoint:CGPointMake(0, -100) endPoint:CGPointMake(0, -100)];
+     
 }
 
-#pragma mark - ABCIntroViewDelegate Methods
 
--(void)onDoneButtonPressed{
-    
-    //    Uncomment so that the IntroView does not show after the user clicks "DONE"
-    //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    //    [defaults setObject:@"YES"forKey:@"intro_screen_viewed"];
-    //    [defaults synchronize];
-    self.navigationController.navigationBar.hidden = NO;
-    [UIView animateWithDuration:1.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.introView.alpha = 0;
-        
-    } completion:^(BOOL finished) {
-        [self.introView removeFromSuperview];
-        [_leftMenu loginView];
-    }];
-}
 
 - (void)sendToken {
     NSString *currentId = [_fileOperation getUserId];
-    if (!_deviceTokenBool || [currentId isEqualToString:@""]) {
-        NSLog(@"deviceToken does not exist!");
-        return;
-    }
+//    if (!_deviceTokenBool || [currentId isEqualToString:@""]) {
+//        NSLog(@"deviceToken does not exist!");
+//        return;
+//    }
     
     NSString *const kRemoteHost = ServerHost;
     
     Repeated_string *request = [Repeated_string message];
     
     [request.contentArray addObject:currentId];
-    [request.contentArray addObject:_deviceToken];
+    NSString *t = [_fileOperation getDeviceToken];
+    [request.contentArray addObject:[_fileOperation getDeviceToken]];
     
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service send_DeviceTokenWithRequest:request handler:^(Inf *response, NSError *error) {
@@ -517,16 +520,16 @@
     
     
     
-    if ([_leftMenu.idText.text isEqualToString:@""]) {
-        return;
-    }
+//    if ([_leftMenu.idText.text isEqualToString:@""]) {
+//        return;
+//    }
     
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
-    request.username = _user_id;
+    request.username = [_fileOperation getUserId];
     NSLog(@"%@", request.username);
     request.start = @"0";
-    request.amount = @"5";
+    request.amount = @"6";
     //[_bill_latest removeAllObjects];
     NSMutableArray *receivedData = [[NSMutableArray alloc] init];
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
@@ -597,7 +600,7 @@
     
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
-    request.username = _user_id;
+    request.username = [_fileOperation getUserId];
     request.start = @"0";
     request.amount = @"all";
     
@@ -613,7 +616,7 @@
         if (!done) {
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
-            if (bills.count < 5) {
+            if (bills.count < 6) {
                 [bills addObject:bill];
             }
             NSString *billString = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", response.billId, response.amount, response.type, response.data_p, response.creater, response.paidBy, response.note, response.image, response.membersArray[0], response.membersArray[1], response.membersArray[2], response.membersArray[3], response.membersArray[4], response.membersArray[5], response.membersArray[6], response.membersArray[7], response.membersArray[8], response.membersArray[9], response.paidStatus, response.typeIcon];
@@ -636,10 +639,10 @@
             for (int i = 0;i != bills.count; i++) {
                 [_bill_latest addObject:bills[i]];
             }
-            
+            [self loadCharts];
             [_tableView reloadData];
             [self finishUpdate];
-            [self loadCharts];
+            //[self loadCharts];
         }
     }];
 }
@@ -719,7 +722,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return _bill_latest.count <= 5 ? _bill_latest.count : 0;
+    return _bill_latest.count <= 6 ? _bill_latest.count : 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -853,6 +856,14 @@
     } else if ([segue.identifier isEqualToString:@"analyze"]) {
         AnalyzeViewController *analyzeView = (AnalyzeViewController *)[segue destinationViewController];
         analyzeView.mainUIView = self;
+    } else if ([segue.identifier isEqualToString:@"billListWithFriendFromMain"]) {
+        BillListWithFriendViewController *billList = (BillListWithFriendViewController *)[segue destinationViewController];
+        //Bill *bill = [[_billsWithMonth objectAtIndex:[_tableView indexPathForSelectedRow].section] objectAtIndex:[_tableView indexPathForSelectedRow].row];
+        billList.username = _friendUsername;
+        billList.navigationItem.title = _friendUsername;
+        billList.sum = @"NULL";
+        //billList.idText = _idText;
+        billList.mainUIView = self;
     }
 }
 
@@ -905,7 +916,7 @@
     NSString *exist = [_fileOperation getFileContent:@"billRecord"];
     NSArray *bills = [exist componentsSeparatedByString:@"\n"];
     
-    for (int i = 0; i != 5 && i != bills.count; i++) {
+    for (int i = 0; i != 6 && i != bills.count; i++) {
         NSArray *bill_content = [bills[i] componentsSeparatedByString:@"*"];
         NSMutableArray *members = [[NSMutableArray alloc] init];
         for (int j = 0; j != 10; j++) {
@@ -944,19 +955,19 @@
             UIColor *color;
             switch (i) {
                 case 0:
-                    color = RGB(90, 200, 250);
+                    color = PNLightBlue;
                     break;
                 case 1:
-                    color = RGB(76, 217, 100);
+                    color = PNFreshGreen;
                     break;
                 case 2:
-                    color = RGB(255, 149, 0);
+                    color = PNDeepGreen;
                     break;
                 case 3:
-                    color = RGB(88, 86, 214);
+                    color = PNButtonGrey;
                     break;
                 case 4:
-                    color = RGB(0, 122, 255);
+                    color = PNBlue;
                     break;
                 default:
                     break;
@@ -964,9 +975,9 @@
             PNPieChartDataItem *item = [PNPieChartDataItem dataItemWithValue:[statisticsDate[i][1] doubleValue] * 100 color:color description:statisticsDate[i][0]];
             [items addObject:item];
         }
-        self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(5, 5, _statusView.frame.size.height - 10, _statusView.frame.size.height - 10) items:items];
+        self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(10, 10, _statusView.frame.size.height - 20, _statusView.frame.size.height - 20) items:items];
         self.pieChart.descriptionTextColor = [UIColor whiteColor];
-        self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:11.0];
+        self.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Machinato" size:15.0];
         self.pieChart.descriptionTextShadowColor = [UIColor clearColor];
         self.pieChart.showAbsoluteValues = NO;
         self.pieChart.showOnlyValues = NO;
@@ -975,7 +986,8 @@
         
         
         self.pieChart.legendStyle = PNLegendItemStyleStacked;
-        self.pieChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
+        self.pieChart.legendFont = [UIFont fontWithName:@"Machinato" size:15.0];
+        //self.pieChart.legendFontColor = [UIColor colorWithRed:91 green:104 blue:126 alpha:1.0];//RGB(91, 104, 126);
         
         _legend = [self.pieChart getLegendWithMaxWidth:200];
         CGFloat originX;
@@ -1044,12 +1056,29 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
     
-    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    for (NSString *file in [fm contentsOfDirectoryAtPath:dataPath error:&error]) {
+        BOOL success = [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@", dataPath, file] error:&error];
+        if (!success || error) {
+            // it failed.
+        }
+    }
 }
 
 
+- (void)viewBillWithFriend:(NSString*)username {
+    _friendUsername = username;
+    [self performSegueWithIdentifier:@"billListWithFriendFromMain" sender:self];
+}
 
-
+- (bool)isLogin {
+    NSString *username = [_fileOperation getUsername];
+    if ([username isEqualToString:@""]) {
+        return NO;
+    }
+    return YES;
+}
 
 
 - (void)didReceiveMemoryWarning {

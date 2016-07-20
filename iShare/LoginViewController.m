@@ -14,6 +14,8 @@
 #import "SignUpViewController.h"
 #import "FileOperation.h"
 #import <TSMessageView.h>
+#import "AppDelegate.h"
+#import "ViewController.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -41,6 +43,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //
+
+    
     [self UISetting];
     _fileOperation = [[FileOperation alloc] init];
 }
@@ -70,6 +76,8 @@
     [_PasswordTextField.leftView addSubview:imgPwd];
     
     _loginView.layer.borderColor = boColor.CGColor;
+    
+    [_LoginButton setTitle:_buttonText forState:UIControlStateNormal];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -180,7 +188,7 @@
     }
     
     NSString *text = _LoginButton.titleLabel.text;
-    if ([text isEqualToString:@"Sign in"]) {
+    if ([text isEqualToString:@"Log in"]) {
         
         
         NSString * const kRemoteHost = ServerHost;
@@ -194,36 +202,8 @@
         [service loginWithRequest:request handler:^(Reply_inf *response, NSError *error) {
             if (response) {
                 if ([response.status isEqualToString:@"OK"]) {
-                    [_fileOperation setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", _UserNameTextField.text, response.information]];
-                    _LeftMenuView.user_id = response.information;
                     
-                    [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
-                    [_LeftMenuView.idText setText:_UserNameTextField.text];
-                    [_LeftMenuView obtain_friends];
-                    
-                    
-                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-                    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-                    
-                    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
-                    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-                    
-                    if (fileExists) {
-                        _LeftMenuView.headImage.image = [UIImage imageWithContentsOfFile:dataPath];
-                    } else {
-                        _LeftMenuView.headImage.image = [UIImage imageNamed:@"icon-user-default.png"];
-                    }
-                    
-                    ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
-                    mainUI.user_id = response.information;
-                    [mainUI obtain_bills];
-                    [mainUI sendToken];
-                    
-                    mainUI.helloWorld.text = @"Welcome to Ishare";
-                    [self dismissViewControllerAnimated:true completion:^{
-                        NSLog(@"Present Modal View");
-                    }];
+                    [self didLogin:response.information];
                 } else {
                     UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle: @"Message" message:response.information delegate: self cancelButtonTitle: @"OK"  otherButtonTitles:nil];
                     
@@ -257,6 +237,48 @@
 
 }
 
+- (void)didLogin:(NSString*)response {
+    [_fileOperation setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", _UserNameTextField.text, response]];
+    [self dismissViewControllerAnimated:true completion:nil];
+    if (!_reLoadFlag) {
+        [((AppDelegate *)[UIApplication sharedApplication].delegate) setupTabViewController];
+    } else {
+        [_LeftMenuView loadUserData];
+        [(ViewController*)(_LeftMenuView.mainUIView) obtain_bills];
+         //*t;
+    };
+    
+    
+//    _LeftMenuView.user_id = response;
+//    
+//    [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
+//    [_LeftMenuView.idText setText:_UserNameTextField.text];
+//    [_LeftMenuView.headerView.userLabel setText:_UserNameTextField.text];
+//    [_LeftMenuView obtain_friends];
+//    
+//    
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+//    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+//    
+//    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
+//    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+//    
+//    if (fileExists) {
+//        _LeftMenuView.headerView.userIconView.image = [UIImage imageWithContentsOfFile:dataPath];
+//    } else {
+//        _LeftMenuView.headerView.userIconView.image = [UIImage imageNamed:@"icon-user-default.png"];
+//    }
+//    
+//    ViewController *mainUI = (ViewController *)_LeftMenuView.mainUIView;
+//    mainUI.user_id = response;
+//    [mainUI obtain_bills];
+//    [mainUI sendToken];
+//    
+//    //mainUI.helloWorld.text = @"Welcome to Ishare";
+    
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (buttonIndex) {
         case 0:
@@ -282,18 +304,8 @@
     [service sign_upWithRequest:request handler:^(Reply_inf *response, NSError *error) {
         if (response) {
             if ([response.status isEqualToString:@"OK"]) {
-                [_fileOperation setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", _UserNameTextField.text, response.information]];
-                _LeftMenuView.user_id = response.information;
                 
-                [_LeftMenuView.log_button setTitle:@"Log out" forState:UIControlStateNormal];
-                [_LeftMenuView.idText setText:_UserNameTextField.text];
-                [_LeftMenuView obtain_friends];
-                
-                ViewController *mainUI = (ViewController*)_LeftMenuView.mainUIView;
-                mainUI.user_id = response.information;
-                [mainUI obtain_bills];
-                [mainUI sendToken];
-                
+                [self didLogin:response.information];
                 
                 [self dismissViewControllerAnimated:true completion:^{
                     NSLog(@"Present Modal View");
@@ -324,10 +336,10 @@
 
 - (IBAction)changeSignMode:(id)sender {
     NSString *text = _LoginButton.titleLabel.text;
-    if ([text isEqualToString:@"Sign in"]) {
+    if ([text isEqualToString:@"Log in"]) {
         [_LoginButton setTitle:@"Sign up" forState:UIControlStateNormal];
     } else {
-        [_LoginButton setTitle:@"Sign in" forState:UIControlStateNormal];
+        [_LoginButton setTitle:@"Log in" forState:UIControlStateNormal];
     }
 }
 
@@ -348,6 +360,14 @@
     
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)signInMode {
+    _buttonText = @"Sign in";
+}
+
+- (void)loginMode {
+    _buttonText = @"Log in";
 }
 
 - (void)didReceiveMemoryWarning {

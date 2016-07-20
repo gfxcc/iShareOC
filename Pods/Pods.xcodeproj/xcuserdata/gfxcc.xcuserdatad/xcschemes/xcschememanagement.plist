@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JazzHands.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Masonry.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -97,12 +102,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1B8062F9B4DD6B301D7A703B668D5233</key>
+		<key>3252C9C2788ED885A5A3BCD43E713260</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3580F0894B05CD7AE085EE477E5604FB</key>
+		<key>37D3B021289A44AB363E71762E96F925</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,17 +127,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5A59DC9F58E47B5D38D069C0B2AA192B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>5DF21164C6E1DC7DEE4CA35AD0FD7B25</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7A8DAB2B161677425C6C05327E29552F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -157,7 +152,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>949FBB4A8DE606BBEE66851211049E68</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A77E80EE0FB5C849D58F76BB3E9F2A55</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>E9EF397B95762DDB254C71DDCB4B1381</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7366D33706071890D831F6744DCCBB3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

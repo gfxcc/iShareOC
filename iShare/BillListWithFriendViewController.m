@@ -60,7 +60,7 @@
     if (![_sum isEqualToString:@"NULL"]) {
         UIButton *button =  [UIButton buttonWithType:UIButtonTypeCustom];
         
-        [button setImage:[UIImage imageNamed:@"payment.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"Bank_Cards Filled"] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(payAllBills)forControlEvents:UIControlEventTouchUpInside];
         [button setFrame:CGRectMake(0, 0, 50, 50)];
         UIBarButtonItem *payment = [[UIBarButtonItem alloc] initWithCustomView:button];

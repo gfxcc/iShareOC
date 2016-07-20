@@ -15,9 +15,10 @@
 #import "RKTabView.h"
 #import "ABCIntroView.h"
 #import "ComBinedImage.h"
+#import "IntroductionViewController.h"
 
 
-@interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ABCIntroViewDelegate>
+@interface ViewController : UIViewController <SlideNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *addNewButtion;
@@ -34,6 +35,7 @@
 @property(strong, nonatomic) NSMutableArray *request;
 @property(strong, nonatomic) NSString *deviceToken;
 @property(strong, nonatomic) NSString *user_id;
+@property(strong, nonatomic) NSString *friendUsername;
 
 @property(strong, nonatomic) RKTabItem *billList;
 @property(strong, nonatomic) RKTabItem *analyze;
@@ -43,7 +45,7 @@
 @property(atomic) BOOL updateAllBillsProcessing;
 @property(nonatomic) BOOL deviceTokenBool;
 @property(nonatomic) int deviceModel;
-@property (nonatomic) BOOL hideStatusBar;
+
 //@property(strong, nonatomic) id<GRXWriter> requestsWriter;
 
 - (void)loadCharts;
@@ -55,5 +57,8 @@
 - (void)updateAllBills;
 - (void)sendToken; // send deviceToken to service
 - (void)checkFlag;
+
+- (void)viewBillWithFriend:(NSString*)username;
+
 @end
 

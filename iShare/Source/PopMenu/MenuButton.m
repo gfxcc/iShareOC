@@ -3,11 +3,11 @@
 //  JackFastKit
 //
 //  Created by 曾 宪华 on 14-10-13.
-//  Copyright (c) 2014年 嗨，我是曾宪华(@xhzengAIB)，曾加入YY Inc.担任高级移动开发工程师，拍立秀App联合创始人，热衷于简洁、而富有理性的事物 QQ:543413507 主页:http://zengxianhua.com All rights reserved.
+//  Copyright (c) 2014年 华捷 iOS软件开发工程师 曾宪华. All rights reserved.
 //
 
 #import "MenuButton.h"
-#import "POP.h"
+#import <POP.h>
 
 // Model
 #import "MenuItem.h"
@@ -32,7 +32,11 @@
         // Initialization code
         self.menuItem = menuItem;
         
-        self.iconImageView = [[GlowImageView alloc] initWithFrame:CGRectMake(0, 0, menuItem.iconImage.size.width, menuItem.iconImage.size.height)];
+        CGSize imageSize = menuItem.iconImage.size;
+        if (!kDevice_Is_iPhone6Plus && !kDevice_Is_iPhone6) {
+            imageSize = CGSizeMake(imageSize.width *0.9, imageSize.height *0.9);
+        }
+        self.iconImageView = [[GlowImageView alloc] initWithFrame:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         self.iconImageView.userInteractionEnabled = NO;
         [self.iconImageView setImage:menuItem.iconImage forState:UIControlStateNormal];
         self.iconImageView.glowColor = menuItem.glowColor;
@@ -40,7 +44,7 @@
         [self addSubview:self.iconImageView];
         
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.iconImageView.frame), CGRectGetWidth(self.bounds), 35)];
-        self.titleLabel.textColor = [UIColor whiteColor];
+        self.titleLabel.textColor = [UIColor blackColor];
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.font = [UIFont systemFontOfSize:14];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -54,13 +58,20 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    // 播放缩放动画
-    POPSpringAnimation *scaleAnimation = [POPSpringAnimation animation];
-    scaleAnimation.springBounciness = 20;    // value between 0-20
-    scaleAnimation.springSpeed = 20;     // value between 0-20
-    scaleAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewScaleXY];
-    scaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.3, 1.3)];
-    [self pop_addAnimation:scaleAnimation forKey:@"scaleAnimationKey"];
+    [self popBegan];
+}
+
+- (void)popBegan{
+    self.alpha = 0.7;
+    
+    //    [self pop_removeAllAnimations];
+    //    // 播放缩放动画
+    //    POPSpringAnimation *scaleAnimation = [POPSpringAnimation animation];
+    //    scaleAnimation.springBounciness = 20;    // value between 0-20
+    //    scaleAnimation.springSpeed = 20;     // value between 0-20
+    //    scaleAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewScaleXY];
+    //    scaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.3, 1.3)];
+    //    [self pop_addAnimation:scaleAnimation forKey:@"scaleAnimationKey"];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -68,26 +79,47 @@
 }
 
 - (void)disMissCompleted:(void(^)(BOOL finished))completed {
-    POPSpringAnimation *scaleAnimation = [POPSpringAnimation animation];
-    scaleAnimation.springBounciness = 16;    // value between 0-20
-    scaleAnimation.springSpeed = 14;     // value between 0-20
-    scaleAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewScaleXY];
-    scaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.0, 1.0)];
-    scaleAnimation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-        if (completed) {
-            completed(finished);
-        }
-    };
-    [self pop_addAnimation:scaleAnimation forKey:@"scaleAnimationKey"];
+    self.alpha = 1.0;
+    
+    if (completed) {
+        completed(YES);
+    }
+    //    POPSpringAnimation *scaleAnimation = [POPSpringAnimation animation];
+    //    scaleAnimation.springBounciness = 16;    // value between 0-20
+    //    scaleAnimation.springSpeed = 14;     // value between 0-20
+    //    scaleAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewScaleXY];
+    //    scaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.0, 1.0)];
+    //    scaleAnimation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+    //        if (completed) {
+    //            completed(finished);
+    //        }
+    //    };
+    //    [self pop_addAnimation:scaleAnimation forKey:@"scaleAnimationKey"];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    UITouch *curTouch = [touches anyObject];
+    if (CGRectContainsPoint(self.bounds, [curTouch locationInView:self]) &&
+        !CGRectContainsPoint(self.bounds, [curTouch previousLocationInView:self])) {
+        [self popBegan];
+    }else if (!CGRectContainsPoint(self.bounds, [curTouch locationInView:self]) &&
+              CGRectContainsPoint(self.bounds, [curTouch previousLocationInView:self])){
+        [self disMissCompleted:NULL];
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    // 回调
-    [self disMissCompleted:^(BOOL finished) {
-        if (self.didSelctedItemCompleted) {
-            self.didSelctedItemCompleted(self.menuItem);
-        }
-    }];
+    UITouch *curTouch = [touches anyObject];
+    if (CGRectContainsPoint(self.bounds, [curTouch locationInView:self])) {
+        // 回调
+        [self disMissCompleted:^(BOOL finished) {
+            if (self.didSelctedItemCompleted) {
+                self.didSelctedItemCompleted(self.menuItem);
+            }
+        }];
+    }else{
+        [self disMissCompleted:NULL];
+    }
 }
 
 @end

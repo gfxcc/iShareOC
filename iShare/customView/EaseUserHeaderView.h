@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *username;
 
 @property (strong, nonatomic) UITapImageView *userIconView;
+@property (strong, nonatomic) UILabel *userLabel;
 
 @property (nonatomic, copy) void (^userIconClicked)();
 @property (nonatomic, copy) void (^userNameClicked)();

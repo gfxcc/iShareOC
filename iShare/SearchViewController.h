@@ -16,5 +16,4 @@
 @property (weak, nonatomic) LeftMenuViewController *LeftMenuView;
 @property (strong, nonatomic) RequestView *requestView;
 @property (nonatomic) NSInteger selectedIndex;
-
 @end

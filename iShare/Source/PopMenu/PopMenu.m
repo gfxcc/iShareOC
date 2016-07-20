@@ -3,13 +3,12 @@
 //  JackFastKit
 //
 //  Created by 曾 宪华 on 14-10-13.
-//  Copyright (c) 2014年 嗨，我是曾宪华(@xhzengAIB)，曾加入YY Inc.担任高级移动开发工程师，拍立秀App联合创始人，热衷于简洁、而富有理性的事物 QQ:543413507 主页:http://zengxianhua.com All rights reserved.
+//  Copyright (c) 2014年 华捷 iOS软件开发工程师 曾宪华. All rights reserved.
 //
 
 #import "PopMenu.h"
 #import "MenuButton.h"
-#import "XHRealTimeBlur.h"
-#import "POP.h"
+#import <POP.h>
 
 #define MenuButtonHeight 110
 #define MenuButtonVerticalPadding 10
@@ -31,7 +30,7 @@
 
 @property (nonatomic, assign) CGPoint startPoint;
 @property (nonatomic, assign) CGPoint endPoint;
-
+@property (nonatomic, strong) UIView *footerView;
 @end
 
 @implementation PopMenu
@@ -57,7 +56,8 @@
     
     typeof(self) __weak weakSelf = self;
     _realTimeBlur = [[XHRealTimeBlur alloc] initWithFrame:self.bounds];
-    _realTimeBlur.showDuration = 0.3;
+    _realTimeBlur.blurStyle = XHBlurStyleTranslucentWhite;
+    _realTimeBlur.showDuration = 0.1;
     _realTimeBlur.disMissDuration = 0.1;
     _realTimeBlur.willShowBlurViewcomplted = ^(void) {
         weakSelf.isShowed = YES;
@@ -65,19 +65,37 @@
     };
     
     _realTimeBlur.willDismissBlurViewCompleted = ^(void) {
-        [weakSelf hidenButtons];
-    };
-    _realTimeBlur.didDismissBlurViewCompleted = ^(BOOL finished) {
-        weakSelf.isShowed = NO;
-        if (finished && weakSelf.selectedItem) {
+        //        UIView *presentView=[[[UIApplication sharedApplication].keyWindow rootViewController] view];
+        //        if ([[presentView.subviews firstObject] isMemberOfClass:NSClassFromString(@"RDVTabBar")]) {
+        //            [presentView bringSubviewToFront:[presentView.subviews firstObject]];
+        //        }
+        [weakSelf.realTimeBlurFooter disMiss];
+        if (weakSelf.selectedItem) {
             if (weakSelf.didSelectedItemCompletion) {
                 weakSelf.didSelectedItemCompletion(weakSelf.selectedItem);
                 weakSelf.selectedItem = nil;
             }
+        }else
+        {
+            weakSelf.didSelectedItemCompletion(nil);
         }
+        [weakSelf hidenButtons];
+    };
+    _realTimeBlur.didDismissBlurViewCompleted = ^(BOOL finished) {
+        
+        weakSelf.isShowed = NO;
         [weakSelf removeFromSuperview];
+        [weakSelf.footerView removeFromSuperview];
     };
     _realTimeBlur.hasTapGestureEnable = YES;
+    
+    
+    _realTimeBlurFooter =  [[XHRealTimeBlur alloc] initWithFrame:self.bounds];
+    _realTimeBlurFooter.blurStyle = XHBlurStyleTranslucentWhite;
+    _realTimeBlurFooter.showDuration = 0.3;
+    _realTimeBlurFooter.disMissDuration = 0.1;
+    
+    _footerView=[[UIView alloc] initWithFrame:CGRectMake(0, kScreen_Height-48, kScreen_Width, 48)];
 }
 
 #pragma mark - 公开方法
@@ -102,8 +120,23 @@
     }
     self.startPoint = startPoint;
     self.endPoint = endPoint;
+    self.clipsToBounds=TRUE;
     [containerView addSubview:self];
     [self.realTimeBlur showBlurViewAtView:self];
+}
+
+- (void)showMenuAtView:(UIView *)containerView startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint withTabFooterView:(UIView *)containerFooter {
+    if (self.isShowed) {
+        return;
+    }
+    self.startPoint = startPoint;
+    self.endPoint = endPoint;
+    [containerView addSubview:self];
+    [self.realTimeBlur showBlurViewAtView:self];
+    
+    //    _realTimeBlurFooter.frame=CGRectMake(0, 0, footerView.size.width, footerView.size.height);
+    [self.realTimeBlurFooter showBlurViewAtView:_footerView];
+    [containerFooter addSubview:_footerView];
 }
 
 - (void)dismissMenu {
@@ -111,6 +144,7 @@
         return;
     }
     [self.realTimeBlur disMiss];
+    //    [_realTimeBlurFooter disMiss];
 }
 
 #pragma mark - 私有方法
@@ -169,8 +203,8 @@
             menuButton.frame = fromRect;
         }
         
-        double delayInSeconds = index * MenuButtonAnimationInterval;
-        
+        double delayInSeconds = (items.count - index) * MenuButtonAnimationInterval;
+        //        NSLog(@"showButtons delayInSeconds:%d - %.3f", index, delayInSeconds);
         [self initailzerAnimationWithToPostion:toRect formPostion:fromRect atView:menuButton beginTime:delayInSeconds];
     }
 }
@@ -189,7 +223,7 @@
         
         switch (self.menuAnimationType) {
             case kPopMenuAnimationTypeSina:
-                toRect.origin.y = self.endPoint.y;
+                toRect.origin.y = self.endPoint.y ;
                 break;
             case kPopMenuAnimationTypeNetEase:
                 toRect.origin.x = self.endPoint.x - CGRectGetMidX(menuButton.bounds);
@@ -198,7 +232,9 @@
             default:
                 break;
         }
-        double delayInSeconds = (items.count - index) * MenuButtonAnimationInterval;
+        double delayInSeconds = index * MenuButtonAnimationInterval;
+        
+        //        NSLog(@"hidenButtons delayInSeconds:%d - %.3f", index, delayInSeconds);
         
         [self initailzerAnimationWithToPostion:toRect formPostion:fromRect atView:menuButton beginTime:delayInSeconds];
     }
@@ -232,8 +268,9 @@
                         atIndex:(NSInteger)index
                          onPage:(NSInteger)page {
     
-    NSUInteger rowCount = itemCount / perRowItemCount + (itemCount % perColumItemCount > 0 ? 1 : 0);
-    CGFloat insetY = (CGRectGetHeight(self.bounds) - (itemHeight + paddingY) * rowCount) / 2.0;
+    CGFloat insetY = (CGRectGetHeight(self.bounds) - (itemHeight + paddingY) * 2) / 2.0;
+    //    NSUInteger rowCount = itemCount / perRowItemCount + (itemCount % perColumItemCount > 0 ? 1 : 0);
+    //    CGFloat insetY = (CGRectGetHeight(self.bounds) - (itemHeight + paddingY) * rowCount) / 2.0;
     
     CGFloat originX = (index % perRowItemCount) * (itemWidth + paddingX) + paddingX + (page * CGRectGetWidth(self.bounds));
     CGFloat originY = ((index / perRowItemCount) - perColumItemCount * page) * (itemHeight + paddingY) + paddingY;
@@ -249,10 +286,12 @@
     springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewFrame];
     springAnimation.removedOnCompletion = YES;
     springAnimation.beginTime = beginTime + CACurrentMediaTime();
-    CGFloat springBounciness = 10 - beginTime * 2;
+    //    CGFloat springBounciness = 6 - beginTime * 2;
+    CGFloat springBounciness = 6;
     springAnimation.springBounciness = springBounciness;    // value between 0-20
     
-    CGFloat springSpeed = 12 - beginTime * 2;
+    //    CGFloat springSpeed = 6 - beginTime * 2;
+    CGFloat springSpeed = 2;
     springAnimation.springSpeed = springSpeed;     // value between 0-20
     springAnimation.toValue = [NSValue valueWithCGRect:toRect];
     springAnimation.fromValue = [NSValue valueWithCGRect:fromRect];

@@ -3,11 +3,12 @@
 //  JackFastKit
 //
 //  Created by 曾 宪华 on 14-10-13.
-//  Copyright (c) 2014年 嗨，我是曾宪华(@xhzengAIB)，曾加入YY Inc.担任高级移动开发工程师，拍立秀App联合创始人，热衷于简洁、而富有理性的事物 QQ:543413507 主页:http://zengxianhua.com All rights reserved.
+//  Copyright (c) 2014年 华捷 iOS软件开发工程师 曾宪华. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "MenuItem.h"
+#import "XHRealTimeBlur.h"
 
 typedef NS_ENUM(NSInteger, PopMenuAnimationType) {
     /** 从下部入 下部出*/
@@ -50,6 +51,7 @@ typedef void(^DidSelectedItemBlock)(MenuItem *selectedItem);
  *  点击菜单元素,Block会把点击的菜单元素当成参数返回给用户，用户可以拿到菜单元素对点击，做相应的操作
  */
 @property (nonatomic, copy) DidSelectedItemBlock didSelectedItemCompletion;
+@property (nonatomic, strong) XHRealTimeBlur *realTimeBlurFooter;
 
 #pragma mark - init 初始化
 
@@ -71,7 +73,7 @@ typedef void(^DidSelectedItemBlock)(MenuItem *selectedItem);
  *  @param endPoint      菜单从哪个 点 出 容器
  */
 - (void)showMenuAtView:(UIView *)containerView startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
-
+- (void)showMenuAtView:(UIView *)containerView startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint withTabFooterView:(UIView *)containerFooter;
 #pragma mark - dismiss
 /**
  *  容器dismiss

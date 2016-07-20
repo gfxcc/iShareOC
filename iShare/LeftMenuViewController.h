@@ -15,7 +15,7 @@
 @interface LeftMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FullSizeViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIImageView *headImage;
+@property (weak, nonatomic) IBOutlet UIImageView *headImageView;
 @property (nonatomic, assign) BOOL slideOutAnimationEnabled;
 @property (weak, nonatomic) IBOutlet UILabel *idText;
 @property (weak, nonatomic) IBOutlet UIButton *log_button;
@@ -33,7 +33,9 @@
 
 @property (strong, nonatomic) EaseUserHeaderView *headerView;
 
-- (void)obtain_friends;
-- (void)loginView;
+- (void)customedViewDidLoad;
 
+- (void)obtain_friends;
+
+- (void)loadUserData;
 @end
