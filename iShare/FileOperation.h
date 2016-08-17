@@ -43,6 +43,8 @@
 
 - (NSString*)getDeviceToken;
 
+- (NSMutableArray*)getBillType;
+- (NSString*)getTypeIconByName:(NSString*)type;
 - (NSMutableArray*)getQuickType;
 
 
@@ -53,6 +55,8 @@
 - (void)setFriendList:(NSArray*)nameList UserId:(NSArray*)idList LastModified:(NSArray*)lastModifiedList;
 - (void)setUsernameAndUserId:(NSString*)nameAndId;
 - (void)setUsername:(NSString*)username userId:(NSString*)userId;
+
+- (void)setBillType:(NSArray*)billType;
 - (void)setQuickType:(NSArray*)quickType;
 - (void)setQucikTypeWithName:(NSString*)typeName TypeIcon:(NSString*)typeIcon Index:(NSInteger)index;
 

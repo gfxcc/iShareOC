@@ -177,7 +177,7 @@
 - (void)deleteConfirm {
     // check permission
     ViewController *mainUI = (ViewController *)_mainUIView;
-    if (![_paidBy.text isEqualToString:mainUI.leftMenu.idText.text]) {
+    if (![_paidBy.text isEqualToString:[_fileOperation getUsername]]) {
         UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:@"Waring" message:@"Only user who paid this bill can delete it." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         
         [updateAlert show];

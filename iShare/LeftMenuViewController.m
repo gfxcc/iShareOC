@@ -98,14 +98,51 @@
     
 }
 
+- (void)loadUserData {
+    FileOperation *fileOperation = [[FileOperation alloc] init];
+    NSString *username = [fileOperation getUsername];
+    NSString *userId = [fileOperation getUserId];
+    
+    _user_id = userId;
+    [self.log_button setTitle:@"Log out" forState:UIControlStateNormal];
+    [self.idText setText:username];
+    [self.headerView.userLabel setText:username];
+    
+    [self loadFriends];
+    [self obtain_friends];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
+    
+    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
+    
+    if (fileExists) {
+        _headImage = [UIImage imageWithContentsOfFile:dataPath];
+    } else {
+        _headImage = [UIImage imageNamed:@"icon-user-default.png"];
+    }
+    
+    _headImageView.image = _headImage;
+    
+    //    ViewController *mainUI = (ViewController *)self.mainUIView;
+    //    mainUI.user_id = userId;
+    //    [mainUI obtain_bills];
+    //    [mainUI sendToken];
+}
+
 #pragma mark - custom functions
 
 - (void)loadFriends {
 
     NSArray *members = [_fileOperation getFriendsNameList];
+    NSArray *membersId = [_fileOperation getFriendsIdList];
     for (int i = 0; i < members.count; i++) {
         [_friendsArray addObject:members[i]];
+        [_friendsIdArray addObject:membersId[i]];
     }
+    [self loadFriendsIcons];
 }
 
 - (void)touch_icon {
@@ -757,36 +794,7 @@
 //    }
 //}
 
-- (void)loadUserData {
-    FileOperation *fileOperation = [[FileOperation alloc] init];
-    NSString *username = [fileOperation getUsername];
-    NSString *userId = [fileOperation getUserId];
-    
-    _user_id = userId;
-    [self.log_button setTitle:@"Log out" forState:UIControlStateNormal];
-    [self.idText setText:username];
-    [self.headerView.userLabel setText:username];
-    [self obtain_friends];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/Icon"];
-    
-    dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, [_fileOperation getUserId]];
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-    
-    if (fileExists) {
-        _headImage = [UIImage imageWithContentsOfFile:dataPath];
-    } else {
-        _headImage = [UIImage imageNamed:@"icon-user-default.png"];
-    }
-    
-    _headImageView.image = _headImage;
-    
-//    ViewController *mainUI = (ViewController *)self.mainUIView;
-//    mainUI.user_id = userId;
-//    [mainUI obtain_bills];
-//    [mainUI sendToken];
-}
+
 
 - (void)cleanUserData {
     

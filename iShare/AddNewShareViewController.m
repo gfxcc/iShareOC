@@ -327,7 +327,11 @@
     request.typeIcon = type[([_keyboard.typePicker selectedRowInComponent:1] + 1)*2 + 1];
     if ([_type.text isEqualToString:@"Breakfast"] || [_type.text isEqualToString:@"Lunch"] || [_type.text isEqualToString:@"Dinner"] || [_type.text isEqualToString:@"Night Food"])
         request.typeIcon = @"ifood";
-    else if ([_type.text isEqualToString:@"Drink"])
+    else {
+        request.typeIcon = [_fileOperation getTypeIconByName:request.type];
+    }
+        
+        /*if ([_type.text isEqualToString:@"Drink"])
         request.typeIcon = @"idrink";
     else if ([_type.text isEqualToString:@"Shopping"])
         request.typeIcon = @"ishopping";
@@ -336,7 +340,7 @@
     else if ([_type.text isEqualToString:@"Home"])
         request.typeIcon = @"ihome";
     else if ([_type.text isEqualToString:@"Trip"])
-        request.typeIcon = @"itrip";
+        request.typeIcon = @"itrip";*/
     
     
     NSLog(@"%@", request.typeIcon);

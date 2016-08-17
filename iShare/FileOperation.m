@@ -164,11 +164,94 @@
     return result;
 }
 
+- (NSMutableArray*)getBillType {
+    NSMutableArray *res = [[NSMutableArray alloc] init];
+    NSString *content = [self getFileContent:@"billType"];
+    if ([content isEqualToString:@""] || !content) {
+        NSMutableArray *array1 = [[NSMutableArray alloc] init];
+        [array1 addObject:@"Food & Drind"];// type name
+        [array1 addObject:@"ifood"];// type icon name
+        [array1 addObject:@"fruit"];
+        [array1 addObject:@"apple2-icon"];
+        [array1 addObject:@"cafe"];
+        [array1 addObject:@"can-icon"];
+        [res addObject:array1];
+        
+        NSMutableArray *array2 = [[NSMutableArray alloc] init];
+        [array2 addObject:@"Rent & Fee"];
+        [array2 addObject:@"clipboard"];
+        [array2 addObject:@"house"];
+        [array2 addObject:@"Apartment-icon"];
+        [array2 addObject:@"PSEG"];
+        [array2 addObject:@"cmyk"];
+        [array2 addObject:@"network"];
+        [array2 addObject:@"global"];
+        [res addObject:array2];
+        
+        NSMutableArray *array3 = [[NSMutableArray alloc] init];
+        [array3 addObject:@"Transportation"];
+        [array3 addObject:@"ibus"];
+        [array3 addObject:@"Taix"];
+        [array3 addObject:@"car"];
+        [array3 addObject:@"Train"];
+        [array3 addObject:@"train"];
+        [array3 addObject:@"Helicopter"];
+        [array3 addObject:@"helicopter"];
+        [res addObject:array3];
+        
+        NSMutableArray *array4 = [[NSMutableArray alloc] init];
+        [array4 addObject:@"Shopping"];
+        [array4 addObject:@"ishopping"];
+        [array4 addObject:@"SuperMarket"];
+        [array4 addObject:@"cart"];
+        [array4 addObject:@"online"];
+        [array4 addObject:@"shop"];
+        [res addObject:array4];
+        
+        NSMutableArray *array6 = [[NSMutableArray alloc] init];
+        [array6 addObject:@"Borrow & Lend"];
+        [array6 addObject:@"booklet"];
+        [array6 addObject:@"lend"];
+        [array6 addObject:@"compose"];
+        [res addObject:array6];
+    } else {
+        NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+        for (int i = 0; i != linesOfFile.count; i++) {
+            NSString *stringOfLine = linesOfFile[i];
+            NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+            [res addObject:contentOfLine];
+            
+        }
+    }
+    
+    return res;
+}
+
+- (NSString*)getTypeIconByName:(NSString*)type {
+    NSMutableArray *quickType = [self getQuickType];
+    for (int i = 0; i != quickType.count; i++) {
+        if ([quickType[i][0] isEqualToString:type]) {
+            return quickType[i][1];
+        }
+    }
+    
+    NSMutableArray *billType = [self getBillType];
+    for (int i = 0; i != billType.count; i++) {
+        for (int j = 0; j < ((NSArray*)billType[i]).count; j += 2) {
+            if ([billType[i][j] isEqualToString:type]) {
+                return billType[i][j+1];
+            }
+        }
+    }
+    
+    return @"";
+}
+
 - (NSMutableArray*)getQuickType {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     NSString *exist = [self getFileContent:@"quickType"];
     if ([exist isEqualToString:@""] || !exist) {
-        exist = @"food*ifood\ndrink*idrink\nshopping*ishopping\ntransportation*ibus\nhome*ihome\ntrip*itrip";
+        exist = @"Food*ifood\nDrink*idrink\nShopping*ishopping\nTransportation*ibus\nHome*ihome\nTrip*itrip";
     }
     NSArray *array = [exist componentsSeparatedByString:@"\n"];
     

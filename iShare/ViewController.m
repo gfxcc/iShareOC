@@ -846,7 +846,7 @@
         billList.mainUIView = self;
     } else if ([segue.identifier isEqualToString:@"messageCenter"]) {
         MessageCenterViewController *messageCenter = (MessageCenterViewController *)[segue destinationViewController];
-        messageCenter.idText = _leftMenu.idText.text;
+        messageCenter.idText = [_fileOperation getUsername];
     } else if ([segue.identifier isEqualToString:@"createShareView"]) {
         UINavigationController *navgation = (UINavigationController *)[segue destinationViewController];
         //
