@@ -1,1 +1,0 @@
-../../../../../../gRPC/src/core/surface/event_string.h

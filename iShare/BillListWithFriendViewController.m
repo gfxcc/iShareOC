@@ -15,9 +15,7 @@
 #import <gRPC_pod/IShare.pbrpc.h>
 #import <gRPC_pod/IShare.pbobjc.h>
 #import <TSMessageView.h>
-#import <gRPC/RxLibrary/GRXWriter.h>
-#import <gRPC/RxLibrary/GRXWriteable.h>
-#import <gRPC/RxLibrary/GRXWriter+Immediate.h>
+#import <RxLibrary/GRXWriter+Immediate.h>
 #import "PullAction.h"
 #import "FileOperation.h"
 

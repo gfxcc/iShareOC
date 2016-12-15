@@ -485,6 +485,7 @@
 		DB94B3EE1B6119F4007AEE7F /* AnalyzeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E11B6119F4007AEE7F /* AnalyzeViewController.m */; };
 		DB94B3EF1B6119F4007AEE7F /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E31B6119F4007AEE7F /* SignUpViewController.m */; };
 		DB94B3F01B6119F4007AEE7F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94B3E41B6119F4007AEE7F /* LoginViewController.m */; };
+		DB950AE51D64CA4900E6A1DD /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DB950AE41D64CA4900E6A1DD /* MBProgressHUD.m */; };
 		DB952E841B6270D600482B00 /* leave.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E811B6270D600482B00 /* leave.png */; };
 		DB952E851B6270D600482B00 /* planner.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E821B6270D600482B00 /* planner.png */; };
 		DB952E8A1B62A81500482B00 /* calendar_month.png in Resources */ = {isa = PBXBuildFile; fileRef = DB952E871B62A81500482B00 /* calendar_month.png */; };
@@ -961,6 +962,7 @@
 		DB2D79631D3830A400287A73 /* UIView+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Screenshot.m"; path = "iShare/Source/NYXImagesKit/Categories/UIView+Screenshot.m"; sourceTree = "<group>"; };
 		DB2D79641D3830A400287A73 /* NYXProgressiveImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NYXProgressiveImageView.h; path = iShare/Source/NYXImagesKit/Classes/NYXProgressiveImageView.h; sourceTree = "<group>"; };
 		DB2D79651D3830A400287A73 /* NYXProgressiveImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NYXProgressiveImageView.m; path = iShare/Source/NYXImagesKit/Classes/NYXProgressiveImageView.m; sourceTree = "<group>"; };
+		DB453E2F1D8CBB870033D963 /* iShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iShare.entitlements; sourceTree = "<group>"; };
 		DB47DD4B1BE83093006AB66C /* EaseStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseStartView.h; sourceTree = "<group>"; };
 		DB47DD4C1BE83093006AB66C /* EaseStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseStartView.m; sourceTree = "<group>"; };
 		DB4EFC181B78F822003F917D /* MessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCenterViewController.h; sourceTree = "<group>"; };
@@ -1155,6 +1157,8 @@
 		DB94B3E61B6119F4007AEE7F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		DB94B3E71B6119F4007AEE7F /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		DB94B3E81B6119F4007AEE7F /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		DB950AE31D64CA4900E6A1DD /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = iShare/Source/MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
+		DB950AE41D64CA4900E6A1DD /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = iShare/Source/MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		DB952E811B6270D600482B00 /* leave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leave.png; path = iShare/Source/leave.png; sourceTree = "<group>"; };
 		DB952E821B6270D600482B00 /* planner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = planner.png; path = iShare/Source/planner.png; sourceTree = "<group>"; };
 		DB952E871B62A81500482B00 /* calendar_month.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar_month.png; path = iShare/Source/calendar_month.png; sourceTree = "<group>"; };
@@ -1691,6 +1695,7 @@
 		DB94B2681B60FE7C007AEE7F /* iShare */ = {
 			isa = PBXGroup;
 			children = (
+				DB453E2F1D8CBB870033D963 /* iShare.entitlements */,
 				4D5773531C548808000BB5B5 /* setting */,
 				DBE5C5121BA768930050A5B1 /* briefReportOfBills */,
 				DBE5C5111BA768680050A5B1 /* typeEditerClass */,
@@ -1758,6 +1763,7 @@
 		DB94B28F1B611485007AEE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DB950AE21D64CA2000E6A1DD /* MBProgressHUD */,
 				DB2D79481D38302400287A73 /* NYXImageKit */,
 				DB2D79441D382E3300287A73 /* SMPageControl */,
 				DB2D79401D382D1F00287A73 /* introductionView */,
@@ -1952,6 +1958,15 @@
 				DB47DD4C1BE83093006AB66C /* EaseStartView.m */,
 			);
 			name = myClass;
+			sourceTree = "<group>";
+		};
+		DB950AE21D64CA2000E6A1DD /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				DB950AE31D64CA4900E6A1DD /* MBProgressHUD.h */,
+				DB950AE41D64CA4900E6A1DD /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		DB99B9151BB42A330053E5DE /* IntroduceView */ = {
@@ -2439,6 +2454,12 @@
 					DB94B2651B60FE7C007AEE7F = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = QRVGNC7P3Q;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					DB94B27E1B60FE7C007AEE7F = {
 						CreatedOnToolsVersion = 6.4;
@@ -3009,6 +3030,7 @@
 				DBE5C51B1BA769C00050A5B1 /* thisMonthBillsViewController.m in Sources */,
 				DB94B38D1B6117AE007AEE7F /* YUBottomPopSelctModel.m in Sources */,
 				DB94B3B51B6117AE007AEE7F /* DaiDodgeKeyboard.m in Sources */,
+				DB950AE51D64CA4900E6A1DD /* MBProgressHUD.m in Sources */,
 				DB2D796F1D3830A400287A73 /* UIView+Screenshot.m in Sources */,
 				DB507E301D224DCC005C004A /* PopMenu.m in Sources */,
 				DB94B3701B6117AD007AEE7F /* MonthTableViewCell.m in Sources */,
@@ -3236,8 +3258,10 @@
 			baseConfigurationReference = 5CDA012379C9BD5090DDAF9E /* Pods-iShare.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iShare/iShare.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = iShare/PrefixHeader.pch;
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -3245,6 +3269,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
@@ -3254,8 +3279,10 @@
 			baseConfigurationReference = 01282628B41E6DE93DA1D0AB /* Pods-iShare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iShare/iShare.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yong Cao (QRVGNC7P3Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = iShare/PrefixHeader.pch;
 				INFOPLIST_FILE = iShare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -3263,6 +3290,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "gfxcc.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;

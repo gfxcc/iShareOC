@@ -126,7 +126,6 @@
 #include <openssl/base.h>
 #include <openssl/thread.h>
 
-#include <inttypes.h>  /* for PRIu64 and friends */
 #include <stdio.h>  /* for FILE* */
 
 #if defined(__cplusplus)
@@ -148,15 +147,15 @@ extern "C" {
 #if defined(OPENSSL_64_BIT)
 #define BN_ULONG uint64_t
 #define BN_BITS2 64
-#define BN_DEC_FMT1	"%" PRIu64
-#define BN_DEC_FMT2	"%019" PRIu64
-#define BN_HEX_FMT1	"%" PRIx64
+#define BN_DEC_FMT1	"%" "llu"
+#define BN_DEC_FMT2	"%019" "llu"
+#define BN_HEX_FMT1	"%" "llx"
 #elif defined(OPENSSL_32_BIT)
 #define BN_ULONG uint32_t
 #define BN_BITS2 32
-#define BN_DEC_FMT1	"%" PRIu32
-#define BN_DEC_FMT2	"%09" PRIu32
-#define BN_HEX_FMT1	"%" PRIx32
+#define BN_DEC_FMT1	"%" "u"
+#define BN_DEC_FMT2	"%09" "u"
+#define BN_HEX_FMT1	"%" "x"
 #else
 #error "Must define either OPENSSL_32_BIT or OPENSSL_64_BIT"
 #endif
@@ -303,17 +302,17 @@ OPENSSL_EXPORT BN_ULONG BN_get_word(const BIGNUM *bn);
 
 /* ASN.1 functions. */
 
-/* BN_cbs2unsigned parses a non-negative DER INTEGER from |cbs| writes the
- * result to |ret|. It returns one on success and zero on failure. */
-OPENSSL_EXPORT int BN_cbs2unsigned(CBS *cbs, BIGNUM *ret);
+/* BN_parse_asn1_unsigned parses a non-negative DER INTEGER from |cbs| writes
+ * the result to |ret|. It returns one on success and zero on failure. */
+OPENSSL_EXPORT int BN_parse_asn1_unsigned(CBS *cbs, BIGNUM *ret);
 
-/* BN_cbs2unsigned_buggy acts like |BN_cbs2unsigned| but tolerates some invalid
- * encodings. Do not use this function. */
-OPENSSL_EXPORT int BN_cbs2unsigned_buggy(CBS *cbs, BIGNUM *ret);
+/* BN_parse_asn1_unsigned_buggy acts like |BN_parse_asn1_unsigned| but tolerates
+ * some invalid encodings. Do not use this function. */
+OPENSSL_EXPORT int BN_parse_asn1_unsigned_buggy(CBS *cbs, BIGNUM *ret);
 
-/* BN_bn2cbb marshals |bn| as a non-negative DER INTEGER and appends the result
- * to |cbb|. It returns one on success and zero on failure. */
-OPENSSL_EXPORT int BN_bn2cbb(CBB *cbb, const BIGNUM *bn);
+/* BN_marshal_asn1 marshals |bn| as a non-negative DER INTEGER and appends the
+ * result to |cbb|. It returns one on success and zero on failure. */
+OPENSSL_EXPORT int BN_marshal_asn1(CBB *cbb, const BIGNUM *bn);
 
 
 /* Internal functions.
@@ -323,7 +322,7 @@ OPENSSL_EXPORT int BN_bn2cbb(CBB *cbb, const BIGNUM *bn);
  * what you want before turning to these. */
 
 /* bn_correct_top decrements |bn->top| until |bn->d[top-1]| is non-zero or
- * until |top| is zero. */
+ * until |top| is zero. If |bn| is zero, |bn->neg| is set to zero. */
 OPENSSL_EXPORT void bn_correct_top(BIGNUM *bn);
 
 /* bn_wexpand ensures that |bn| has at least |words| works of space without
@@ -383,12 +382,12 @@ OPENSSL_EXPORT int BN_uadd(BIGNUM *r, const BIGNUM *a, const BIGNUM *b);
 /* BN_add_word adds |w| to |a|. It returns one on success and zero otherwise. */
 OPENSSL_EXPORT int BN_add_word(BIGNUM *a, BN_ULONG w);
 
-/* BN_sub sets |r| = |a| - |b|, where |r| must be a distinct pointer from |a|
- * and |b|. It returns one on success and zero on allocation failure. */
+/* BN_sub sets |r| = |a| - |b|, where |r| may be the same pointer as either |a|
+ * or |b|. It returns one on success and zero on allocation failure. */
 OPENSSL_EXPORT int BN_sub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b);
 
 /* BN_usub sets |r| = |a| - |b|, where |a| and |b| are non-negative integers,
- * |b| < |a| and |r| must be a distinct pointer from |a| and |b|. It returns
+ * |b| < |a| and |r| may be the same pointer as either |a| or |b|. It returns
  * one on success and zero on allocation failure. */
 OPENSSL_EXPORT int BN_usub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b);
 
@@ -436,10 +435,19 @@ OPENSSL_EXPORT int BN_sqrt(BIGNUM *out_sqrt, const BIGNUM *in, BN_CTX *ctx);
  * less than, equal to or greater than |b|, respectively. */
 OPENSSL_EXPORT int BN_cmp(const BIGNUM *a, const BIGNUM *b);
 
+/* BN_cmp_word is like |BN_cmp| except it takes its second argument as a
+ * |BN_ULONG| instead of a |BIGNUM|. */
+OPENSSL_EXPORT int BN_cmp_word(const BIGNUM *a, BN_ULONG b);
+
 /* BN_ucmp returns a value less than, equal to or greater than zero if the
  * absolute value of |a| is less than, equal to or greater than the absolute
  * value of |b|, respectively. */
 OPENSSL_EXPORT int BN_ucmp(const BIGNUM *a, const BIGNUM *b);
+
+/* BN_equal_consttime returns one if |a| is equal to |b|, and zero otherwise.
+ * It takes an amount of time dependent on the sizes of |a| and |b|, but
+ * independent of the contents (including the signs) of |a| and |b|. */
+OPENSSL_EXPORT int BN_equal_consttime(const BIGNUM *a, const BIGNUM *b);
 
 /* BN_abs_is_word returns one if the absolute value of |bn| equals |w| and zero
  * otherwise. */
@@ -497,7 +505,7 @@ OPENSSL_EXPORT int BN_mask_bits(BIGNUM *a, int n);
 
 /* Modulo arithmetic. */
 
-/* BN_mod_word returns |a| mod |w|. */
+/* BN_mod_word returns |a| mod |w| or (BN_ULONG)-1 on error. */
 OPENSSL_EXPORT BN_ULONG BN_mod_word(const BIGNUM *a, BN_ULONG w);
 
 /* BN_mod is a helper macro that calls |BN_div| and discards the quotient. */
@@ -560,7 +568,8 @@ OPENSSL_EXPORT int BN_mod_lshift1(BIGNUM *r, const BIGNUM *a, const BIGNUM *m,
 OPENSSL_EXPORT int BN_mod_lshift1_quick(BIGNUM *r, const BIGNUM *a,
                                         const BIGNUM *m);
 
-/* BN_mod_sqrt returns a |BIGNUM|, r, such that r^2 == a (mod p). */
+/* BN_mod_sqrt returns a |BIGNUM|, r, such that r^2 == a (mod p). |p| must be a
+ * prime. */
 OPENSSL_EXPORT BIGNUM *BN_mod_sqrt(BIGNUM *in, const BIGNUM *a, const BIGNUM *p,
                                    BN_CTX *ctx);
 
@@ -581,9 +590,15 @@ OPENSSL_EXPORT int BN_rand(BIGNUM *rnd, int bits, int top, int bottom);
 /* BN_pseudo_rand is an alias for |BN_rand|. */
 OPENSSL_EXPORT int BN_pseudo_rand(BIGNUM *rnd, int bits, int top, int bottom);
 
-/* BN_rand_range sets |rnd| to a random value [0..range). It returns one on
- * success and zero otherwise. */
+/* BN_rand_range is equivalent to |BN_rand_range_ex| with |min_inclusive| set
+ * to zero and |max_exclusive| set to |range|. */
 OPENSSL_EXPORT int BN_rand_range(BIGNUM *rnd, const BIGNUM *range);
+
+/* BN_rand_range_ex sets |rnd| to a random value in
+ * [min_inclusive..max_exclusive). It returns one on success and zero
+ * otherwise. */
+OPENSSL_EXPORT int BN_rand_range_ex(BIGNUM *r, BN_ULONG min_inclusive,
+                                    const BIGNUM *max_exclusive);
 
 /* BN_pseudo_rand_range is an alias for BN_rand_range. */
 OPENSSL_EXPORT int BN_pseudo_rand_range(BIGNUM *rnd, const BIGNUM *range);
@@ -706,20 +721,41 @@ OPENSSL_EXPORT int BN_is_prime_ex(const BIGNUM *candidate, int checks,
 OPENSSL_EXPORT int BN_gcd(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
                           BN_CTX *ctx);
 
-/* BN_mod_inverse sets |out| equal to |a|^-1, mod |n|. If either of |a| or |n|
- * have |BN_FLG_CONSTTIME| set then the operation is performed in constant
- * time. If |out| is NULL, a fresh BIGNUM is allocated. It returns the result
- * or NULL on error. */
+/* BN_mod_inverse sets |out| equal to |a|^-1, mod |n|. If |out| is NULL, a
+ * fresh BIGNUM is allocated. It returns the result or NULL on error.
+ *
+ * If either of |a| or |n| have |BN_FLG_CONSTTIME| set then the operation is
+ * performed using an algorithm that avoids some branches but which isn't
+ * constant-time. This function shouldn't be used for secret values, even
+ * with |BN_FLG_CONSTTIME|; use |BN_mod_inverse_blinded| instead. Or, if
+ * |n| is guaranteed to be prime, use
+ * |BN_mod_exp_mont_consttime(out, a, m_minus_2, m, ctx, m_mont)|, taking
+ * advantage of Fermat's Little Theorem. */
 OPENSSL_EXPORT BIGNUM *BN_mod_inverse(BIGNUM *out, const BIGNUM *a,
                                       const BIGNUM *n, BN_CTX *ctx);
 
-/* BN_mod_inverse_ex acts like |BN_mod_inverse| except that, when it returns
- * zero, it will set |*out_no_inverse| to one if the failure was caused because
- * |a| has no inverse mod |n|. Otherwise it will set |*out_no_inverse| to
+/* BN_mod_inverse_blinded sets |out| equal to |a|^-1, mod |n|, where |n| is the
+ * Montgomery modulus for |mont|. |a| must be non-negative and must be less
+ * than |n|. |n| must be greater than 1. |a| is blinded (masked by a random
+ * value) to protect it against side-channel attacks. |BN_mod_inverse_blinded|
+ * may or may not ignore the |BN_FLG_CONSTTIME| flag on any/all of its inputs.
+ * It returns one on success or zero on failure. On failure, if the failure was
+ * caused by |a| having no inverse mod |n| then |*out_no_inverse| will be set
+ * to one; otherwise it will be set to zero. */
+int BN_mod_inverse_blinded(BIGNUM *out, int *out_no_inverse, const BIGNUM *a,
+                           const BN_MONT_CTX *mont, BN_CTX *ctx);
+
+/* BN_mod_inverse_odd sets |out| equal to |a|^-1, mod |n|. |a| must be
+ * non-negative and must be less than |n|. |n| must be odd. This function
+ * shouldn't be used for secret values; use |BN_mod_inverse_blinded| instead.
+ * Or, if |n| is guaranteed to be prime, use
+ * |BN_mod_exp_mont_consttime(out, a, m_minus_2, m, ctx, m_mont)|, taking
+ * advantage of Fermat's Little Theorem. It returns one on success or zero on
+ * failure. On failure, if the failure was caused by |a| having no inverse mod
+ * |n| then |*out_no_inverse| will be set to one; otherwise it will be set to
  * zero. */
-OPENSSL_EXPORT BIGNUM *BN_mod_inverse_ex(BIGNUM *out, int *out_no_inverse,
-                                         const BIGNUM *a, const BIGNUM *n,
-                                         BN_CTX *ctx);
+int BN_mod_inverse_odd(BIGNUM *out, int *out_no_inverse, const BIGNUM *a,
+                       const BIGNUM *n, BN_CTX *ctx);
 
 /* BN_kronecker returns the Kronecker symbol of |a| and |b| (which is -1, 0 or
  * 1), or -2 on error. */
@@ -749,25 +785,29 @@ OPENSSL_EXPORT int BN_MONT_CTX_set(BN_MONT_CTX *mont, const BIGNUM *mod,
 
 /* BN_MONT_CTX_set_locked takes |lock| and checks whether |*pmont| is NULL. If
  * so, it creates a new |BN_MONT_CTX| and sets the modulus for it to |mod|. It
- * then stores it as |*pmont| and returns it, or NULL on error.
+ * then stores it as |*pmont|. It returns one on success and zero on error.
  *
- * If |*pmont| is already non-NULL then the existing value is returned. */
-BN_MONT_CTX *BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, CRYPTO_MUTEX *lock,
-                                    const BIGNUM *mod, BN_CTX *bn_ctx);
+ * If |*pmont| is already non-NULL then it does nothing and returns one. */
+int BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, CRYPTO_MUTEX *lock,
+                           const BIGNUM *mod, BN_CTX *bn_ctx);
 
-/* BN_to_montgomery sets |ret| equal to |a| in the Montgomery domain. It
- * returns one on success and zero on error. */
+/* BN_to_montgomery sets |ret| equal to |a| in the Montgomery domain. |a| is
+ * assumed to be in the range [0, n), where |n| is the Montgomery modulus. It
+ * returns one on success or zero on error. */
 OPENSSL_EXPORT int BN_to_montgomery(BIGNUM *ret, const BIGNUM *a,
                                     const BN_MONT_CTX *mont, BN_CTX *ctx);
 
-/* BN_from_montgomery sets |ret| equal to |a| * R^-1, i.e. translates values
- * out of the Montgomery domain. It returns one on success or zero on error. */
+/* BN_from_montgomery sets |ret| equal to |a| * R^-1, i.e. translates values out
+ * of the Montgomery domain. |a| is assumed to be in the range [0, n), where |n|
+ * is the Montgomery modulus. It returns one on success or zero on error. */
 OPENSSL_EXPORT int BN_from_montgomery(BIGNUM *ret, const BIGNUM *a,
                                       const BN_MONT_CTX *mont, BN_CTX *ctx);
 
 /* BN_mod_mul_montgomery set |r| equal to |a| * |b|, in the Montgomery domain.
  * Both |a| and |b| must already be in the Montgomery domain (by
- * |BN_to_montgomery|). It returns one on success or zero on error. */
+ * |BN_to_montgomery|). In particular, |a| and |b| are assumed to be in the
+ * range [0, n), where |n| is the Montgomery modulus. It returns one on success
+ * or zero on error. */
 OPENSSL_EXPORT int BN_mod_mul_montgomery(BIGNUM *r, const BIGNUM *a,
                                          const BIGNUM *b,
                                          const BN_MONT_CTX *mont, BN_CTX *ctx);
@@ -797,14 +837,6 @@ OPENSSL_EXPORT int BN_mod_exp_mont_consttime(BIGNUM *rr, const BIGNUM *a,
                                              BN_CTX *ctx,
                                              const BN_MONT_CTX *mont);
 
-OPENSSL_EXPORT int BN_mod_exp_mont_word(BIGNUM *r, BN_ULONG a, const BIGNUM *p,
-                                        const BIGNUM *m, BN_CTX *ctx,
-                                        const BN_MONT_CTX *mont);
-OPENSSL_EXPORT int BN_mod_exp2_mont(BIGNUM *r, const BIGNUM *a1,
-                                    const BIGNUM *p1, const BIGNUM *a2,
-                                    const BIGNUM *p2, const BIGNUM *m,
-                                    BN_CTX *ctx, const BN_MONT_CTX *mont);
-
 
 /* Deprecated functions */
 
@@ -823,6 +855,20 @@ OPENSSL_EXPORT size_t BN_bn2mpi(const BIGNUM *in, uint8_t *out);
  * |out| is reused and returned. On error, NULL is returned and the error queue
  * is updated. */
 OPENSSL_EXPORT BIGNUM *BN_mpi2bn(const uint8_t *in, size_t len, BIGNUM *out);
+
+/* BN_mod_exp_mont_word is like |BN_mod_exp_mont| except that the base |a| is
+ * given as a |BN_ULONG| instead of a |BIGNUM *|. It returns one on success
+ * or zero otherwise. */
+OPENSSL_EXPORT int BN_mod_exp_mont_word(BIGNUM *r, BN_ULONG a, const BIGNUM *p,
+                                        const BIGNUM *m, BN_CTX *ctx,
+                                        const BN_MONT_CTX *mont);
+
+/* BN_mod_exp2_mont calculates (a1^p1) * (a2^p2) mod m. It returns 1 on success
+ * or zero otherwise. */
+OPENSSL_EXPORT int BN_mod_exp2_mont(BIGNUM *r, const BIGNUM *a1,
+                                    const BIGNUM *p1, const BIGNUM *a2,
+                                    const BIGNUM *p2, const BIGNUM *m,
+                                    BN_CTX *ctx, const BN_MONT_CTX *mont);
 
 
 /* Private functions */
@@ -850,15 +896,6 @@ OPENSSL_EXPORT unsigned BN_num_bits_word(BN_ULONG l);
  * call BN_mod_exp_mont_consttime, BN_div() will call BN_div_no_branch,
  * BN_mod_inverse() will call BN_mod_inverse_no_branch. */
 #define BN_FLG_CONSTTIME 0x04
-
-
-/* Android compatibility section.
- *
- * These functions are declared, temporarily, for Android because
- * wpa_supplicant will take a little time to sync with upstream. Outside of
- * Android they'll have no definition. */
-
-OPENSSL_EXPORT BIGNUM *get_rfc3526_prime_1536(BIGNUM *bn);
 
 
 #if defined(__cplusplus)

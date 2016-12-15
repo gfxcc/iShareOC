@@ -98,6 +98,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
 
     _fileOperation = [[FileOperation alloc] init];
     _user_id = [_fileOperation getUserId];
@@ -132,33 +133,6 @@
     _tableView.delegate = self;
 
     
-
-//    NSUserDefaults *theDefaults;
-//    int  launchCount;
-//    //Set up the properties for the integer and default.
-//    theDefaults = [NSUserDefaults standardUserDefaults];
-//    launchCount = (int)[theDefaults integerForKey:@"hasRun"] + 1;
-//    [theDefaults setInteger:launchCount forKey:@"hasRun"];
-//    [theDefaults synchronize];
-//    
-//    //Log the amount of times the application has been run
-//    NSLog(@"This application has been run %d amount of times", launchCount);
-//    
-//    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"hasShowedUpatePopupForVersion1.11.1"]) {
-//        
-//        // Set the value to YES
-//        [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"hasShowedUpatePopupForVersion1.11.1"];
-//        self.navigationController.navigationBar.hidden = YES;
-//        //Run your first launch code (Bring user to info/setup screen, etc.)
-//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        if (![defaults objectForKey:@"intro_screen_viewed"]) {
-//            self.introView = [[ABCIntroView alloc] initWithFrame:self.view.frame];
-//            self.introView.delegate = self;
-//            self.introView.backgroundColor = [UIColor greenColor];
-//            [self.view addSubview:self.introView];
-//        }
-//    }
-    
     // Do any additional setup after loading the view, typically from a nib.
     
     if (![self isLogin]) {
@@ -188,9 +162,6 @@
     _analyze = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"task_normal"] target:self selector:@selector(buttonTabPressedAnalyze:)];
     _messageCenter = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"privatemessage_normal"] target:self selector:@selector(buttonTabPressedMessageCenter:)];
     
-//    _billList.titleString = @"statement";
-//    _analyze.titleString = @"balance";
-//    _messageCenter.titleString = @"message";
     
     //self.standardView.horizontalInsets = HorizontalEdgeInsetsMake(25, 25);
     
@@ -203,16 +174,11 @@
 //    _statusView.layer.masksToBounds = YES;
     
     
-    [self loadLastestBill];
     [self keepSyn];
+    [self loadLastestBill];
     [self obtain_bills];
     [self create_folder];
-    //[self updateAllBills];
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-//        [self updateAllBills];
-//    });
 
-    //[self sendToken];
 
 }
 
@@ -348,54 +314,60 @@
 - (void)keepSyn {
     NSString * const kRemoteHost = ServerHost;
 
-    //[self deleteAllRequests];
-    // Example gRPC call using a generated proto client library:
 
-    //NSString *user_id = [_fileOperation getUserId];
-    GRXWriter *_requestsWriter = [GRXWriter writerWithValueSupplier:^id() {
-        Inf *test1 = [Inf message];
-        test1.information = _user_id;
-        [NSThread sleepForTimeInterval:1.0f];
-        return test1;
-    }];
-    
-    //NSLog(@"test");
-    //[_requestsWriter startWithWriteable:writable];
-    Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
-    
-    [service synWithRequestsWriter:_requestsWriter eventHandler:^(BOOL done, Syn_data *response, NSError *error) {
+    Inf *request = [Inf message];
+    request.information = _user_id;
+
+    Synchronism *service = [[Synchronism alloc] initWithHost:kRemoteHost];
+
+    [service synWithRequest:request eventHandler:^(BOOL done, Syn_data *response, NSError *error) {
         if (!done) {
             NSLog(@"receive message:%@ %@ %@ %@", response.friend_p, response.bill, response.delete_p, response.request);
             
-            if ([response.friend_p isEqualToString:@"0"]) {
-                
-            } else if ([response.friend_p isEqualToString:@"1"]) {
+            if ([response.friend_p isEqualToString:@"1"]) {
                 [_leftMenu obtain_friends];
             }
-            
-            if ([response.bill isEqualToString:@"0"]) {
-                _billProcessing = NO;
-            } else if ([response.bill isEqualToString:@"1"]) {
-                _billProcessing = YES;
+            if ([response.bill isEqualToString:@"1"]) {
                 [self obtain_bills];
             }
-            
-            if ([response.delete_p isEqualToString:@"0"]) {
-                _updateAllBillsProcessing = NO;
-            } else if ([response.delete_p isEqualToString:@"1"] && !_updateAllBillsProcessing) {
-                _updateAllBillsProcessing = YES;
+            if ([response.delete_p isEqualToString:@"1"]) {
                 [self updateAllBills];
             }
-            
-            if ([response.request isEqualToString:@"0"]) {
-                _requestProcessing = NO;
-            } else if ([response.request isEqualToString:@"1"] && !_requestProcessing) {
-                _requestProcessing = YES;
+            if ([response.request isEqualToString:@"1"]) {
                 [self obtain_request];
-            } else if ([response.request isEqualToString:@"2"] && !_requestProcessing) {
-                _requestProcessing = YES;
+            } else if ([response.request isEqualToString:@"2"]) {
                 [self obtain_requestLog];
             }
+//            
+//            if ([response.friend_p isEqualToString:@"0"]) {
+//                
+//            } else if ([response.friend_p isEqualToString:@"1"]) {
+//                [_leftMenu obtain_friends];
+//            }
+//            
+//            if ([response.bill isEqualToString:@"0"]) {
+//                _billProcessing = NO;
+//            } else if ([response.bill isEqualToString:@"1"]) {
+//                _billProcessing = YES;
+//                [self obtain_bills];
+//            }
+//            
+//            if ([response.delete_p isEqualToString:@"0"]) {
+//                _updateAllBillsProcessing = NO;
+//            } else if ([response.delete_p isEqualToString:@"1"] && !_updateAllBillsProcessing) {
+//                _updateAllBillsProcessing = YES;
+//                [self updateAllBills];
+//            }
+//            
+//            if ([response.request isEqualToString:@"0"]) {
+//                _requestProcessing = NO;
+//            } else if ([response.request isEqualToString:@"1"] && !_requestProcessing) {
+//                _requestProcessing = YES;
+//                [self obtain_request];
+//            } else if ([response.request isEqualToString:@"2"] && !_requestProcessing) {
+//                _requestProcessing = YES;
+//                [self obtain_requestLog];
+//            }
             
         } else if (error) {
             NSLog(@"Finished with error: %@", error);
@@ -404,8 +376,8 @@
 //                                            type:TSMessageNotificationTypeWarning];
             [self performSelector:@selector(keepSyn) withObject:nil afterDelay:1.0f];
         } else {
-            _requestsWriter.state = GRXWriterStateStarted;
-            NSLog(@"%li", (long)_requestsWriter.state);
+            //requestsWriter.state = GRXWriterStateStarted;
+            //NSLog(@"state:%li", (long)requestsWriter.state);
         }
     }];
     
@@ -523,7 +495,7 @@
 //    if ([_leftMenu.idText.text isEqualToString:@""]) {
 //        return;
 //    }
-    
+    NSLog(@"called obtain_bills");
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
     request.username = [_fileOperation getUserId];
@@ -539,7 +511,7 @@
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
 
             [receivedData addObject:bill];
-            //NSLog(@"%@", response.data_p);
+            NSLog(@"get %@", response.billId);
 
         } else if (error) {
             [TSMessage showNotificationInViewController:self
@@ -558,6 +530,7 @@
 //            }
             
             if ([self noBillRecord]) {
+                NSLog(@"start call");
                 [self updateAllBills];
             } else {
             
@@ -593,14 +566,14 @@
 }
 
 - (void)updateAllBills {
-    
+    NSLog(@"did called");
     [JDStatusBarNotification showWithStatus:@"load data"];
     [JDStatusBarNotification showActivityIndicator:YES
                                     indicatorStyle:UIActivityIndicatorViewStyleGray];
     
     NSString * const kRemoteHost = ServerHost;
     Bill_request *request = [Bill_request message];
-    request.username = [_fileOperation getUserId];
+    request.username = @"1";//[_fileOperation getUserId];
     request.start = @"0";
     request.amount = @"all";
     
@@ -614,6 +587,7 @@
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service obtain_billsWithRequest:request eventHandler:^(BOOL done, Share_inf *response, NSError *error){
         if (!done) {
+            NSLog(@"get %@", response.billId);
             Bill *bill = [[Bill alloc] init];
             [bill initWithID:response.billId amount:response.amount type:response.type date:response.data_p members:response.membersArray creater:response.creater paidBy:response.paidBy note:response.note image:response.image paidStatus:response.paidStatus typeIcon:response.typeIcon];
             if (bills.count < 6) {
@@ -621,6 +595,7 @@
             }
             NSString *billString = [NSString stringWithFormat:@"%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@*%@", response.billId, response.amount, response.type, response.data_p, response.creater, response.paidBy, response.note, response.image, response.membersArray[0], response.membersArray[1], response.membersArray[2], response.membersArray[3], response.membersArray[4], response.membersArray[5], response.membersArray[6], response.membersArray[7], response.membersArray[8], response.membersArray[9], response.paidStatus, response.typeIcon];
             [_bills addObject:billString];
+            NSLog(@"add %@", response.billId);
         } else if (error) {
             [TSMessage showNotificationInViewController:self
                                                   title:@"GRPC ERROR"
@@ -1080,6 +1055,36 @@
     return YES;
 }
 
+
+- (void)grpcTest {
+    //[GRPCCall useInsecureConnectionsForHost:ServerHost];
+    //[GRPCCall setUserAgentPrefix:@"HelloWorld/1.0" forHost:kHostAddress];
+    
+    /*
+    Greeter *client = [[Greeter alloc] initWithHost:ServerHost];
+    
+    //    HLWHelloRequest *request = [HLWHelloRequest message];
+    //    request.name = @"Objective-C";
+    //
+    //    [client sayHelloWithRequest:request handler:^(HLWHelloReply *response, NSError *error) {
+    //      NSLog(@"%@", response.message);
+    //    }];
+    
+    Bill_request *request = [Bill_request message];
+    request.username = @"1";
+    request.start = @"0";
+    request.amount = @"all";
+    
+    [client obtain_billsWithRequest:request eventHandler:^(BOOL done, Share_inf *note, NSError *error) {
+        if (!done) {
+            NSLog(@"get %@", note.billId);
+        } else if (error) {
+            
+        } else {
+            NSLog(@"Chat ended.");
+        }
+    }];*/
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -6,13 +6,22 @@
   "homepage": "https://github.com/gfxcc",
   "source": {
     "git": "https://github.com/grpc/grpc.git",
-    "tag": "release-0_14_0-objectivec-0.14.0",
+    "tag": "release-0_0_1-objectivec-0.0.1",
     "submodules": true
   },
   "summary": "...",
   "platforms": {
     "ios": "7.1",
     "osx": "10.9"
+  },
+  "dependencies": {
+    "!ProtoCompiler-gRPCPlugin": [
+      "~> 1.0"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES"
   },
   "subspecs": [
     {
@@ -25,7 +34,7 @@
       "requires_arc": false,
       "dependencies": {
         "Protobuf": [
-          "~> 3.0.0-alpha-4"
+
         ]
       }
     },
@@ -38,8 +47,8 @@
       "header_mappings_dir": ".",
       "requires_arc": true,
       "dependencies": {
-        "gRPC": [
-          "~> 0.11"
+        "gRPC-ProtoRPC": [
+
         ],
         "gRPC_pod/Messages": [
 

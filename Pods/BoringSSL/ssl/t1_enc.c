@@ -136,7 +136,6 @@
 #include <openssl/ssl.h>
 
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 
 #include <openssl/err.h>
@@ -144,7 +143,7 @@
 #include <openssl/hmac.h>
 #include <openssl/md5.h>
 #include <openssl/mem.h>
-#include <openssl/obj.h>
+#include <openssl/nid.h>
 #include <openssl/rand.h>
 
 #include "internal.h"
@@ -314,11 +313,10 @@ int tls1_change_cipher_state(SSL *ssl, int which) {
   }
 
   if (is_read) {
-    ssl_set_read_state(ssl, aead_ctx);
-  } else {
-    ssl_set_write_state(ssl, aead_ctx);
+    return ssl->method->set_read_state(ssl, aead_ctx);
   }
-  return 1;
+
+  return ssl->method->set_write_state(ssl, aead_ctx);
 }
 
 size_t SSL_get_key_block_len(const SSL *ssl) {
@@ -328,9 +326,9 @@ size_t SSL_get_key_block_len(const SSL *ssl) {
 }
 
 int SSL_generate_key_block(const SSL *ssl, uint8_t *out, size_t out_len) {
-  return ssl->enc_method->prf(
-      ssl, out, out_len, ssl->session->master_key,
-      ssl->session->master_key_length, TLS_MD_KEY_EXPANSION_CONST,
+  return ssl->s3->enc_method->prf(
+      ssl, out, out_len, SSL_get_session(ssl)->master_key,
+      SSL_get_session(ssl)->master_key_length, TLS_MD_KEY_EXPANSION_CONST,
       TLS_MD_KEY_EXPANSION_CONST_SIZE, ssl->s3->server_random, SSL3_RANDOM_SIZE,
       ssl->s3->client_random, SSL3_RANDOM_SIZE);
 }
@@ -340,12 +338,16 @@ int tls1_setup_key_block(SSL *ssl) {
     return 1;
   }
 
+  SSL_SESSION *session = ssl->session;
+  if (ssl->s3->new_session != NULL) {
+    session = ssl->s3->new_session;
+  }
+
   const EVP_AEAD *aead = NULL;
   size_t mac_secret_len, fixed_iv_len;
-  if (ssl->session->cipher == NULL ||
+  if (session->cipher == NULL ||
       !ssl_cipher_get_evp_aead(&aead, &mac_secret_len, &fixed_iv_len,
-                               ssl->session->cipher,
-                               ssl3_protocol_version(ssl))) {
+                               session->cipher, ssl3_protocol_version(ssl))) {
     OPENSSL_PUT_ERROR(SSL, SSL_R_CIPHER_OR_HASH_UNAVAILABLE);
     return 0;
   }
@@ -373,7 +375,7 @@ int tls1_setup_key_block(SSL *ssl) {
 
   ssl3_cleanup_key_block(ssl);
 
-  uint8_t *keyblock = (uint8_t *)OPENSSL_malloc(key_block_len);
+  uint8_t *keyblock = OPENSSL_malloc(key_block_len);
   if (keyblock == NULL) {
     OPENSSL_PUT_ERROR(SSL, ERR_R_MALLOC_FAILURE);
     return 0;
@@ -388,29 +390,6 @@ int tls1_setup_key_block(SSL *ssl) {
   ssl->s3->tmp.key_block_length = (uint8_t)key_block_len;
   ssl->s3->tmp.key_block = keyblock;
   return 1;
-}
-
-static int tls1_cert_verify_mac(SSL *ssl, int md_nid, uint8_t *out) {
-  const EVP_MD_CTX *ctx_template;
-  if (md_nid == NID_md5) {
-    ctx_template = &ssl->s3->handshake_md5;
-  } else if (md_nid == EVP_MD_CTX_type(&ssl->s3->handshake_hash)) {
-    ctx_template = &ssl->s3->handshake_hash;
-  } else {
-    OPENSSL_PUT_ERROR(SSL, SSL_R_NO_REQUIRED_DIGEST);
-    return 0;
-  }
-
-  EVP_MD_CTX ctx;
-  EVP_MD_CTX_init(&ctx);
-  if (!EVP_MD_CTX_copy_ex(&ctx, ctx_template)) {
-    EVP_MD_CTX_cleanup(&ctx);
-    return 0;
-  }
-  unsigned ret;
-  EVP_DigestFinal_ex(&ctx, out, &ret);
-  EVP_MD_CTX_cleanup(&ctx);
-  return ret;
 }
 
 static int append_digest(const EVP_MD_CTX *ctx, uint8_t *out, size_t *out_len,
@@ -478,9 +457,10 @@ static int tls1_final_finish_mac(SSL *ssl, int from_server, uint8_t *out) {
   }
 
   static const size_t kFinishedLen = 12;
-  if (!ssl->enc_method->prf(ssl, out, kFinishedLen, ssl->session->master_key,
-                            ssl->session->master_key_length, label, label_len,
-                            buf, digests_len, NULL, 0)) {
+  if (!ssl->s3->enc_method->prf(ssl, out, kFinishedLen,
+                                SSL_get_session(ssl)->master_key,
+                                SSL_get_session(ssl)->master_key_length, label,
+                                label_len, buf, digests_len, NULL, 0)) {
     return 0;
   }
 
@@ -497,19 +477,19 @@ int tls1_generate_master_secret(SSL *ssl, uint8_t *out,
       return 0;
     }
 
-    if (!ssl->enc_method->prf(ssl, out, SSL3_MASTER_SECRET_SIZE, premaster,
-                              premaster_len,
-                              TLS_MD_EXTENDED_MASTER_SECRET_CONST,
-                              TLS_MD_EXTENDED_MASTER_SECRET_CONST_SIZE, digests,
-                              digests_len, NULL, 0)) {
+    if (!ssl->s3->enc_method->prf(ssl, out, SSL3_MASTER_SECRET_SIZE, premaster,
+                                  premaster_len,
+                                  TLS_MD_EXTENDED_MASTER_SECRET_CONST,
+                                  TLS_MD_EXTENDED_MASTER_SECRET_CONST_SIZE,
+                                  digests, digests_len, NULL, 0)) {
       return 0;
     }
   } else {
-    if (!ssl->enc_method->prf(ssl, out, SSL3_MASTER_SECRET_SIZE, premaster,
-                              premaster_len, TLS_MD_MASTER_SECRET_CONST,
-                              TLS_MD_MASTER_SECRET_CONST_SIZE,
-                              ssl->s3->client_random, SSL3_RANDOM_SIZE,
-                              ssl->s3->server_random, SSL3_RANDOM_SIZE)) {
+    if (!ssl->s3->enc_method->prf(ssl, out, SSL3_MASTER_SECRET_SIZE, premaster,
+                                  premaster_len, TLS_MD_MASTER_SECRET_CONST,
+                                  TLS_MD_MASTER_SECRET_CONST_SIZE,
+                                  ssl->s3->client_random, SSL3_RANDOM_SIZE,
+                                  ssl->s3->server_random, SSL3_RANDOM_SIZE)) {
       return 0;
     }
   }
@@ -523,6 +503,11 @@ int SSL_export_keying_material(SSL *ssl, uint8_t *out, size_t out_len,
                                int use_context) {
   if (!ssl->s3->have_version || ssl->version == SSL3_VERSION) {
     return 0;
+  }
+
+  if (ssl3_protocol_version(ssl) >= TLS1_3_VERSION) {
+    return tls13_export_keying_material(ssl, out, out_len, label, label_len,
+                                        context, context_len, use_context);
   }
 
   size_t seed_len = 2 * SSL3_RANDOM_SIZE;
@@ -547,132 +532,16 @@ int SSL_export_keying_material(SSL *ssl, uint8_t *out, size_t out_len,
     memcpy(seed + 2 * SSL3_RANDOM_SIZE + 2, context, context_len);
   }
 
-  int ret = ssl->enc_method->prf(ssl, out, out_len, ssl->session->master_key,
-                                 ssl->session->master_key_length, label,
-                                 label_len, seed, seed_len, NULL, 0);
+  int ret =
+      ssl->s3->enc_method->prf(ssl, out, out_len,
+                               SSL_get_session(ssl)->master_key,
+                               SSL_get_session(ssl)->master_key_length, label,
+                               label_len, seed, seed_len, NULL, 0);
   OPENSSL_free(seed);
   return ret;
-}
-
-static int tls1_alert_code(int code) {
-  switch (code) {
-    case SSL_AD_CLOSE_NOTIFY:
-      return SSL3_AD_CLOSE_NOTIFY;
-
-    case SSL_AD_UNEXPECTED_MESSAGE:
-      return SSL3_AD_UNEXPECTED_MESSAGE;
-
-    case SSL_AD_BAD_RECORD_MAC:
-      return SSL3_AD_BAD_RECORD_MAC;
-
-    case SSL_AD_DECRYPTION_FAILED:
-      return TLS1_AD_DECRYPTION_FAILED;
-
-    case SSL_AD_RECORD_OVERFLOW:
-      return TLS1_AD_RECORD_OVERFLOW;
-
-    case SSL_AD_DECOMPRESSION_FAILURE:
-      return SSL3_AD_DECOMPRESSION_FAILURE;
-
-    case SSL_AD_HANDSHAKE_FAILURE:
-      return SSL3_AD_HANDSHAKE_FAILURE;
-
-    case SSL_AD_NO_CERTIFICATE:
-      return -1;
-
-    case SSL_AD_BAD_CERTIFICATE:
-      return SSL3_AD_BAD_CERTIFICATE;
-
-    case SSL_AD_UNSUPPORTED_CERTIFICATE:
-      return SSL3_AD_UNSUPPORTED_CERTIFICATE;
-
-    case SSL_AD_CERTIFICATE_REVOKED:
-      return SSL3_AD_CERTIFICATE_REVOKED;
-
-    case SSL_AD_CERTIFICATE_EXPIRED:
-      return SSL3_AD_CERTIFICATE_EXPIRED;
-
-    case SSL_AD_CERTIFICATE_UNKNOWN:
-      return SSL3_AD_CERTIFICATE_UNKNOWN;
-
-    case SSL_AD_ILLEGAL_PARAMETER:
-      return SSL3_AD_ILLEGAL_PARAMETER;
-
-    case SSL_AD_UNKNOWN_CA:
-      return TLS1_AD_UNKNOWN_CA;
-
-    case SSL_AD_ACCESS_DENIED:
-      return TLS1_AD_ACCESS_DENIED;
-
-    case SSL_AD_DECODE_ERROR:
-      return TLS1_AD_DECODE_ERROR;
-
-    case SSL_AD_DECRYPT_ERROR:
-      return TLS1_AD_DECRYPT_ERROR;
-    case SSL_AD_EXPORT_RESTRICTION:
-      return TLS1_AD_EXPORT_RESTRICTION;
-
-    case SSL_AD_PROTOCOL_VERSION:
-      return TLS1_AD_PROTOCOL_VERSION;
-
-    case SSL_AD_INSUFFICIENT_SECURITY:
-      return TLS1_AD_INSUFFICIENT_SECURITY;
-
-    case SSL_AD_INTERNAL_ERROR:
-      return TLS1_AD_INTERNAL_ERROR;
-
-    case SSL_AD_USER_CANCELLED:
-      return TLS1_AD_USER_CANCELLED;
-
-    case SSL_AD_NO_RENEGOTIATION:
-      return TLS1_AD_NO_RENEGOTIATION;
-
-    case SSL_AD_UNSUPPORTED_EXTENSION:
-      return TLS1_AD_UNSUPPORTED_EXTENSION;
-
-    case SSL_AD_CERTIFICATE_UNOBTAINABLE:
-      return TLS1_AD_CERTIFICATE_UNOBTAINABLE;
-
-    case SSL_AD_UNRECOGNIZED_NAME:
-      return TLS1_AD_UNRECOGNIZED_NAME;
-
-    case SSL_AD_BAD_CERTIFICATE_STATUS_RESPONSE:
-      return TLS1_AD_BAD_CERTIFICATE_STATUS_RESPONSE;
-
-    case SSL_AD_BAD_CERTIFICATE_HASH_VALUE:
-      return TLS1_AD_BAD_CERTIFICATE_HASH_VALUE;
-
-    case SSL_AD_UNKNOWN_PSK_IDENTITY:
-      return TLS1_AD_UNKNOWN_PSK_IDENTITY;
-
-    case SSL_AD_INAPPROPRIATE_FALLBACK:
-      return SSL3_AD_INAPPROPRIATE_FALLBACK;
-
-    default:
-      return -1;
-  }
 }
 
 const SSL3_ENC_METHOD TLSv1_enc_data = {
     tls1_prf,
     tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    tls1_alert_code,
-    0,
-};
-
-const SSL3_ENC_METHOD TLSv1_1_enc_data = {
-    tls1_prf,
-    tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    tls1_alert_code,
-    SSL_ENC_FLAG_EXPLICIT_IV,
-};
-
-const SSL3_ENC_METHOD TLSv1_2_enc_data = {
-    tls1_prf,
-    tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    tls1_alert_code,
-    SSL_ENC_FLAG_EXPLICIT_IV|SSL_ENC_FLAG_SIGALGS|SSL_ENC_FLAG_SHA256_PRF,
 };

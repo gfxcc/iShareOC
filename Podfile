@@ -17,6 +17,6 @@ pod 'APParallaxHeader', '0.1.6'
 #pod 'FontAwesome+iOS', :git => 'git@github.com:alexdrone/ios-fontawesome.git'
 pod 'Masonry'
 pod 'JazzHands', '2.0.0'
-//pod 'MBProgressHUD', '~> 1.0.0'
+#pod 'MBProgressHUD', '~> 1.0.0'
 
 end

@@ -72,7 +72,8 @@ static void rand_thread_state_free(void *state) {
   OPENSSL_free(state);
 }
 
-#if defined(OPENSSL_X86_64) && !defined(OPENSSL_NO_ASM)
+#if defined(OPENSSL_X86_64) && !defined(OPENSSL_NO_ASM) && \
+    !defined(BORINGSSL_UNSAFE_FUZZER_MODE)
 
 /* These functions are defined in asm/rdrand-x86_64.pl */
 extern int CRYPTO_rdrand(uint8_t out[8]);
@@ -209,6 +210,8 @@ int RAND_load_file(const char *path, long num) {
   }
 }
 
+const char *RAND_file_name(char *buf, size_t num) { return NULL; }
+
 void RAND_add(const void *buf, int num, double entropy) {}
 
 int RAND_egd(const char *path) {
@@ -237,3 +240,5 @@ RAND_METHOD *RAND_SSLeay(void) {
 }
 
 void RAND_set_rand_method(const RAND_METHOD *method) {}
+
+void RAND_cleanup(void) {}

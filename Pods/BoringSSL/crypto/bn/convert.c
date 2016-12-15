@@ -204,17 +204,14 @@ int BN_bn2cbb_padded(CBB *out, size_t len, const BIGNUM *in) {
 static const char hextable[] = "0123456789abcdef";
 
 char *BN_bn2hex(const BIGNUM *bn) {
-  int i, j, v, z = 0;
-  char *buf;
-  char *p;
-
-  buf = (char *)OPENSSL_malloc(bn->top * BN_BYTES * 2 + 2);
+  char *buf = OPENSSL_malloc(1 /* leading '-' */ + 1 /* zero is non-empty */ +
+                             bn->top * BN_BYTES * 2 + 1 /* trailing NUL */);
   if (buf == NULL) {
     OPENSSL_PUT_ERROR(BN, ERR_R_MALLOC_FAILURE);
     return NULL;
   }
 
-  p = buf;
+  char *p = buf;
   if (bn->neg) {
     *(p++) = '-';
   }
@@ -223,10 +220,11 @@ char *BN_bn2hex(const BIGNUM *bn) {
     *(p++) = '0';
   }
 
-  for (i = bn->top - 1; i >= 0; i--) {
-    for (j = BN_BITS2 - 8; j >= 0; j -= 8) {
+  int z = 0;
+  for (int i = bn->top - 1; i >= 0; i--) {
+    for (int j = BN_BITS2 - 8; j >= 0; j -= 8) {
       /* strip leading zeros */
-      v = ((int)(bn->d[i] >> (long)j)) & 0xff;
+      int v = ((int)(bn->d[i] >> (long)j)) & 0xff;
       if (z || v != 0) {
         *(p++) = hextable[v >> 4];
         *(p++) = hextable[v & 0x0f];
@@ -385,9 +383,8 @@ char *BN_bn2dec(const BIGNUM *a) {
    */
   i = BN_num_bits(a) * 3;
   num = i / 10 + i / 1000 + 1 + 1;
-  bn_data =
-      (BN_ULONG *)OPENSSL_malloc((num / BN_DEC_NUM + 1) * sizeof(BN_ULONG));
-  buf = (char *)OPENSSL_malloc(num + 3);
+  bn_data = OPENSSL_malloc((num / BN_DEC_NUM + 1) * sizeof(BN_ULONG));
+  buf = OPENSSL_malloc(num + 3);
   if ((buf == NULL) || (bn_data == NULL)) {
     OPENSSL_PUT_ERROR(BN, ERR_R_MALLOC_FAILURE);
     goto err;
@@ -400,14 +397,15 @@ char *BN_bn2dec(const BIGNUM *a) {
 #define BUF_REMAIN (num + 3 - (size_t)(p - buf))
   p = buf;
   lp = bn_data;
+
+  if (BN_is_negative(t)) {
+    *p++ = '-';
+  }
+
   if (BN_is_zero(t)) {
     *(p++) = '0';
     *(p++) = '\0';
   } else {
-    if (BN_is_negative(t)) {
-      *p++ = '-';
-    }
-
     while (!BN_is_zero(t)) {
       *lp = BN_div_word(t, BN_DEC_CONV);
       lp++;
@@ -578,12 +576,14 @@ BIGNUM *BN_mpi2bn(const uint8_t *in, size_t len, BIGNUM *out) {
     return NULL;
   }
 
+  int out_is_alloced = 0;
   if (out == NULL) {
     out = BN_new();
-  }
-  if (out == NULL) {
-    OPENSSL_PUT_ERROR(BN, ERR_R_MALLOC_FAILURE);
-    return NULL;
+    if (out == NULL) {
+      OPENSSL_PUT_ERROR(BN, ERR_R_MALLOC_FAILURE);
+      return NULL;
+    }
+    out_is_alloced = 1;
   }
 
   if (in_len == 0) {
@@ -593,6 +593,9 @@ BIGNUM *BN_mpi2bn(const uint8_t *in, size_t len, BIGNUM *out) {
 
   in += 4;
   if (BN_bin2bn(in, in_len, out) == NULL) {
+    if (out_is_alloced) {
+      BN_free(out);
+    }
     return NULL;
   }
   out->neg = ((*in) & 0x80) != 0;

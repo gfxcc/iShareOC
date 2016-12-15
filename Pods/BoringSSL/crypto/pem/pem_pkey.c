@@ -69,10 +69,6 @@
 #include <openssl/rand.h>
 #include <openssl/x509.h>
 
-#include "../evp/internal.h"
-
-int pem_check_suffix(const char *pem_str, const char *suffix);
-
 EVP_PKEY *PEM_read_bio_PrivateKey(BIO *bp, EVP_PKEY **x, pem_password_cb *cb,
                                   void *u)
 {
@@ -80,7 +76,6 @@ EVP_PKEY *PEM_read_bio_PrivateKey(BIO *bp, EVP_PKEY **x, pem_password_cb *cb,
     const unsigned char *p = NULL;
     unsigned char *data = NULL;
     long len;
-    int slen;
     EVP_PKEY *ret = NULL;
 
     if (!PEM_bytes_read_bio(&data, &len, &nm, PEM_STRING_EVP_PKEY, bp, cb, u))
@@ -128,12 +123,15 @@ EVP_PKEY *PEM_read_bio_PrivateKey(BIO *bp, EVP_PKEY **x, pem_password_cb *cb,
             *x = ret;
         }
         PKCS8_PRIV_KEY_INFO_free(p8inf);
-    } else if ((slen = pem_check_suffix(nm, "PRIVATE KEY")) > 0) {
-        const EVP_PKEY_ASN1_METHOD *ameth;
-        ameth = EVP_PKEY_asn1_find_str(NULL, nm, slen);
-        if (!ameth || !ameth->old_priv_decode)
-            goto p8err;
-        ret = d2i_PrivateKey(ameth->pkey_id, x, &p, len);
+    } else if (strcmp(nm, PEM_STRING_RSA) == 0) {
+        /* TODO(davidben): d2i_PrivateKey parses PKCS#8 along with the
+         * standalone format. This and the cases below probably should not
+         * accept PKCS#8. */
+        ret = d2i_PrivateKey(EVP_PKEY_RSA, x, &p, len);
+    } else if (strcmp(nm, PEM_STRING_EC) == 0) {
+        ret = d2i_PrivateKey(EVP_PKEY_EC, x, &p, len);
+    } else if (strcmp(nm, PEM_STRING_DSA) == 0) {
+        ret = d2i_PrivateKey(EVP_PKEY_DSA, x, &p, len);
     }
  p8err:
     if (ret == NULL)
@@ -150,86 +148,7 @@ int PEM_write_bio_PrivateKey(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
                              unsigned char *kstr, int klen,
                              pem_password_cb *cb, void *u)
 {
-    char pem_str[80];
-    if (!x->ameth || x->ameth->priv_encode)
-        return PEM_write_bio_PKCS8PrivateKey(bp, x, enc,
-                                             (char *)kstr, klen, cb, u);
-
-    BIO_snprintf(pem_str, 80, "%s PRIVATE KEY", x->ameth->pem_str);
-    return PEM_ASN1_write_bio((i2d_of_void *)i2d_PrivateKey,
-                              pem_str, bp, x, enc, kstr, klen, cb, u);
-}
-
-static int public_key_type_from_str(const char *name, size_t len)
-{
-    if (len == 3 && memcmp(name, "RSA", 3) == 0) {
-        return EVP_PKEY_RSA;
-    } else if (len == 2 && memcmp(name, "DH", 2) == 0) {
-        return EVP_PKEY_DH;
-    } else if (len == 2 && memcmp(name, "EC", 2) == 0) {
-        return EVP_PKEY_EC;
-    }
-    return NID_undef;
-}
-
-static int set_pkey_type_from_str(EVP_PKEY *pkey, const char *name,
-                                  size_t len)
-{
-    int nid = public_key_type_from_str(name, len);
-    if (nid == NID_undef) {
-        return 0;
-    }
-    return EVP_PKEY_set_type(pkey, nid);
-}
-
-EVP_PKEY *PEM_read_bio_Parameters(BIO *bp, EVP_PKEY **x)
-{
-    char *nm = NULL;
-    const unsigned char *p = NULL;
-    unsigned char *data = NULL;
-    long len;
-    int slen;
-    EVP_PKEY *ret = NULL;
-
-    if (!PEM_bytes_read_bio(&data, &len, &nm, PEM_STRING_PARAMETERS,
-                            bp, 0, NULL))
-        return NULL;
-    p = data;
-
-    if ((slen = pem_check_suffix(nm, "PARAMETERS")) > 0) {
-        ret = EVP_PKEY_new();
-        if (!ret)
-            goto err;
-        if (!set_pkey_type_from_str(ret, nm, slen)
-            || !ret->ameth->param_decode
-            || !ret->ameth->param_decode(ret, &p, len)) {
-            EVP_PKEY_free(ret);
-            ret = NULL;
-            goto err;
-        }
-        if (x) {
-            if (*x)
-                EVP_PKEY_free((EVP_PKEY *)*x);
-            *x = ret;
-        }
-    }
- err:
-    if (ret == NULL)
-        OPENSSL_PUT_ERROR(PEM, ERR_R_ASN1_LIB);
-    OPENSSL_free(nm);
-    OPENSSL_free(data);
-    return (ret);
-}
-
-int PEM_write_bio_Parameters(BIO *bp, EVP_PKEY *x)
-{
-    char pem_str[80];
-    if (!x->ameth || !x->ameth->param_encode)
-        return 0;
-
-    BIO_snprintf(pem_str, 80, "%s PARAMETERS", x->ameth->pem_str);
-    return PEM_ASN1_write_bio((i2d_of_void *)x->ameth->param_encode,
-                              pem_str, bp, x, NULL, NULL, 0, 0, NULL);
+    return PEM_write_bio_PKCS8PrivateKey(bp, x, enc, (char *)kstr, klen, cb, u);
 }
 
 #ifndef OPENSSL_NO_FP_API

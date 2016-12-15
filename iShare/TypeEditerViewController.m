@@ -37,13 +37,14 @@
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
-    _typeArray = [[NSMutableArray alloc] init];
-    for (int i = 0; i != linesOfFile.count; i++) {
-        NSString *stringOfLine = linesOfFile[i];
-        NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
-        [_typeArray addObject:contentOfLine];
-        
-    }
+    //_typeArray = [[NSMutableArray alloc] init];
+//    for (int i = 0; i != linesOfFile.count; i++) {
+//        NSString *stringOfLine = linesOfFile[i];
+//        NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+//        [_typeArray addObject:contentOfLine];
+//        
+//    }
+    _typeArray = [_fileOperation getBillType];
 }
 
 
@@ -73,13 +74,14 @@
     NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     
     // check empty or not
-    _typeArray = [[NSMutableArray alloc] init];
-    for (int i = 0; i != linesOfFile.count; i++) {
-        NSString *stringOfLine = linesOfFile[i];
-        NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
-        [_typeArray addObject:contentOfLine];
-        
-    }
+//    _typeArray = [[NSMutableArray alloc] init];
+//    for (int i = 0; i != linesOfFile.count; i++) {
+//        NSString *stringOfLine = linesOfFile[i];
+//        NSMutableArray *contentOfLine = [[NSMutableArray alloc] initWithArray:[stringOfLine componentsSeparatedByString:@"#"]];
+//        [_typeArray addObject:contentOfLine];
+//        
+//    }
+    _typeArray = [_fileOperation getBillType];
     [_tableView reloadData];
 }
 

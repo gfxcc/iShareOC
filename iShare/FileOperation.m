@@ -169,7 +169,7 @@
     NSString *content = [self getFileContent:@"billType"];
     if ([content isEqualToString:@""] || !content) {
         NSMutableArray *array1 = [[NSMutableArray alloc] init];
-        [array1 addObject:@"Food & Drind"];// type name
+        [array1 addObject:@"Food & Drink"];// type name
         [array1 addObject:@"ifood"];// type icon name
         [array1 addObject:@"fruit"];
         [array1 addObject:@"apple2-icon"];
@@ -214,6 +214,8 @@
         [array6 addObject:@"lend"];
         [array6 addObject:@"compose"];
         [res addObject:array6];
+        
+        [self setBillType:res];
     } else {
         NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
         for (int i = 0; i != linesOfFile.count; i++) {
@@ -341,6 +343,23 @@
 
 - (void)setUsername:(NSString*)username userId:(NSString*)userId {
     [self setUsernameAndUserId:[NSString stringWithFormat:@"%@*%@", username, userId]];
+}
+
+- (void)setBillType:(NSArray*)billType {
+    NSString *content;
+    for (int i = 0; i < billType.count; i++) {
+        
+        NSMutableArray *second = billType[i];
+        NSString *line = second[0];
+        for (int j = 1; j < second.count; j++) {
+            line = [NSString stringWithFormat:@"%@#%@", line, second[j]];
+        }
+        if (i != 0)
+            content = [NSString stringWithFormat:@"%@\n%@", content, line];
+        else
+            content = line;
+    }
+    [self setFileContent:content filename:@"billType"];
 }
 
 - (void)setFriendList:(NSArray*)nameList UserId:(NSArray*)idList LastModified:(NSArray*)lastModifiedList {

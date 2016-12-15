@@ -31,7 +31,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [GRPCCall useInsecureConnectionsForHost:ServerHost];
+    NSString * host = ServerHost;
+    [GRPCCall useInsecureConnectionsForHost:host];
+    //[GRPCCall useInsecureConnectionsForHost:@"11"];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -124,7 +126,7 @@
     leftMenu.mainUIView = mainView;
     mainView.leftMenu = leftMenu;
     
-    [leftMenu customedViewDidLoad];
+    //[leftMenu customedViewDidLoad];
 
     [SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
@@ -160,6 +162,7 @@
 //    [mainUI sendToken];
     
     //[_fileOperation setDeviceToken:tokenString];
+    
     [self sendToken:tokenString];
 }
 

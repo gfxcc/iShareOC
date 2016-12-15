@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "LeftMenuViewController.h"
 #import "SlideNavigationController.h"
-#import <gRPC/RxLibrary/GRXWriter.h>
-#import <gRPC/RxLibrary/GRXWriteable.h>
-#import <gRPC/RxLibrary/GRXWriter+Immediate.h>
+#import <GRPCClient/GRPCCall+Tests.h>
+#import <RxLibrary/GRXWriter+Immediate.h>
+#import <RxLibrary/GRXWriter+Transformations.h>
 #import "RKTabView.h"
 #import "ABCIntroView.h"
 #import "ComBinedImage.h"

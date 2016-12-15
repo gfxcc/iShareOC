@@ -16,6 +16,7 @@
 #import <TSMessageView.h>
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "MBProgressHUD.h"
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -32,6 +33,7 @@
 
 @property (nonatomic) LogingAnimationType AnimationType;
 @property (nonatomic, strong) FileOperation *fileOperation;
+@property (nonatomic, strong) MBProgressHUD *hud;
 @end
 
 @implementation LoginViewController
@@ -190,6 +192,7 @@
     NSString *text = _LoginButton.titleLabel.text;
     if ([text isEqualToString:@"Log in"]) {
         
+        [self progressViewEnable];
         
         NSString * const kRemoteHost = ServerHost;
         Login_m *request = [[Login_m alloc] init];
@@ -200,6 +203,7 @@
         
         Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
         [service loginWithRequest:request handler:^(Reply_inf *response, NSError *error) {
+            [self progressViewDisable];
             if (response) {
                 if ([response.status isEqualToString:@"OK"]) {
                     
@@ -299,9 +303,10 @@
     request.email = email;
     
     // Example gRPC call using a generated proto client library:
-    
+    [self progressViewEnable];
     Greeter *service = [[Greeter alloc] initWithHost:kRemoteHost];
     [service sign_upWithRequest:request handler:^(Reply_inf *response, NSError *error) {
+        [self progressViewDisable];
         if (response) {
             if ([response.status isEqualToString:@"OK"]) {
                 
@@ -368,6 +373,20 @@
 
 - (void)loginMode {
     _buttonText = @"Log in";
+}
+
+- (void)progressViewEnable {
+    _hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    
+    // Set the label text.
+    _hud.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+    // You can also adjust other label properties if needed.
+    // hud.label.font = [UIFont italicSystemFontOfSize:16.f];
+
+}
+
+- (void)progressViewDisable {
+    [_hud hideAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

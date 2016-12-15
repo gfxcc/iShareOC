@@ -209,6 +209,10 @@
                 //NSLog(@"%@  ", response.friendsArray[i]);
                 [_friendsArray addObject:response.friendsNameArray[i]];
                 [_friendsIdArray addObject:response.friendsIdArray[i]];
+                //int b = response.friendsIdArray.count;
+                //NSString *c = response.test;
+                //NSMutableArray *a = response.friendsLastModifiedArray;
+                int c = response.friendsLastModifiedArray_Count;
                 [_friendsLastModified addObject:response.friendsLastModifiedArray[i]];
             }
             [self loadFriendsIcons];

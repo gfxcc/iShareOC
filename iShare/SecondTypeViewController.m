@@ -30,20 +30,20 @@
     _tableView.dataSource = self;
     _tableView.delegate = self;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
-    // ##load data from file
-    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
-                          documentsDirectory];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
-                                                    usedEncoding:nil
-                                                           error:nil];
-    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
-    
-    // check empty or not
-    NSArray *typeContent = [linesOfFile[_indexOfType] componentsSeparatedByString:@"#"];
-    // !!!! this array contain all element of a type. The really count of second type should be (_typeArray.count / 2) - 1
-    _typeArray = [[NSMutableArray alloc] initWithArray:typeContent];
+//    // ##load data from file
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString *fileName = [NSString stringWithFormat:@"%@/billType",
+//                          documentsDirectory];
+//    NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
+//                                                    usedEncoding:nil
+//                                                           error:nil];
+//    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+//    
+//    // check empty or not
+//    NSArray *typeContent = [linesOfFile[_indexOfType] componentsSeparatedByString:@"#"];
+//    // !!!! this array contain all element of a type. The really count of second type should be (_typeArray.count / 2) - 1
+    _typeArray = [_fileOperation getBillType];
     
 }
 
