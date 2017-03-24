@@ -91,7 +91,7 @@
         
         dataPath = [NSString stringWithFormat:@"%@/%@.png", dataPath, _memberIdArray[i]];
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
-        UIImage *icon = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"];
+        UIImage *icon = fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"profle.png"];
         [_memberIcons addObject:icon];
     }
     

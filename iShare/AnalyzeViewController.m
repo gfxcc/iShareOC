@@ -232,7 +232,7 @@
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:dataPath];
 
     
-    [cell initWithIcon:(fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"icon-user-default.png"]) username:_friendsArray[indexPath.row] amount:[_result objectAtIndex:indexPath.row]];
+    [cell initWithIcon:(fileExists ? [UIImage imageWithContentsOfFile:dataPath] : [UIImage imageNamed:@"profle.png"]) username:_friendsArray[indexPath.row] amount:[_result objectAtIndex:indexPath.row]];
     
     return cell;
 }

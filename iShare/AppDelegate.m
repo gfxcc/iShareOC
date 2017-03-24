@@ -126,7 +126,7 @@
     leftMenu.mainUIView = mainView;
     mainView.leftMenu = leftMenu;
     
-    //[leftMenu customedViewDidLoad];
+    [leftMenu customedViewDidLoad];
 
     [SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;

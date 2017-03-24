@@ -60,10 +60,7 @@
     [super viewDidLoad];
     //self.tableView.separatorColor = [UIColor lightGrayColor];
     
-    
     [self customedViewDidLoad];
-    
-    
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -87,7 +84,6 @@
 - (void)customedViewDidLoad {
     _fileOperation = [[FileOperation alloc] init];
     _user_id = [_fileOperation getUserId];
-    
 
     _friendsArray = [[NSMutableArray alloc] init];
     _friendsIdArray = [[NSMutableArray alloc] init];
@@ -95,7 +91,6 @@
     _friendsIconList = [[NSMutableArray alloc] init];
     [self loadUserData];
     //
-    
 }
 
 - (void)loadUserData {
@@ -121,7 +116,7 @@
     if (fileExists) {
         _headImage = [UIImage imageWithContentsOfFile:dataPath];
     } else {
-        _headImage = [UIImage imageNamed:@"icon-user-default.png"];
+        _headImage = [UIImage imageNamed:@"profle.png"];
     }
     
     _headImageView.image = _headImage;
@@ -212,7 +207,7 @@
                 //int b = response.friendsIdArray.count;
                 //NSString *c = response.test;
                 //NSMutableArray *a = response.friendsLastModifiedArray;
-                int c = response.friendsLastModifiedArray_Count;
+                //int c = response.friendsLastModifiedArray_Count;
                 [_friendsLastModified addObject:response.friendsLastModifiedArray[i]];
             }
             [self loadFriendsIcons];
@@ -423,7 +418,7 @@
         if (fileExists) {
             _friendsIconList[i] = [UIImage imageWithContentsOfFile:imagePath];
         } else {
-            _friendsIconList[i] = [UIImage imageNamed:@"icon-user-default.png"];
+            _friendsIconList[i] = [UIImage imageNamed:@"profle.png"];
         }
     }
     [_tableView reloadData];
@@ -481,7 +476,7 @@
                 
                 _idText.text = @"";
                 //_headImageView.image = [UIImage imageNamed:@"icon-user-default.png"];
-                _headerView.userIconView.image = [UIImage imageNamed:@"icon-user-default.png"];
+                _headerView.userIconView.image = [UIImage imageNamed:@"profle.png"];
                 _headerView.userLabel.text = @"";
                 
                 break;

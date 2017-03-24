@@ -170,9 +170,7 @@
 #pragma mark reaction funcion to cell
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"notification"]) {
-        NotificationViewController *notificationView = (NotificationViewController *)[segue destinationViewController];
-    } else if ([segue.identifier isEqualToString:@"accountDetail"]) {
+    if ([segue.identifier isEqualToString:@"accountDetail"]) {
         AccountDetailViewController *accountDetailView = (AccountDetailViewController *)[segue destinationViewController];
         accountDetailView.leftUIView = _leftUIView;
     }

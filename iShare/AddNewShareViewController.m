@@ -105,7 +105,7 @@
     NSString *content = [[NSString alloc] initWithContentsOfFile:fileName
                                           usedEncoding:nil
                                                  error:nil];
-    NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
+    //NSArray *linesOfFile= [content componentsSeparatedByString:@"\n"];
     //NSArray *firstType = [linesOfFile[0] componentsSeparatedByString:@"#"];
 //    _type.text = firstType.count < 2 ? @"Food and Drind > hamburger" : [NSString stringWithFormat:@"%@ > %@", firstType[0], firstType[2]];
     

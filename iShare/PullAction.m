@@ -322,10 +322,7 @@ const CGFloat pDistanceToTop        = 15.0f;
     CGFloat height = 0;
     
     
-    CGFloat t = [[change objectForKey:@"new"] CGPointValue].y;
-    CGFloat ttttt = self.originalContentInset.top;
-    CGFloat tt = _scrollView.contentSize.height;
-    CGFloat ttt = _scrollView.bounds.size.height;/*
+    /*
     //NSLog(@"%f, %f, %f, %f\n", t, ttttt, tt, ttt);
     //NSLog(@"%f %f\n", _scrollView.contentOffset.y, _scrollView.contentInset.top);
     */

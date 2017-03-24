@@ -179,7 +179,6 @@
     [self obtain_bills];
     [self create_folder];
 
-
 }
 
 - (void)buttonTabPressedBillList:(id)sender {
@@ -760,7 +759,7 @@
     for (int i = 0; i != 10; i++) {
         if (![bill.members[i] isEqualToString:@""]) {
             BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[i]]];
-            [imageArray addObject:(fileExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[i]]] : [UIImage imageNamed:@"icon-user-default.png"])];
+            [imageArray addObject:(fileExist ? [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png", dataPath, bill.members[i]]] : [UIImage imageNamed:@"profle.png"])];
         }
     }
 
@@ -803,8 +802,6 @@
         default:
             break;
     }
-
-
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

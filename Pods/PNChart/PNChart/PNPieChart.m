@@ -10,8 +10,6 @@
 //needed for the expected label size
 #import "PNLineChart.h"
 
-#define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
-
 @interface PNPieChart()
 
 @property (nonatomic) NSArray *items;
@@ -423,7 +421,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x + beforeLabel, y, labelsize.width, labelsize.height)];
         label.text = pdata.textDescription;
-        label.textColor = self.legendFontColor ? self.legendFontColor : RGB(91, 104, 126);
+        label.textColor = self.legendFontColor ? self.legendFontColor : [UIColor blackColor];
         label.font = self.legendFont ? self.legendFont : [UIFont systemFontOfSize:12.0f];
         label.lineBreakMode = NSLineBreakByWordWrapping;
         label.numberOfLines = 0;
